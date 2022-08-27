@@ -69,7 +69,7 @@ class AddStockController extends Controller
         $this->notificationUtil = $notificationUtil;
         $this->cashRegisterUtil = $cashRegisterUtil;
         $this->moneysafeUtil = $moneysafeUtil;
-        
+
     }
 
     /**
