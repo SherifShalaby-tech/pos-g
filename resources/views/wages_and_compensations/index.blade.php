@@ -115,7 +115,7 @@
                                                     $employee = App\Models\Employee::find($wages_and_compensation->employee_id);
                                                 @endphp
                                                 <td>
-                                                    <img src="@if (!empty($employee->getFirstMediaUrl('employee_photo'))) {{ $employee->getFirstMediaUrl('employee_photo') }}@else{{ asset('uploads/' . session('logo')) }} @endif"
+                                                    <img src="@if ($employee != null ) @if (!empty($employee->getFirstMediaUrl('employee_photo'))) {{ $employee->getFirstMediaUrl('employee_photo') }}@else{{ asset('uploads/' . session('logo')) }} @endif @else{{ asset('uploads/' . session('logo')) }} @endif"
                                                         style="width: 50px; border: 2px solid #fff;" />
                                                 </td>
                                                 <td>
