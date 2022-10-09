@@ -108,7 +108,7 @@ class ProductController extends Controller
     {
         if (request()->ajax()) {
 
-            $products = Product::Active()->leftjoin('variations', function ($join) {
+            $products = Product::leftjoin('variations', function ($join) {
                 $join->on('products.id', 'variations.product_id')->whereNull('variations.deleted_at');
             })
                 ->leftjoin('add_stock_lines', function ($join) {
@@ -504,8 +504,7 @@ class ProductController extends Controller
             ['purchase_price' => ['required', 'max:25', 'decimal']],
             ['sell_price' => ['required', 'max:25', 'decimal']],
         );
-
-//        try {
+        try {
             $discount_customers = $this->getDiscountCustomerFromType($request->discount_customer_types);
 
             $product_data = [
@@ -580,13 +579,13 @@ class ProductController extends Controller
                 'success' => true,
                 'msg' => __('lang.success')
             ];
-//        } catch (\Exception $e) {
-//            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-//            $output = [
-//                'success' => false,
-//                'msg' => __('lang.something_went_wrong')
-//            ];
-//        }
+        } catch (\Exception $e) {
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('lang.something_went_wrong')
+            ];
+        }
 
         return $output;
     }
