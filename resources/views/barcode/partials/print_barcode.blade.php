@@ -109,7 +109,7 @@
                     @endif
 
                     {{-- Grade --}}
-                    <span style="display: block !important;font-weight: bold;font-size: 15px"  >
+                    <span style="display: block !important;font-weight: bold;font-size: 19px;margin-bottom: 1px;"  >
                         @if (!empty($print['grade']) && !empty($details['details']->grade_name))
                             @lang('lang.grade'):
                             {{ $details['details']->grade_name }}
