@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\ProductImport;
 use App\Models\Brand;
+use App\Models\Printer;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Customer;
@@ -444,6 +445,7 @@ class ProductController extends Controller
         $raw_materials  = Product::where('is_raw_material', 1)->orderBy('name', 'asc')->pluck('name', 'id');
         $raw_material_units  = Unit::orderBy('name', 'asc')->pluck('name', 'id');
         $suppliers = Supplier::pluck('name', 'id');
+        $printers = Printer::get(['id','name']);
 
         if ($quick_add) {
             return view('product.create_quick_add')->with(compact(
@@ -464,6 +466,7 @@ class ProductController extends Controller
                 'customer_types',
                 'discount_customer_types',
                 'stores',
+                'printers'
             ));
         }
 
@@ -484,6 +487,7 @@ class ProductController extends Controller
             'customer_types',
             'discount_customer_types',
             'stores',
+            'printers'
         ));
     }
 
@@ -550,6 +554,22 @@ class ProductController extends Controller
             DB::beginTransaction();
 
             $product = Product::create($product_data);
+            if($request->printers){
+                // loop printers
+                foreach ($request->printers as $printer){
+                    $data = [
+                        'printer_id' => $printer,
+                        'product_id' => $product['id'],
+                    ];
+                    $insert_data[] = $data;
+                    $insert_data = collect($insert_data);
+                    $chunks = $insert_data->chunk(100);
+                    foreach ($chunks as $chunk)
+                    {
+                        DB::table('printer_product')->insert($chunk->toArray());
+                    }
+                }
+            }
 
             $this->productUtil->createOrUpdateVariations($product, $request);
 
