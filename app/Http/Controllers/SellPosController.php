@@ -1189,6 +1189,9 @@ class SellPosController extends Controller
                 ->leftjoin('currencies as received_currency', 'transactions.received_currency_id', 'received_currency.id')
                 ->where('type', 'sell')->where('status', '!=', 'draft');
 
+            if(strtolower(Session::get('user.job_title')) == 'cashier'){
+                $query->where('created_by',Auth::user()->id);
+            }
             if (!empty($store_id)) {
                 $query->where('transactions.store_id', $store_id);
             }

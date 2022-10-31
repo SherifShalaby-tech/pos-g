@@ -1282,5 +1282,15 @@ return [
     'number_of_customer' => 'Number of customers',
     'cash_register_is_closed' => 'Cash register is closed',
     'import_req'=>'Make sure the entered data is correct and try again',
+    'trash_employee' => 'Trash',
+    'total_taxes' => 'Total Taxes',
+    'printers' => 'Printers',
+    'add_new_printer' => 'add new printer',
+    'printers_list' => 'printers list',
+    'is_cashier' => 'Available for use at the cashier',
+    'createdBy' => 'Created By',
+    'printer_deleted' => 'Printer Deleted',
+    'printer_updated' => 'Printer Updated',
+    'returned_by' => 'Returned By'
 
 ];
