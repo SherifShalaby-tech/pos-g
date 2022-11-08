@@ -142,11 +142,11 @@ class SupplierController extends Controller
 
             return redirect()->back()->withInput()->with('status', $output);
         }
-//        try {
+        try {
             $data = $request->except('_token', 'quick_add');
+            $data['address'] = $data['address']!=null ? $data['address'] : ' ';
             $data['products'] = !empty($data['products']) ? $data['products'] : [];
             $data['created_by'] = Auth::user()->id;
-
             DB::beginTransaction();
             $supplier = Supplier::create($data);
 
@@ -168,13 +168,13 @@ class SupplierController extends Controller
                 'supplier_id' => $supplier_id,
                 'msg' => __('lang.success')
             ];
-//        } catch (\Exception $e) {
-//            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-//            $output = [
-//                'success' => false,
-//                'msg' => __('lang.something_went_wrong')
-//            ];
-//        }
+        } catch (\Exception $e) {
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('lang.something_went_wrong')
+            ];
+        }
 
 
         if ($request->ajax()) {
