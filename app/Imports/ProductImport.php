@@ -100,6 +100,7 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                     if(!$category){
                         $category =   Category::create([
                             'name'=>  $row['category'],
+                            'product_class_id'=>!empty($row['class'])?$class->id:null,
                         ]);
                     }
                 }
@@ -129,7 +130,6 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                         ]);
                     }
                 }
-//            dd($row['product_name']);
                 $product_data = [
                     'name' => $row['product_name'],
                     'product_class_id' => !empty($class) ? $class->id : null,
@@ -167,7 +167,6 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                     'active' => 1,
                     'created_by' => Auth::user()->id
                 ];
-
                 $product = Product::create($product_data);
                 $this->productUtil->createOrUpdateVariations($product, $this->request);
 
