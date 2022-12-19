@@ -6,7 +6,7 @@ $recent_product = App\Models\Product::where('is_raw_material', 0)
 <div class="row">
     <div class="col-md-4">
         <div class="i-checks">
-            <input id="is_service" name="is_service" type="checkbox"
+            <input id="is_service" name="is_consumption_details[0][amount_used]service" type="checkbox"
                 @if (session('system_mode') == 'restaurant') checked
                 @elseif(!empty($recent_product) && $recent_product->is_service == 1) checked @endif
                 value="1" class="form-control-custom">

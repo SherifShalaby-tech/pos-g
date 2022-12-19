@@ -66,6 +66,8 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::get('product-class/get-dropdown', 'ProductClassController@getDropdown');
     Route::resource('product-class', ProductClassController::class);
     Route::get('category/get-sub-category-dropdown', 'CategoryController@getSubCategoryDropdown');
+    Route::get('get-all-subcategories', 'CategoryController@getAllSubCategories')->name('get.all.subcategories');
+
     Route::get('category/get-dropdown', 'CategoryController@getDropdown');
     Route::get('sub-category', 'CategoryController@getSubCategories');
     Route::resource('category', CategoryController::class);
@@ -410,3 +412,5 @@ Route::post('/tokens/create', function (Request $request) {
 
     return ['token' => $token->plainTextToken];
 });
+
+//Route::get('get-all-subcategories', 'CategoryController@getAllSubCategories');
