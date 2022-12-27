@@ -15,4 +15,9 @@ class Size extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    public function variations()
+    {
+        return $this->hasMany(Variation::class,'size_id');
+    }
 }
