@@ -289,14 +289,15 @@ $(document).ready(function () {
             var string = "";
             if (item.is_service == 0 && item.qty_available <= 0) {
                 string +=
-                    '<li class="ui-state-disabled">' +
-                    item.text +
+                    '<li class="ui-state-disabled">'
+                    +item.text +
                     " (" +
                     LANG.out_of_stock +
                     ") </li>";
             } else {
                 string += item.text;
             }
+            console.log(item)
             return $("<li>")
                 .append("<div>" + string + "</div>")
                 .appendTo(ul);
