@@ -827,12 +827,9 @@ class AddStockController extends Controller
                 'source_id' => !empty($data['source_id']) ? $data['source_id'] : null,
                 'source_type' => !empty($data['source_type']) ? $data['source_type'] : null,
             ];
-
             DB::beginTransaction();
             $transaction = Transaction::create($transaction_data);
-
             Excel::import(new AddStockLineImport($transaction->id), $request->file);
-
             foreach ($transaction->add_stock_lines as $line) {
                 $this->productUtil->updateProductQuantityStore($line->product_id, $line->variation_id, $transaction->store_id,  $line->quantity, 0);
             }

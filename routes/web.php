@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::resource('consumption', ConsumptionController::class);
     Route::get('product-class/get-dropdown', 'ProductClassController@getDropdown');
     Route::resource('product-class', ProductClassController::class);
+    Route::get('product-class/child/{id}', 'ProductClassController@showChild');
     Route::get('category/get-sub-category-dropdown', 'CategoryController@getSubCategoryDropdown');
     Route::get('get-all-subcategories', 'CategoryController@getAllSubCategories')->name('get.all.subcategories');
 
@@ -73,12 +74,17 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::resource('category', CategoryController::class);
     Route::get('brand/get-dropdown', 'BrandController@getDropdown');
     Route::resource('brand', BrandController::class);
+    Route::get('brand/get-products/{id}', 'BrandController@getBrandProducts');
     Route::get('unit/get-unit-details/{unit_id}', 'UnitController@getUnitDetails');
     Route::get('unit/get-dropdown', 'UnitController@getDropdown');
+    Route::get('unit/get-products/{id}', 'UnitController@getUnitProducts');
     Route::resource('unit', UnitController::class);
     Route::get('color/get-dropdown', 'ColorController@getDropdown');
     Route::resource('color', ColorController::class);
+    Route::resource('color', ColorController::class);
+    Route::get('color/get-products/{id}', 'ColorController@getColorProducts');
     Route::get('size/get-dropdown', 'SizeController@getDropdown');
+    Route::get('size/get-products/{id}', 'SizeController@getSizeProducts');
     Route::resource('size', SizeController::class);
     Route::get('grade/get-dropdown', 'GradeController@getDropdown');
     Route::resource('grade', GradeController::class);
@@ -402,11 +408,16 @@ Route::get('/clear-cache', function () {
 
     echo 'cache cleared!';
 });
-// Route::get('/update-purchase-price-transaction-sell-lines', function () {
-//     \Artisan::call('pos:updatePurchasePriceForTransactionSellLines');
+ Route::get('/update-purchase-price-transaction-sell-lines', function () {
+    \Artisan::call('pos:updatePurchasePriceForTransactionSellLines');
 
-//     echo 'purchase price update for sell lines!';
-// });
+     echo 'purchase price update for sell lines!';
+ });
+
+Route::get('/test5', function () {
+    return \App\Models\Product::first()->multiple_colors[0];
+
+});
 Route::post('/tokens/create', function (Request $request) {
     $token = $request->user()->createToken($request->token_name);
 

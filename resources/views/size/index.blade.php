@@ -47,6 +47,11 @@
                                                         class="dripicons-document-edit"></i> @lang('lang.edit')</a>
                                             </li>
                                             <li class="divider"></li>
+                                                <li>
+                                                    <a data-href="{{action('SizeController@getSizeProducts', $size->id)}}"
+                                                       data-container=".view_modal" class="btn btn-modal"><i
+                                                            class="dripicons-document-edit"></i> @lang('lang.products')</a>
+                                                </li>
                                             @endcan
                                             @can('product_module.size.delete')
                                             <li>

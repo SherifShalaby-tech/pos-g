@@ -924,6 +924,8 @@ class SellPosController extends Controller
                     $name = $value['name'];
                     foreach ($value['variations'] as $variation) {
                         $v = Variation::find($variation['variation_id']);
+                        $color = $v->color->name;
+                        $size = $v->size->name;
                         $text = $name;
                         if ($value['type'] == 'variable') {
                             if ($variation['variation_name'] != 'Default') {
@@ -934,11 +936,13 @@ class SellPosController extends Controller
                         $i++;
                         $result[] = [
                             'id' => $i,
-                            'text' => $text . ' - ' . $variation['sub_sku'],
+                            'text' => 'Color: '.$color.' - '.'Size: '.$size.' - ' .$text . ' - ' . $variation['sub_sku'],
                             'product_id' => $key,
                             'variation_id' => $variation['variation_id'],
                             'qty_available' => $variation['qty'],
-                            'is_service' => $value['is_service']
+                            'is_service' => $value['is_service'],
+                            'color' => $color,
+                            'size' => $size
                         ];
                     }
                     $i++;

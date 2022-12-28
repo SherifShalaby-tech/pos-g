@@ -244,13 +244,18 @@ class ProductController extends Controller
                 ->editColumn('supplier_name', function ($row) {
                     return $row->supplier->name ?? '';
                 })
+
                 ->editColumn('batch_number', '{{$batch_number}}')
                 ->editColumn('default_sell_price', '{{@num_format($default_sell_price)}}')
                 ->addColumn('tax', '{{$tax}}')
                 ->editColumn('brand', '{{$brand}}')
                 ->editColumn('unit', '{{$unit}}')
-                ->editColumn('color', '{{$color}}')
-                ->editColumn('size', '{{$size}}')
+                ->editColumn('color', function ($row){
+                    return isset($row->multiple_colors) ? Color::whereId($row->multiple_colors)->first()->name : "";
+                })
+                ->editColumn('size', function ($row){
+                    return isset($row->multiple_sizes) ? Size::whereId($row->multiple_sizes)->first()->name : "";
+                })
                 ->editColumn('grade', '{{$grade}}')
                 ->editColumn('current_stock', '@if($is_service){{@num_format(0)}} @else{{@num_format($current_stock)}}@endif')
                 ->addColumn('current_stock_value', function ($row) {
