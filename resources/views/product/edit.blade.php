@@ -125,7 +125,7 @@
                                     <div class="form-group">
                                         {!! Form::label('name', __('lang.name') . ' *', []) !!}
                                         <div class="input-group my-group">
-                                            {!! Form::text('name', $product->name, ['class' => 'form-control', 'required', 'placeholder' => __('lang.name')]) !!}
+                                            {!! Form::text('name', $product->name, ['class' => 'form-control', 'required', 'placeholder' => "mada"]) !!}
                                             <span class="input-group-btn">
                                                 <button type="button"
                                                     class="btn btn-default bg-white btn-flat translation_btn" type="button"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\ProductImport;
+use App\Models\AddStockLine;
 use App\Models\Brand;
 use App\Models\Printer;
 use App\Models\Category;
@@ -276,15 +277,25 @@ class ProductController extends Controller
                     }
                 })
                 ->editColumn('created_by', '{{$created_by_name}}')
-                ->addColumn('supplier', function ($row) {
-                    $query = Transaction::leftjoin('add_stock_lines', 'transactions.id', '=', 'add_stock_lines.transaction_id')
+                ->editColumn('supplier_name', function ($row) {
+                    $addStocks =  AddStockLine::select('id','transaction_id')
+                        ->with(['transaction:id,supplier_id','transaction.supplier:id,name'])
+                        ->whereProductId($row->id)
+                        ->get();
+                    $supplierNames = array();
+                    foreach ($addStocks as $supplier)
+                    {
+                        array_push($supplierNames,$supplier->transaction->supplier->name);
+                    }
+                    return implode(' , ',array_unique($supplierNames));
+/*                    $query = Transaction::leftjoin('add_stock_lines', 'transactions.id', '=', 'add_stock_lines.transaction_id')
                         ->leftjoin('suppliers', 'transactions.supplier_id', '=', 'suppliers.id')
                         ->where('transactions.type', 'add_stock')
                         ->where('add_stock_lines.product_id', $row->id)
                         ->select('suppliers.name')
                         ->orderBy('transactions.id', 'desc')
                         ->first();
-                    return $query->name ?? '';
+                    return $query->name;*/
                 })
                 ->addColumn('selection_checkbox', function ($row) use ($is_add_stock) {
                     if ($row->is_service == 1 || $is_add_stock == 1) {
