@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AddStockLine;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -415,8 +416,14 @@ Route::get('/clear-cache', function () {
  });
 
 Route::get('/test5', function () {
-    return \App\Models\Product::first()->multiple_colors[0];
-
+    return \App\Models\Product::whereId(978)->first();
+    $addStocks =  AddStockLine::select('id','transaction_id')->with(['transaction:id,supplier_id','transaction.supplier:id,name'])->whereProductId(661)->get();
+    $supplierNames = array();
+    foreach ($addStocks as $supplier)
+    {
+        array_push($supplierNames,$supplier->transaction->supplier->name);
+    }
+    return implode(' , ',array_unique($supplierNames));
 });
 Route::post('/tokens/create', function (Request $request) {
     $token = $request->user()->createToken($request->token_name);
