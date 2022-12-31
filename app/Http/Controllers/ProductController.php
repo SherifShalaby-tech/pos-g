@@ -900,6 +900,7 @@ class ProductController extends Controller
         $name = request()->name;
         $purchase_price = request()->purchase_price;
         $sell_price = request()->sell_price;
+        $is_service = request()->is_service;
 
         return view('product.partial.variation_row')->with(compact(
             'units',
@@ -911,7 +912,8 @@ class ProductController extends Controller
             'name',
             'purchase_price',
             'sell_price',
-            'units_js'
+            'units_js',
+            'is_service'
         ));
     }
 

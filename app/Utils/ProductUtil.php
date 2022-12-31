@@ -947,6 +947,7 @@ class ProductUtil extends Util
                 $add_stock->expiry_date = !empty($line['expiry_date']) ? $this->uf_date($line['expiry_date']) : null;
                 $add_stock->expiry_warning = $line['expiry_warning'];
                 $add_stock->convert_status_expire = $line['convert_status_expire'];
+                $add_stock->sell_price = $line['selling_price'];
                 $add_stock->save();
                 $keep_lines_ids[] = $line['add_stock_line_id'];
                 $qty =  $this->num_uf($line['quantity']);
