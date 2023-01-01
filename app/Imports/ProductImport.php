@@ -11,6 +11,7 @@ use App\Models\ProductClass;
 use App\Models\Size;
 use App\Models\Tax;
 use App\Models\Unit;
+use App\Models\Variation;
 use App\Utils\ProductUtil;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -168,9 +169,17 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                     'created_by' => Auth::user()->id
                 ];
                 $product = Product::create($product_data);
+                
+                $variation_data['name'] = 'Default';
+                $variation_data['product_id'] = $product->id;
+                $variation_data['sub_sku'] = $row['sku'];
+                $variation_data['color_id'] = !empty($product->multiple_colors) ? $product->multiple_colors[0] : null;
+                $variation_data['size_id'] = !empty($product->multiple_sizes) ? $product->multiple_sizes[0] : null;
+                $variation_data['grade_id'] = !empty($product->multiple_grades) ? $product->multiple_grades[0] : null;
+                $variation_data['unit_id'] = !empty($product->multiple_units) ? $product->multiple_units[0] : null;
+                $variation_data['is_dummy'] = 1;
+                Variation::create($variation_data);
                 $this->productUtil->createOrUpdateVariations($product, $this->request);
-
-
             }
 
         }

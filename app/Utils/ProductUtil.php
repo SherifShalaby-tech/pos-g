@@ -263,7 +263,6 @@ class ProductUtil extends Util
                     $variation->number_vs_base_unit= $v['number_vs_base_unit'] ?? 0;
                     $variation->default_purchase_price = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);
                     $variation->default_sell_price = !empty($v['default_sell_price']) ? $this->num_uf($v['default_sell_price']) : $this->num_uf($product->sell_price);
-
                     $variation->save();
                     $variation_array[] = ['variation' => $variation, 'variant_stores' => $v['variant_stores']];
                     $keey_variations[] = $v['id'];
