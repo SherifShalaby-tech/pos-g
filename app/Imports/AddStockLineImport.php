@@ -50,6 +50,7 @@ class AddStockLineImport implements ToModel, WithHeadingRow, WithValidation
             'product_id' => $product->product_id,
             'variation_id' => $product->variation_id,
             'quantity' => $row['quantity'],
+            'sell_price' => $row['sell_price'],
             'purchase_price' => $product->purchase_price,
             'sub_total' => $row['quantity'] * $product->purchase_price,
         ]);
@@ -59,7 +60,8 @@ class AddStockLineImport implements ToModel, WithHeadingRow, WithValidation
     {
         return [
             'product_code' => 'exists:variations,sub_sku',
-            'quantity' => 'required'
+            'quantity' => 'required',
+             'sell_price' => 'required'
         ];
     }
 }

@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Yajra\DataTables\Html\Editor\Fields\BelongsTo;
 
 class Category extends Model implements HasMedia
 {
@@ -37,5 +39,20 @@ class Category extends Model implements HasMedia
             }
         }
         return $name;
+    }
+
+    public function productClass()
+    {
+        return $this->belongsTo(ProductClass::class,'product_class_id');
+    }
+
+    public function mainCategory()
+    {
+        return $this->belongsTo(Category::class,'parent_id');
+    }
+
+    public function subCategories() : HasMany
+    {
+        return $this->hasMany(Category::class,'parent_id');
     }
 }

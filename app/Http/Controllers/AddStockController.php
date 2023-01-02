@@ -323,7 +323,6 @@ class AddStockController extends Controller
      */
     public function store(Request $request)
     {
-
         // try {
         $data = $request->except('_token');
 
@@ -827,12 +826,9 @@ class AddStockController extends Controller
                 'source_id' => !empty($data['source_id']) ? $data['source_id'] : null,
                 'source_type' => !empty($data['source_type']) ? $data['source_type'] : null,
             ];
-
             DB::beginTransaction();
             $transaction = Transaction::create($transaction_data);
-
             Excel::import(new AddStockLineImport($transaction->id), $request->file);
-
             foreach ($transaction->add_stock_lines as $line) {
                 $this->productUtil->updateProductQuantityStore($line->product_id, $line->variation_id, $transaction->store_id,  $line->quantity, 0);
             }
@@ -896,7 +892,14 @@ class AddStockController extends Controller
                 'success' => true,
                 'msg' => __('lang.success')
             ];
-        } catch (\Exception $e) {
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+/*            $failures = $e->failures();
+            foreach ($failures as $failure) {
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }*/
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
             $output = [
                 'success' => false,

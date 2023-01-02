@@ -39,4 +39,9 @@ class Unit extends Model
         $units = $query->orderBy('name', 'asc')->pluck('name', 'id');
         return  $units;
     }
+
+    public function variations()
+    {
+        return $this->hasMany(Variation::class,'unit_id');
+    }
 }

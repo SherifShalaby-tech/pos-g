@@ -150,6 +150,14 @@ class BrandController extends Controller
         ));
     }
 
+    public function getBrandProducts($id)
+    {
+        $brand = Brand::with('products')->find($id);
+        return view('brand.getBrandProducts')->with(compact(
+            'brand',
+        ));
+    }
+
     /**
      * Update the specified resource in storage.
      *

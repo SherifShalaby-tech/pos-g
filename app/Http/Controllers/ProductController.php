@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\ProductImport;
+use App\Models\AddStockLine;
 use App\Models\Brand;
 use App\Models\Printer;
 use App\Models\Category;
@@ -25,6 +26,7 @@ use App\Models\Variation;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -244,13 +246,18 @@ class ProductController extends Controller
                 ->editColumn('supplier_name', function ($row) {
                     return $row->supplier->name ?? '';
                 })
+
                 ->editColumn('batch_number', '{{$batch_number}}')
                 ->editColumn('default_sell_price', '{{@num_format($default_sell_price)}}')
                 ->addColumn('tax', '{{$tax}}')
                 ->editColumn('brand', '{{$brand}}')
                 ->editColumn('unit', '{{$unit}}')
-                ->editColumn('color', '{{$color}}')
-                ->editColumn('size', '{{$size}}')
+                ->editColumn('color', function ($row){
+                    return isset($row->multiple_colors) ? Color::whereId($row->multiple_colors)->first()->name : "";
+                })
+                ->editColumn('size', function ($row){
+                    return isset($row->multiple_sizes) ? Size::whereId($row->multiple_sizes)->first()->name : "";
+                })
                 ->editColumn('grade', '{{$grade}}')
                 ->editColumn('current_stock', '@if($is_service){{@num_format(0)}} @else{{@num_format($current_stock)}}@endif')
                 ->addColumn('current_stock_value', function ($row) {
@@ -271,15 +278,25 @@ class ProductController extends Controller
                     }
                 })
                 ->editColumn('created_by', '{{$created_by_name}}')
-                ->addColumn('supplier', function ($row) {
-                    $query = Transaction::leftjoin('add_stock_lines', 'transactions.id', '=', 'add_stock_lines.transaction_id')
+                ->editColumn('supplier_name', function ($row) {
+                    $addStocks =  AddStockLine::select('id','transaction_id')
+                        ->with(['transaction:id,supplier_id','transaction.supplier:id,name'])
+                        ->whereProductId($row->id)
+                        ->get();
+                    $supplierNames = array();
+                    foreach ($addStocks as $supplier)
+                    {
+                        array_push($supplierNames,$supplier->transaction->supplier->name);
+                    }
+                    return implode(' , ',array_unique($supplierNames));
+/*                    $query = Transaction::leftjoin('add_stock_lines', 'transactions.id', '=', 'add_stock_lines.transaction_id')
                         ->leftjoin('suppliers', 'transactions.supplier_id', '=', 'suppliers.id')
                         ->where('transactions.type', 'add_stock')
                         ->where('add_stock_lines.product_id', $row->id)
                         ->select('suppliers.name')
                         ->orderBy('transactions.id', 'desc')
                         ->first();
-                    return $query->name ?? '';
+                    return $query->name;*/
                 })
                 ->addColumn('selection_checkbox', function ($row) use ($is_add_stock) {
                     if ($row->is_service == 1 || $is_add_stock == 1) {
@@ -884,6 +901,7 @@ class ProductController extends Controller
         $name = request()->name;
         $purchase_price = request()->purchase_price;
         $sell_price = request()->sell_price;
+        $is_service = request()->is_service;
 
         return view('product.partial.variation_row')->with(compact(
             'units',
@@ -895,7 +913,8 @@ class ProductController extends Controller
             'name',
             'purchase_price',
             'sell_price',
-            'units_js'
+            'units_js',
+            'is_service'
         ));
     }
 
@@ -1029,12 +1048,18 @@ class ProductController extends Controller
             DB::beginTransaction();
             Excel::import(new ProductImport($this->productUtil, $request), $request->file);
             DB::commit();
-
             $output = [
                 'success' => true,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
+/*            $failures = $e->failures();
+            foreach ($failures as $failure) {
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+               return  $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }*/
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
             $output = [
                 'success' => false,

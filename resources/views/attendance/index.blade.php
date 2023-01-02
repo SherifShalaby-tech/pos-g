@@ -27,6 +27,8 @@
                                         <th>@lang('lang.check_out_time')</th>
                                         <th>@lang('lang.status')</th>
                                         <th>@lang('lang.created_by')</th>
+                                        <th>@lang('lang.action')</th>
+
                                     </tr>
                                 </thead>
 
@@ -85,6 +87,24 @@
                                         </td>
                                         <td>
                                             {{ucfirst($attendance->created_by)}}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn-sm dropdown-toggle"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">@lang('lang.action')
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                                        <li>
+                                                            <a data-href=""
+                                                               data-container=".view_modal" class="btn btn-modal"><i
+                                                                    class="dripicons-document-edit"></i> @lang('lang.edit')</a>
+                                                        </li>
+                                                </ul>
+                                            </div>
+
                                         </td>
                                     </tr>
                                     @endforeach

@@ -134,8 +134,15 @@ class ProductClassController extends Controller
     public function edit($id)
     {
         $product_class = ProductClass::find($id);
-
         return view('product_class.edit')->with(compact(
+            'product_class'
+        ));
+    }
+
+    public function showChild($id)
+    {
+        $product_class = ProductClass::with(['categories.subcategories'])->find($id);
+        return view('product_class.showChild')->with(compact(
             'product_class'
         ));
     }

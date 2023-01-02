@@ -35,6 +35,11 @@ $i = $index;
             <input class="final_cost" type="hidden" name="add_stock_lines[{{$i}}][final_cost]" value="@if(isset($product->default_purchase_price)){{@num_format($product->default_purchase_price / $exchange_rate)}}@else{{0}}@endif">
     </td>
     <td>
+        <input type="text" class="form-control sell_price"
+               name="add_stock_lines[{{$loop->index}}][sell_price]" required
+               value="@if(isset($product->sell_price)){{@num_format($product->sell_price)}}@else{{0}}@endif">
+    </td>
+    <td>
         <span class="sub_total_span"></span>
         <input type="hidden" class="form-control sub_total" name="add_stock_lines[{{$i}}][sub_total]" value="">
     </td>
