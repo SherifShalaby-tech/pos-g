@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\CashRegister;
 use App\Models\CashRegisterTransaction;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Coupon;
 use App\Models\Currency;
 use App\Models\Customer;
@@ -17,6 +18,7 @@ use App\Models\GiftCard;
 use App\Models\Product;
 use App\Models\ProductClass;
 use App\Models\SalesPromotion;
+use App\Models\Size;
 use App\Models\Store;
 use App\Models\StorePos;
 use App\Models\System;
@@ -887,6 +889,8 @@ class SellPosController extends Controller
                     'products.id as product_id',
                     'products.name',
                     'products.type',
+                    'products.multiple_colors',
+                    'products.multiple_sizes',
                     'products.is_service',
                     'variations.id as variation_id',
                     'variations.name as variation',
@@ -905,6 +909,8 @@ class SellPosController extends Controller
                 $products_array[$product->product_id]['name'] = $product->name;
                 $products_array[$product->product_id]['sku'] = $product->sub_sku;
                 $products_array[$product->product_id]['type'] = $product->type;
+                $products_array[$product->product_id]['color'] = $product->multiple_colors[0];
+                $products_array[$product->product_id]['size'] = $product->multiple_sizes[0];
                 $products_array[$product->product_id]['is_service'] = $product->is_service;
                 $products_array[$product->product_id]['qty'] = $this->productUtil->num_uf($product->qty_available - $product->block_qty);
                 $products_array[$product->product_id]['variations'][]
@@ -924,8 +930,20 @@ class SellPosController extends Controller
                     $name = $value['name'];
                     foreach ($value['variations'] as $variation) {
                         $v = Variation::find($variation['variation_id']);
-                        $color = $v->color->name;
-                        $size = $v->size->name;
+                        if($v->color->name)
+                        {
+                            $color =  $v->color->name;
+                        }else{
+                            $colorId = $value['color'];
+                            $color = Color::whereId($colorId)->first()->name;
+                        }
+                        if($v->size->name)
+                        {
+                            $size =  $v->size->name;
+                        }else{
+                            $sizeId = $value['size'];
+                            $size = Size::whereId($sizeId)->first()->name;
+                        }
                         $text = $name;
                         if ($value['type'] == 'variable') {
                             if ($variation['variation_name'] != 'Default') {

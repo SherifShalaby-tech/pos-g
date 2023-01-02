@@ -893,13 +893,13 @@ class AddStockController extends Controller
                 'msg' => __('lang.success')
             ];
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
+/*            $failures = $e->failures();
             foreach ($failures as $failure) {
-              return   $failure->row(); // row that went wrong
+                $failure->row(); // row that went wrong
                 $failure->attribute(); // either heading key (if using heading row concern) or column index
                 $failure->errors(); // Actual error messages from Laravel validator
                 $failure->values(); // The values of the row that has failed.
-            }
+            }*/
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
             $output = [
                 'success' => false,

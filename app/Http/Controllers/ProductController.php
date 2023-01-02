@@ -26,6 +26,7 @@ use App\Models\Variation;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -900,6 +901,7 @@ class ProductController extends Controller
         $name = request()->name;
         $purchase_price = request()->purchase_price;
         $sell_price = request()->sell_price;
+        $is_service = request()->is_service;
 
         return view('product.partial.variation_row')->with(compact(
             'units',
@@ -911,7 +913,8 @@ class ProductController extends Controller
             'name',
             'purchase_price',
             'sell_price',
-            'units_js'
+            'units_js',
+            'is_service'
         ));
     }
 
@@ -1045,12 +1048,18 @@ class ProductController extends Controller
             DB::beginTransaction();
             Excel::import(new ProductImport($this->productUtil, $request), $request->file);
             DB::commit();
-
             $output = [
                 'success' => true,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
+/*            $failures = $e->failures();
+            foreach ($failures as $failure) {
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+               return  $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }*/
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
             $output = [
                 'success' => false,

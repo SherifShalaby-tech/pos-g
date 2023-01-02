@@ -263,7 +263,6 @@ class ProductUtil extends Util
                     $variation->number_vs_base_unit= $v['number_vs_base_unit'] ?? 0;
                     $variation->default_purchase_price = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);
                     $variation->default_sell_price = !empty($v['default_sell_price']) ? $this->num_uf($v['default_sell_price']) : $this->num_uf($product->sell_price);
-
                     $variation->save();
                     $variation_array[] = ['variation' => $variation, 'variant_stores' => $v['variant_stores']];
                     $keey_variations[] = $v['id'];
@@ -947,6 +946,7 @@ class ProductUtil extends Util
                 $add_stock->expiry_date = !empty($line['expiry_date']) ? $this->uf_date($line['expiry_date']) : null;
                 $add_stock->expiry_warning = $line['expiry_warning'];
                 $add_stock->convert_status_expire = $line['convert_status_expire'];
+                $add_stock->sell_price = $line['selling_price'];
                 $add_stock->save();
                 $keep_lines_ids[] = $line['add_stock_line_id'];
                 $qty =  $this->num_uf($line['quantity']);

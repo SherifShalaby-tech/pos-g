@@ -11,6 +11,7 @@ use App\Models\ProductClass;
 use App\Models\Size;
 use App\Models\Tax;
 use App\Models\Unit;
+use App\Models\Variation;
 use App\Utils\ProductUtil;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -150,8 +151,8 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                     'expiry_warning' => $row['expiry_warning'],
                     'convert_status_expire' => $row['convert_status_expire'],
                     'alert_quantity' => $row['alert_quantity'],
-                    'purchase_price' => $row['purchase_price'],
-                    'sell_price' => $row['sell_price'],
+                    'purchase_price' => 0,
+                    'sell_price' => 0,
                     'tax_id' => !empty($tax) ? $tax->id : null,
                     'tax_method' => $row['tax_method'],
                     'discount_type' => $row['discount_type'],
@@ -168,9 +169,17 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                     'created_by' => Auth::user()->id
                 ];
                 $product = Product::create($product_data);
+
+                $variation_data['name'] = 'Default';
+                $variation_data['product_id'] = $product->id;
+                $variation_data['sub_sku'] = $row['sku'];
+                $variation_data['color_id'] = !empty($product->multiple_colors) ? $product->multiple_colors[0] : null;
+                $variation_data['size_id'] = !empty($product->multiple_sizes) ? $product->multiple_sizes[0] : null;
+                $variation_data['grade_id'] = !empty($product->multiple_grades) ? $product->multiple_grades[0] : null;
+                $variation_data['unit_id'] = !empty($product->multiple_units) ? $product->multiple_units[0] : null;
+                $variation_data['is_dummy'] = 1;
+                Variation::create($variation_data);
                 $this->productUtil->createOrUpdateVariations($product, $this->request);
-
-
             }
 
         }
@@ -182,8 +191,6 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
             'product_name' => 'required',
             'class' => 'required',
             'sku' => 'sometimes|unique:products',
-            'sell_price' => 'required|numeric',
-            'purchase_price' => 'required|numeric',
         ];
     }
 }
