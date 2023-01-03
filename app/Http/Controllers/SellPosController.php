@@ -1190,7 +1190,7 @@ class SellPosController extends Controller
                 ->where('type', 'sell')->where('status', '!=', 'draft');
 
             if(strtolower(session('user.job_title')) == 'cashier'){
-                $query->where('created_by',Auth::user()->id);
+                $query->where('transactions.created_by',Auth::user()->id);
             }
             if (!empty($store_id)) {
                 $query->where('transactions.store_id', $store_id);
