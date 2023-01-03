@@ -39,4 +39,9 @@ class ProductClass extends Model implements HasMedia
         }
         return $name;
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class,'product_class_id');
+    }
 }

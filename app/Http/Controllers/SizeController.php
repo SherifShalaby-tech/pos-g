@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Size;
 use App\Utils\Util;
 use Illuminate\Http\Request;
@@ -121,11 +122,23 @@ class SizeController extends Controller
      */
     public function edit($id)
     {
-
         $size = Size::find($id);
-
         return view('size.edit')->with(compact(
             'size'
+        ));
+    }
+
+    public function getSizeProducts($id)
+    {
+        $color = Size::with('variations.product')->find($id);
+        $product_ids =array();
+        foreach ($color->variations as $variation)
+        {
+            array_push($product_ids,$variation->product->id);
+        }
+        $products = Product::whereIn('id',array_unique($product_ids))->pluck('name');
+        return view('size.getSizeProducts')->with(compact(
+            'products'
         ));
     }
 

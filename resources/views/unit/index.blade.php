@@ -52,6 +52,11 @@
                                                         class="dripicons-document-edit"></i> @lang('lang.edit')</a>
                                             </li>
                                             <li class="divider"></li>
+                                                <li>
+                                                    <a data-href="{{action('UnitController@getUnitProducts', $unit->id)}}"
+                                                       data-container=".view_modal" class="btn btn-modal"><i
+                                                            class="dripicons-document-edit"></i> @lang('lang.products')</a>
+                                                </li>
                                             @endcan
                                             @can('product_module.unit.delete')
                                             <li>

@@ -14,6 +14,8 @@ return [
     */
     'number_vs_base_unit'=>'Units equation',
     'dashboard' => 'Dashboard',
+    'path' => 'Path',
+    'showChild' => 'Show Content',
     'username' => 'Username',
     'password' => 'Password',
     'email' => 'Email',

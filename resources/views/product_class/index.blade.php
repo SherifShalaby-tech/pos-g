@@ -62,6 +62,14 @@
                                                                 @lang('lang.edit')</a>
                                                         </li>
                                                         <li class="divider"></li>
+                                                        <li>
+                                                        <li>
+
+                                                            <a data-href="{{ action('ProductClassController@showChild', $product_class->id) }}"
+                                                               data-container=".view_modal" class="btn btn-modal"><i
+                                                                    class="dripicons-document-edit"></i>
+                                                                @lang('lang.showChild')</a>
+                                                        </li>
                                                     @endcan
                                                     @if ($product_class->name != 'Extras')
                                                         @can('product_module.product_class.delete')

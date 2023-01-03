@@ -57,6 +57,13 @@ class CategoryController extends Controller
         ));
     }
 
+    public function getAllSubCategories()
+    {
+        $categories = Category::whereNotNull('parent_id')->orderBy('name', 'asc')->pluck('name', 'id');
+        $categories_dp = $this->commonUtil->createDropdownHtml($categories, 'Please Select');
+        return $categories_dp;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

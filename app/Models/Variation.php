@@ -51,4 +51,6 @@ class Variation extends Model
     {
         return $this->hasMany(ConsumptionProduct::class);
     }
+
+
 }

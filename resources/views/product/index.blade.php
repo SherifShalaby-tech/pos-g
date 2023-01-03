@@ -500,9 +500,11 @@
                             name: 'default_purchase_price',
                             searchable: false
                         },
-                    @endcan {
+                    @endcan
+                    {
                         data: 'supplier_name',
-                        name: 'supplier.name'
+                        name: 'supplier_name',
+                        searchable: false
                     },
                     {
                         data: 'active',

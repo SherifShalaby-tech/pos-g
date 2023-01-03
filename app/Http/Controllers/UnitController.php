@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Unit;
 use App\Utils\Util;
 use Illuminate\Http\Request;
@@ -131,6 +132,20 @@ class UnitController extends Controller
         return view('unit.edit')->with(compact(
             'unit',
             'units'
+        ));
+    }
+
+    public function getUnitProducts($id)
+    {
+        $color = Unit::with('variations.product')->find($id);
+        $product_ids =array();
+        foreach ($color->variations as $variation)
+        {
+            array_push($product_ids,$variation->product->id);
+        }
+        $products = Product::whereIn('id',array_unique($product_ids))->pluck('name');
+        return view('unit.getUnitProducts')->with(compact(
+            'products'
         ));
     }
 

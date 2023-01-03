@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Color;
+use App\Models\Product;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -125,6 +126,20 @@ class ColorController extends Controller
 
         return view('color.edit')->with(compact(
             'color'
+        ));
+    }
+
+    public function getColorProducts($id)
+    {
+         $color = Color::with('variations.product')->find($id);
+        $product_ids =array();
+         foreach ($color->variations as $variation)
+         {
+             array_push($product_ids,$variation->product->id);
+         }
+         $products = Product::whereIn('id',array_unique($product_ids))->pluck('name');
+        return view('color.getColorProducts')->with(compact(
+            'products'
         ));
     }
 

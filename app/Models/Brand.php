@@ -18,4 +18,9 @@ class Brand extends Model implements HasMedia
      * @var array
      */
     protected $guarded = ['id'];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class,'brand_id');
+    }
 }
