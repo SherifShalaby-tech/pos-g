@@ -1212,19 +1212,19 @@ class SellPosController extends Controller
                 ->where('type', 'sell')->where('status', '!=', 'draft');
 
             if(strtolower(session('user.job_title')) == 'cashier'){
-                $query->where('created_by',Auth::user()->id);
+                $query->where('transactions.created_by',Auth::user()->id);
             }
             if (!empty($store_id)) {
                 $query->where('transactions.store_id', $store_id);
             }
             if (!empty(request()->start_date)) {
-                $query->whereDate('transaction_date', '>=', request()->start_date);
+                $query->whereDate('transactions.transaction_date', '>=', request()->start_date);
             }
             if (!empty(request()->end_date)) {
-                $query->whereDate('transaction_date', '<=', request()->end_date);
+                $query->whereDate('transactions.transaction_date', '<=', request()->end_date);
             }
             if (!empty(request()->customer_id)) {
-                $query->where('customer_id', request()->customer_id);
+                $query->where('transactions.customer_id', request()->customer_id);
             }
             if (!empty(request()->deliveryman_id)) {
                 $query->where('transactions.deliveryman_id', request()->deliveryman_id);
