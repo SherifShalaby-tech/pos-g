@@ -954,7 +954,7 @@ class SellPosController extends Controller
                         $i++;
                         $result[] = [
                             'id' => $i,
-                            'text' => 'Color: '.$color.' - '.'Size: '.$size.' - ' .$text . ' - ' . $variation['sub_sku'],
+                            'text' =>$color.' - '.$size.' - ' .$text . ' - ' . $variation['sub_sku'],
                             'product_id' => $key,
                             'variation_id' => $variation['variation_id'],
                             'qty_available' => $variation['qty'],
