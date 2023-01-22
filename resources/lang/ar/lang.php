@@ -12,7 +12,11 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
+    'change_current_stock' => 'تغيير سعر البيع للمخزون الحالى ',
+    'clear_all_input_form'=>'الاحتفاظ بالبيانات بعد عملية الإدخال',
+    'add_a_free_amount'=>'اضافة كمية مجانية من نفس المنتج',
+    'free_amount'=>'الكمية المجانية',
+    'new_purchase_price'=>'سعر الشراء الجديد',
     'dashboard' => 'نظرة عامة',
     'path' => 'المسار',
     'showChild' => 'عرض المحتوى',

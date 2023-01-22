@@ -126,6 +126,7 @@ class ProductController extends Controller
                 ->leftjoin('categories as sub_categories', 'products.sub_category_id', 'sub_categories.id')
                 ->leftjoin('brands', 'products.brand_id', 'brands.id')
                 ->leftjoin('supplier_products', 'products.id', 'supplier_products.product_id')
+                ->leftjoin('suppliers as suppliersf', 'supplier_products.supplier_id', 'suppliersf.id')
                 ->leftjoin('users', 'products.created_by', 'users.id')
                 ->leftjoin('users as edited', 'products.edited_by', 'users.id')
                 ->leftjoin('taxes', 'products.tax_id', 'taxes.id')
@@ -213,6 +214,7 @@ class ProductController extends Controller
                 'grades.name as grade',
                 'units.name as unit',
                 'taxes.name as tax',
+                'suppliersf.name as supplier',
                 'variations.id as variation_id',
                 'variations.name as variation_name',
                 'variations.default_purchase_price',
@@ -243,9 +245,9 @@ class ProductController extends Controller
                     data-container=".view_modal" class="btn btn-modal">' . __('lang.view') . '</a>';
                     return $html;
                 })
-                ->editColumn('supplier_name', function ($row) {
-                    return $row->supplier->name ?? '';
-                })
+                // ->addColumn('supplier_name', function ($row) {
+                //     return $row->supplier ? $row->supplier->name : '';
+                // })
 
                 ->editColumn('batch_number', '{{$batch_number}}')
                 ->editColumn('default_sell_price', '{{@num_format($default_sell_price)}}')
@@ -253,10 +255,24 @@ class ProductController extends Controller
                 ->editColumn('brand', '{{$brand}}')
                 ->editColumn('unit', '{{$unit}}')
                 ->editColumn('color', function ($row){
-                    return isset($row->multiple_colors) ? Color::whereId($row->multiple_colors)->first()->name : "";
+                    $color='';
+                    if(isset($row->multiple_colors)){
+                      $color_m=Color::whereId($row->multiple_colors)->first();
+                      if($color_m){
+                         $color= $color_m ->name;
+                      }
+                    }
+                    return $color;
                 })
                 ->editColumn('size', function ($row){
-                    return isset($row->multiple_sizes) ? Size::whereId($row->multiple_sizes)->first()->name : "";
+                    $size='';
+                    if(isset($row->multiple_sizes)){
+                      $size_m=Size::whereId($row->multiple_sizes)->first();
+                      if($size_m){
+                         $size= $size_m ->name;
+                      }
+                    }
+                    return $size;
                 })
                 ->editColumn('grade', '{{$grade}}')
                 ->editColumn('current_stock', '@if($is_service){{@num_format(0)}} @else{{@num_format($current_stock)}}@endif')
@@ -278,7 +294,7 @@ class ProductController extends Controller
                     }
                 })
                 ->editColumn('created_by', '{{$created_by_name}}')
-                ->editColumn('supplier_name', function ($row) {
+                ->addColumn('supplier_name', function ($row) {
                     $addStocks =  AddStockLine::select('id','transaction_id')
                         ->with(['transaction:id,supplier_id','transaction.supplier:id,name'])
                         ->whereProductId($row->id)
@@ -525,7 +541,7 @@ class ProductController extends Controller
             ['purchase_price' => ['required', 'max:25', 'decimal']],
             ['sell_price' => ['required', 'max:25', 'decimal']],
         );
-        try {
+//        try {
             $discount_customers = $this->getDiscountCustomerFromType($request->discount_customer_types);
 
             $product_data = [
@@ -616,13 +632,13 @@ class ProductController extends Controller
                 'success' => true,
                 'msg' => __('lang.success')
             ];
-        } catch (\Exception $e) {
-            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-            $output = [
-                'success' => false,
-                'msg' => __('lang.something_went_wrong')
-            ];
-        }
+//        } catch (\Exception $e) {
+//            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+//            $output = [
+//                'success' => false,
+//                'msg' => __('lang.something_went_wrong')
+//            ];
+//        }
 
         return $output;
     }
@@ -1032,6 +1048,28 @@ class ProductController extends Controller
      */
     public function getImport()
     {
+        $prices=DB::table('new_name')->get();
+
+
+        foreach($prices as $price){
+        //     $variation = Variation::find($price->id);
+        //     if($variation){
+        //         $variation->default_purchase_price=$price->Purchase_Price;
+        //         $variation->default_sell_price=$price->sell_price;
+                $product = Product::where('sku',$price->Sku)->first();
+                if($product){
+                    $product->name=$price->Product_Name;
+                    // $product->sell_price=$price->sell_price;
+                    $product->save();
+                }
+        //         $variation->save();
+            }
+
+
+
+        // }
+
+
         return view('product.import');
     }
 
@@ -1041,6 +1079,9 @@ class ProductController extends Controller
      */
     public function saveImport(Request $request)
     {
+
+
+
         $this->validate($request, [
             'file' => 'required|mimes:csv,txt,xlsx'
         ]);
@@ -1057,7 +1098,7 @@ class ProductController extends Controller
             foreach ($failures as $failure) {
                 $failure->row(); // row that went wrong
                 $failure->attribute(); // either heading key (if using heading row concern) or column index
-               return  $failure->errors(); // Actual error messages from Laravel validator
+              return  $failure->errors(); // Actual error messages from Laravel validator
                 $failure->values(); // The values of the row that has failed.
             }*/
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());

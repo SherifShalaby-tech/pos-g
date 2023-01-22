@@ -106,7 +106,7 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                     }
                 }
                 if (!empty($row['sub_category']) && !empty($row['category'])) {
-                    $sub_category = Category::where('name', $row['sub_category'])->where('parent_id',$category->id)->first();
+                    $sub_category = Category::where('name', $row['sub_category'])->whereNotNull('parent_id')->first();
                     if(!$sub_category){
                         $sub_category =   Category::create([
                             'name'=>  $row['sub_category'],
@@ -173,13 +173,14 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
                 $variation_data['name'] = 'Default';
                 $variation_data['product_id'] = $product->id;
                 $variation_data['sub_sku'] = $row['sku'];
-                $variation_data['color_id'] = !empty($product->multiple_colors) ? $product->multiple_colors[0] : null;
-                $variation_data['size_id'] = !empty($product->multiple_sizes) ? $product->multiple_sizes[0] : null;
-                $variation_data['grade_id'] = !empty($product->multiple_grades) ? $product->multiple_grades[0] : null;
-                $variation_data['unit_id'] = !empty($product->multiple_units) ? $product->multiple_units[0] : null;
+                $variation_data['color_id'] = $color?$color->id : null ;
+                $variation_data['size_id'] = $size?$size->id : null ;
+                $variation_data['grade_id'] =$grade? $grade->id : null ;
+                $variation_data['unit_id'] = $unit? $unit->id : null ;
                 $variation_data['is_dummy'] = 1;
-                Variation::create($variation_data);
-                $this->productUtil->createOrUpdateVariations($product, $this->request);
+                $variation=Variation::create($variation_data);
+                $this->productUtil->createOrUpdateProductStore($product, $variation, $this->request, []);
+                // $this->productUtil->createOrUpdateVariations($product, $this->request);
             }
 
         }

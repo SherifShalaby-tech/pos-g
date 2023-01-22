@@ -4,10 +4,24 @@
     <td class="row_number"></td>
     @endif
     <td style="width: @if(session('system_mode')  != 'restaurant') 18%; @else 20%; @endif font-size: 13px;">
+@php
+$Variation=\App\Models\Variation::where('id',$product->variation_id)->first();
+    if($Variation){
+        $stockLines=\App\Models\AddStockLine::where('variation_id',$Variation->id)->whereColumn('quantity',">",'quantity_sold')->first();
+        $default_sell_price=$stockLines?($stockLines->sell_price == 0? $Variation->default_sell_price : $stockLines->sell_price )  : $Variation->default_sell_price;
+        $default_purchase_price=$stockLines?($stockLines->purchase_price == 0? $Variation->default_purchase_price : $stockLines->purchase_price ) : $Variation->default_purchase_price;
+
+    }
+
+@endphp
         @if($product->variation_name != "Default")
         <b>{{$product->variation_name}}</b> {{$product->sub_sku}}
         @else
         <b>{{$product->product_name}}</b>
+        <p>
+             {{$product->sub_sku}}
+        </p>
+       
         @endif
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][is_service]" class="is_service"
             value="{{$product->is_service}}">
@@ -16,9 +30,9 @@
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][variation_id]" class="variation_id"
             value="{{$product->variation_id}}">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][price_hidden]" class="price_hidden"
-            value="@if(isset($product->default_sell_price)){{@num_format($product->default_sell_price / $exchange_rate)}}@else{{0}}@endif">
+            value="@if(isset($default_sell_price)){{@num_format(($default_sell_price) / $exchange_rate)}}@else{{0}}@endif">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][purchase_price]" class="purchase_price"
-            value="@if(isset($product->default_purchase_price)){{@num_format($product->default_purchase_price / $exchange_rate)}}@else{{0}}@endif">
+            value="@if(isset($default_purchase_price)){{@num_format($default_purchase_price / $exchange_rate)}}@else{{0}}@endif">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][tax_id]" class="tax_id"
             value="{{$product->tax_id}}">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][tax_method]" class="tax_method"
@@ -49,6 +63,9 @@
             value="@if(!empty($sale_promotion_details)){{$sale_promotion_details->discount_type}}@else{{0}}@endif">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][promotion_discount_amount]"
             class="promotion_discount_amount" value="0">
+           @php $loop_index= $loop->index + $index@endphp
+       
+
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 18% @else 20% @endif">
         <div class="input-group"><span class="input-group-btn">
@@ -74,8 +91,8 @@
     <td style="width: @if(session('system_mode')  != 'restaurant') 16% @else 15% @endif">
         <input type="text" class="form-control sell_price"
             name="transaction_sell_line[{{$loop->index + $index}}][sell_price]" required
-            @if(!auth()->user()->can('product_module.sell_price.create_and_edit')) readonly @endif
-        value="@if(isset($product->default_sell_price)){{@num_format($product->default_sell_price / $exchange_rate)}}@else{{0}}@endif">
+            @if(!auth()->user()->can('product_module.sell_price.create_and_edit')) readonly @elseif(env('IS_SUB_BRANCH',false)) readonly @endif
+        value="@if(isset($default_sell_price)){{@num_format(($default_sell_price) / $exchange_rate)}}@else{{0}}@endif">
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 13% @else 15% @endif">
         <input type="hidden" class="form-control product_discount_type"

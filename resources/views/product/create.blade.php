@@ -1,15 +1,32 @@
 @extends('layouts.app')
 @section('title', __('lang.product'))
-
+@php
+$clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
+@endphp
 @section('content')
     <section class="forms">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>@lang('lang.add_new_product')</h4>
+                        <div class="row mr-2 ml-2">
+                            <div class="card-header d-flex align-items-center col-md-7">
+                                <h4>@lang('lang.add_new_product')</h4>
+                            </div>
+                            <div class="col-md-3 card-header d-flex align-items-center ">
+                                <div class="i-checks">
+                                    <input id="clear_all_input_form" name="clear_all_input_form"
+                                           type="checkbox" @if ($clear_all_input_form == null || $clear_all_input_form == '1') checked @endif value="1"
+                                           class="form-control-custom">
+                                    <label for="clear_all_input_form">
+                                        <strong>
+                                            @lang('lang.clear_all_input_form')
+                                        </strong>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="card-body">
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
                             {!! Form::open(['url' => action('ProductController@store'), 'id' => 'product-form', 'method' => 'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}

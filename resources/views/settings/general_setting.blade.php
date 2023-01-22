@@ -64,6 +64,7 @@
                                 </strong></label>
                         </div>
                     </div>
+
                     @if (session('system_mode') == 'restaurant')
                         <div class="col-md-3">
                             <div class="i-checks">

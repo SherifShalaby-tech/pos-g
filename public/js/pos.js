@@ -247,7 +247,7 @@ $(document).ready(function () {
                             ._trigger("select", "autocompleteselect", ui);
                         $(this).autocomplete("close");
                     } else if (ui.content.length == 0) {
-                        swal("Product not found");
+                        // swal("Product not found");
                     }
                 },
                 focus: function (event, ui) {

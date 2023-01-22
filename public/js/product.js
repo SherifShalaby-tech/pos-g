@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    if(!$('#clear_all_input_form').is(':checked')){
+        $('.clear_input_form').val('');
+        $('.clear_input_form').selectpicker('refresh');
+    }
     //Prevent enter key function except texarea
     $("form").on("keyup keypress", function (e) {
         var keyCode = e.keyCode || e.which;
@@ -87,7 +91,19 @@ $(document).on("click", ".add_row", function () {
         },
     });
 });
-
+$(document).on("click", "#clear_all_input_form", function () {
+    var value = $('#clear_all_input_form').is(':checked')?1:0;
+    $.ajax({
+        method: "get",
+        url: "/create-or-update-system-property/clear_all_input_form/"+value,
+        contentType: "html",
+        success: function (result) {
+            if (result.success) {
+                swal("Success", response.msg, "success");
+            }
+        },
+    });
+});
 $(document).on("change", ".v_size, .v_color", function () {
     let row = $(this).parents(".variation_row");
     let name = row.find(".name_hidden").val();
@@ -149,6 +165,11 @@ myDropzone = new Dropzone("div#my-dropzone", {
                                 $("#sku").val("").change();
                                 $("#name").val("").change();
                                 $(".translations").val("").change();
+                                if(!$('#clear_all_input_form').is(':checked')){
+                                    $('.clear_input_form').val('');
+                                    $('.clear_input_form').selectpicker('refresh');
+                                }
+
                             } else {
                                 swal("Error", response.msg, "error");
                             }
