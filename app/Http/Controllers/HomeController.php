@@ -7,6 +7,8 @@ use App\Models\Employee;
 use App\Models\GiftCard;
 use App\Models\Leave;
 use App\Models\Product;
+use App\Models\Category;
+
 use App\Models\Store;
 use App\Models\System;
 use App\Models\Transaction;
@@ -19,7 +21,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 class HomeController extends Controller
 {
     protected $commonUtil;
@@ -32,12 +33,51 @@ class HomeController extends Controller
      */
     public function __construct(Util $commonUtil, ProductUtil $productUtil, TransactionUtil $transactionUtil)
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('dd');
         $this->commonUtil = $commonUtil;
         $this->productUtil = $productUtil;
         $this->transactionUtil = $transactionUtil;
     }
+    //  public function dd()
+    // {
+    //     $old_parents= DB::table('categories_old')->whereNull('parent_id')->get();
+    //     $old_subs= DB::table('categories_old')->whereNotNull('parent_id')->get();
+    //     $old_class= DB::table('product_classes_old')->get();
+        
+        
+        
+    //     // dd($old_class,$old_subs,$old_parents);   
+    //     foreach($old_subs as $k=>$old_sub){
+    //         DB::table('product_classes')->insert([
+    //             'name'=>$old_sub->name,
+    //             'sort'=>$k+1,
+    //             'status'=>1,
+    //             'translations'=>$old_sub->translations
+    //         ]);
+    //     }
+        
+    //     foreach($old_class as $k=>$old_clas){
+            
+    //       $new_parent= Category::create([
+    //             'name'=>$old_clas->name,
+    //             'description'=>null,
+    //             'parent_id'=>null,
+    //             'translations'=>$old_clas->translations
+    //             ]);
+           
+            
+    //       $old_parents=  DB::table('categories_old')->where('parent_id',$old_clas->id)->get();
+    //         foreach($old_parents as $k=>$old_parent){
+    //           DB::table('categories')->insert([
+    //             'name'=>$old_parent->name,
+    //             'description'=>$old_parent->description,
+    //             'parent_id'=>$new_parent->id,
+    //             'translations'=>$old_parent->translations
+    //         ]);  
+    //         }
+    //     }
 
+    // }
     /**
      * Show the application dashboard.
      *

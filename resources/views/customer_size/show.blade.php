@@ -40,19 +40,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($getAttributeListArray as $key => $value)
-                            <tr>
-                                <td>
-                                    <label for="">{{$value}}</label>
-                                </td>
-                                <td>
-                                    {{@num_format($customer_size->$key['cm'])}}
-                                </td>
-                                <td>
-                                    {{@num_format($customer_size->$key['inches'])}}
-                                </td>
-                            </tr>
-                            @endforeach
+                            @isset($customer_size)
+                                @foreach ($getAttributeListArray as $key => $value)
+                                <tr>
+                                    <td>
+                                        <label for="">{{$value}}</label>
+                                    </td>
+                                    <td>
+                                        {{@num_format($customer_size->$key['cm'])}}
+                                    </td>
+                                    <td>
+                                        {{@num_format($customer_size->$key['inches'])}}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @endisset
                         </tbody>
                     </table>
                 </div>

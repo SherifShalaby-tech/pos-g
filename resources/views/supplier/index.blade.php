@@ -43,6 +43,7 @@
                             <tbody>
                                 @php
                                     $total_due = 0;
+                                    $total_sp=0;
                                 @endphp
                                 @foreach ($suppliers as $supplier)
                                     <tr>
@@ -133,6 +134,7 @@
                                     </tr>
                                     @php
                                         $total_due += $supplier->total_invoice - $supplier->total_paid + $supplier->total_supplier_service - $supplier->total_supplier_service_paid;
+                                        $total_sp += $supplier->total_purchase + $supplier->total_supplier_service;
                                     @endphp
                                 @endforeach
                             </tbody>
@@ -142,10 +144,11 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <th style="text-align: right">@lang('lang.total')</th>
+                                    <td>{{$total_sp}}</td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{$total_due}}</td>
                                 </tr>
                             </tfoot>
                         </table>

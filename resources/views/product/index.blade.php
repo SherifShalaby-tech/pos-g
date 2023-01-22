@@ -260,7 +260,7 @@
             <thead>
                 <tr>
                     <th>@lang('lang.image')</th>
-                    <th>@lang('lang.name')</th>
+                    <th style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@lang('lang.name')&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     <th>@lang('lang.product_code')</th>
                     <th>
                         @if (session('system_mode') == 'restaurant')
@@ -359,6 +359,7 @@
                 $(obj).val(i)
             });
             product_table = $('#product_table').DataTable({
+                
                 lengthChange: true,
                 paging: true,
                 info: false,

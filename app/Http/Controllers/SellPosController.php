@@ -909,8 +909,8 @@ class SellPosController extends Controller
                 $products_array[$product->product_id]['name'] = $product->name;
                 $products_array[$product->product_id]['sku'] = $product->sub_sku;
                 $products_array[$product->product_id]['type'] = $product->type;
-                $products_array[$product->product_id]['color'] = $product->multiple_colors[0];
-                $products_array[$product->product_id]['size'] = $product->multiple_sizes[0];
+                $products_array[$product->product_id]['color'] =array_key_exists(0, $product->multiple_colors) ?$product->multiple_colors[0]:null ;
+                $products_array[$product->product_id]['size'] = array_key_exists(0, $product->multiple_sizes) ? $product->multiple_sizes[0]:null;
                 $products_array[$product->product_id]['is_service'] = $product->is_service;
                 $products_array[$product->product_id]['qty'] = $this->productUtil->num_uf($product->qty_available - $product->block_qty);
                 $products_array[$product->product_id]['variations'][]
@@ -935,14 +935,20 @@ class SellPosController extends Controller
                             $color =  $v->color->name;
                         }else{
                             $colorId = $value['color'];
-                            $color = Color::whereId($colorId)->first()->name;
+                            $color_m = Color::whereId($colorId)->first();
+                            if($color_m){
+                              $color=  $color_m->name;
+                            }
                         }
                         if($v->size->name)
                         {
                             $size =  $v->size->name;
                         }else{
                             $sizeId = $value['size'];
-                            $size = Size::whereId($sizeId)->first()->name;
+                            $size_m = Size::whereId($sizeId)->first();
+                            if($size_m){
+                              $size=  $size_m->name;
+                            }
                         }
                         $text = $name;
                         if ($value['type'] == 'variable') {
@@ -954,7 +960,7 @@ class SellPosController extends Controller
                         $i++;
                         $result[] = [
                             'id' => $i,
-                            'text' => 'Color: '.$color.' - '.'Size: '.$size.' - ' .$text . ' - ' . $variation['sub_sku'],
+                            'text' =>$color.' - '.$size.' - ' .$text . ' - ' . $variation['sub_sku'],
                             'product_id' => $key,
                             'variation_id' => $variation['variation_id'],
                             'qty_available' => $variation['qty'],
@@ -1218,13 +1224,13 @@ class SellPosController extends Controller
                 $query->where('transactions.store_id', $store_id);
             }
             if (!empty(request()->start_date)) {
-                $query->whereDate('transaction_date', '>=', request()->start_date);
+                $query->whereDate('transactions.transaction_date', '>=', request()->start_date);
             }
             if (!empty(request()->end_date)) {
-                $query->whereDate('transaction_date', '<=', request()->end_date);
+                $query->whereDate('transactions.transaction_date', '<=', request()->end_date);
             }
             if (!empty(request()->customer_id)) {
-                $query->where('customer_id', request()->customer_id);
+                $query->where('transactions.customer_id', request()->customer_id);
             }
             if (!empty(request()->deliveryman_id)) {
                 $query->where('transactions.deliveryman_id', request()->deliveryman_id);

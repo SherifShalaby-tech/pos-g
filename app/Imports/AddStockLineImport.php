@@ -51,8 +51,9 @@ class AddStockLineImport implements ToModel, WithHeadingRow, WithValidation
             'variation_id' => $product->variation_id,
             'quantity' => $row['quantity'],
             'sell_price' => $row['sell_price'],
-            'purchase_price' => $product->purchase_price,
-            'sub_total' => $row['quantity'] * $product->purchase_price,
+            'final_cost' => $row['quantity'] * $row['purchase_price'],
+            'purchase_price' => $row['purchase_price'],
+            'sub_total' => $row['quantity'] * $row['purchase_price'],
         ]);
     }
 

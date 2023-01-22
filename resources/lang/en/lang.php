@@ -12,6 +12,11 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+    'change_current_stock' => 'change price of current stock',
+    'clear_all_input_form'=>'Keeping data after saving product',
+    'add_a_free_amount'=>'add a free amount of the same product',
+    'free_amount'=>'free amount',
+    'new_purchase_price'=>'new purchase price',
     'number_vs_base_unit'=>'Units equation',
     'dashboard' => 'Dashboard',
     'path' => 'Path',
