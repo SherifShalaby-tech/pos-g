@@ -250,7 +250,19 @@ class ProductController extends Controller
                 // })
 
                 ->editColumn('batch_number', '{{$batch_number}}')
-                ->editColumn('default_sell_price', '{{@num_format($default_sell_price)}}')
+                ->editColumn('default_sell_price', function ($row) {
+                    $price= AddStockLine::where('variation_id',$row->variation_id)
+                        ->whereColumn('quantity',">",'quantity_sold')->first();
+                    $price= $price? ($price->sell_price > 0 ? $price->sell_price : $row->default_sell_price):$row->default_sell_price;
+                    return $this->productUtil->num_f($price);
+                })//, '{{@num_format($default_sell_price)}}')
+                ->editColumn('default_purchase_price', function ($row) {
+                    $price= AddStockLine::where('variation_id',$row->variation_id)
+                        ->whereColumn('quantity',">",'quantity_sold')->first();
+                    $price= $price? ($price->purchase_price > 0 ? $price->purchase_price : $row->default_purchase_price):$row->default_purchase_price;
+
+                    return $this->productUtil->num_f($price);
+                })
                 ->addColumn('tax', '{{$tax}}')
                 ->editColumn('brand', '{{$brand}}')
                 ->editColumn('unit', '{{$unit}}')
@@ -285,7 +297,7 @@ class ProductController extends Controller
                 ->editColumn('exp_date', '@if(!empty($exp_date)){{@format_date($exp_date)}}@endif')
                 ->addColumn('manufacturing_date', '@if(!empty($manufacturing_date)){{@format_date($manufacturing_date)}}@endif')
                 ->editColumn('discount', '{{@num_format($discount)}}')
-                ->editColumn('default_purchase_price', '{{@num_format($default_purchase_price)}}')
+//                ->editColumn('default_purchase_price', '{{@num_format($default_purchase_price)}}')
                 ->editColumn('active', function ($row) {
                     if ($row->active) {
                         return __('lang.yes');
