@@ -312,44 +312,44 @@ $(document).on("submit", "form#quick_add_category_form", function (e) {
         },
     });
 });
-
-$(document).on("change", "#product_class_id", function () {
-    $.ajax({
-        method: "get",
-        url:
-            "/category/get-dropdown?product_class_id=" +
-            $("#product_class_id").val(),
-        data: {},
-        contentType: "html",
-        success: function (result) {
-            $("#category_id").empty().append(result).change();
-            $("#category_id").selectpicker("refresh");
-
-            if (category_id) {
-                $("#category_id").selectpicker("val", category_id);
-            }
-        },
-    });
-});
-
-$(document).on("change", "#category_id", function () {
-    $.ajax({
-        method: "get",
-        url:
-            "/category/get-sub-category-dropdown?category_id=" +
-            $("#category_id").val(),
-        data: {},
-        contentType: "html",
-        success: function (result) {
-            $("#sub_category_id").empty().append(result).change();
-            $("#sub_category_id").selectpicker("refresh");
-
-            if (sub_category_id) {
-                $("#sub_category_id").selectpicker("val", sub_category_id);
-            }
-        },
-    });
-});
+//
+// $(document).on("change", "#product_class_id", function () {
+//     $.ajax({
+//         method: "get",
+//         url:
+//             "/category/get-dropdown?product_class_id=" +
+//             $("#product_class_id").val(),
+//         data: {},
+//         contentType: "html",
+//         success: function (result) {
+//             $("#category_id").empty().append(result).change();
+//             $("#category_id").selectpicker("refresh");
+//
+//             if (category_id) {
+//                 $("#category_id").selectpicker("val", category_id);
+//             }
+//         },
+//     });
+// });
+//
+// $(document).on("change", "#category_id", function () {
+//     $.ajax({
+//         method: "get",
+//         url:
+//             "/category/get-sub-category-dropdown?category_id=" +
+//             $("#category_id").val(),
+//         data: {},
+//         contentType: "html",
+//         success: function (result) {
+//             $("#sub_category_id").empty().append(result).change();
+//             $("#sub_category_id").selectpicker("refresh");
+//
+//             if (sub_category_id) {
+//                 $("#sub_category_id").selectpicker("val", sub_category_id);
+//             }
+//         },
+//     });
+// });
 var brand_id = null;
 $(document).on("submit", "form#quick_add_brand_form", function (e) {
     e.preventDefault();

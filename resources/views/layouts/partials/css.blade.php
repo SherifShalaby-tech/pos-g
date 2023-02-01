@@ -61,4 +61,8 @@ type="text/css">
     .hide {
         display: none !important;
     }
+    ul#ui-id-1 {
+        max-height: 320px;
+        overflow-y: scroll;
+    }
 </style>

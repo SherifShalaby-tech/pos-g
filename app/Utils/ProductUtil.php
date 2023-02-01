@@ -241,7 +241,11 @@ class ProductUtil extends Util
         $variations = $request->variations;
         $keey_variations = [];
         if (!empty($variations)) {
+                $unit_id=!empty($request->multiple_units) ? $request->multiple_units[0] : null;
             foreach ($variations as $v) {
+                if(count($variations) > 1){
+                    $unit_id=$v['unit_id'] ??null;
+                }
                 $c = Variation::where('product_id', $product->id)
                     ->count() + 1;
                 if ($v['name'] == 'Default') {
@@ -259,7 +263,7 @@ class ProductUtil extends Util
                     $variation->color_id = $v['color_id'] ?? null;
                     $variation->size_id = $v['size_id'] ?? null;
                     $variation->grade_id = $v['grade_id'] ?? null;
-                    $variation->unit_id = $v['unit_id'] ?? null;
+                    $variation->unit_id = $unit_id;
                     $variation->number_vs_base_unit= $v['number_vs_base_unit'] ?? 0;
                     $variation->default_purchase_price = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);
                     $variation->default_sell_price = !empty($v['default_sell_price']) ? $this->num_uf($v['default_sell_price']) : $this->num_uf($product->sell_price);
@@ -273,7 +277,7 @@ class ProductUtil extends Util
                     $variation_data['color_id'] = $v['color_id'] ?? null;
                     $variation_data['size_id'] = $v['size_id'] ?? null;
                     $variation_data['grade_id'] = $v['grade_id'] ?? null;
-                    $variation_data['unit_id'] = $v['unit_id'] ?? null;
+                    $variation_data['unit_id'] = $v['unit_id'] ??  null;
                     $variation_data['number_vs_base_unit']= $v['number_vs_base_unit'] ?? 0;
                     $variation_data['default_purchase_price'] = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);
                     $variation_data['default_sell_price'] = !empty($v['default_sell_price']) ? $this->num_uf($v['default_sell_price']) : $this->num_uf($product->sell_price);
@@ -1380,7 +1384,7 @@ class ProductUtil extends Util
             $query->where('product_stores.store_id', $store_id);
         }
         $query->select(
-            DB::raw('SUM((add_stock_lines.quantity - add_stock_lines.quantity_sold )* add_stock_lines.purchase_price) as current_stock_value'),
+            DB::raw('SUM((add_stock_lines.quantity - add_stock_lines.quantity_sold ) * add_stock_lines.purchase_price) as current_stock_value'),
         );
 
         $current_stock_value = $query->first();
