@@ -43,10 +43,10 @@ class HomeController extends Controller
     //     $old_parents= DB::table('categories_old')->whereNull('parent_id')->get();
     //     $old_subs= DB::table('categories_old')->whereNotNull('parent_id')->get();
     //     $old_class= DB::table('product_classes_old')->get();
-        
-        
-        
-    //     // dd($old_class,$old_subs,$old_parents);   
+
+
+
+    //     // dd($old_class,$old_subs,$old_parents);
     //     foreach($old_subs as $k=>$old_sub){
     //         DB::table('product_classes')->insert([
     //             'name'=>$old_sub->name,
@@ -55,17 +55,17 @@ class HomeController extends Controller
     //             'translations'=>$old_sub->translations
     //         ]);
     //     }
-        
+
     //     foreach($old_class as $k=>$old_clas){
-            
+
     //       $new_parent= Category::create([
     //             'name'=>$old_clas->name,
     //             'description'=>null,
     //             'parent_id'=>null,
     //             'translations'=>$old_clas->translations
     //             ]);
-           
-            
+
+
     //       $old_parents=  DB::table('categories_old')->where('parent_id',$old_clas->id)->get();
     //         foreach($old_parents as $k=>$old_parent){
     //           DB::table('categories')->insert([
@@ -73,7 +73,7 @@ class HomeController extends Controller
     //             'description'=>$old_parent->description,
     //             'parent_id'=>$new_parent->id,
     //             'translations'=>$old_parent->translations
-    //         ]);  
+    //         ]);
     //         }
     //     }
 
@@ -700,7 +700,8 @@ class HomeController extends Controller
             $gift_card_sold = GiftCard::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->sum('balance');
         }
 
-        $profit = $revenue - $cost_sold_product + $cost_sold_returned_product + $gift_card_sold - $gift_card_returned - $total_sale_item_tax_inclusive - $total_sale_general_tax_inclusive;  //excluding taxes from profit as its not part of profit
+        $profit = $revenue - $cost_sold_product + $cost_sold_returned_product + $gift_card_sold - $gift_card_returned - $total_sale_item_tax_inclusive - $total_sale_general_tax_inclusive;
+        //excluding taxes from profit as its not part of profit
         $expense_query = Transaction::where('type', 'expense')->where('status', 'received');
         if (!empty($start_date)) {
             $expense_query->whereDate('transaction_date', '>=', $start_date);

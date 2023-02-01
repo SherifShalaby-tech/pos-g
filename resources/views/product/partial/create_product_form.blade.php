@@ -2,6 +2,7 @@
 $recent_product = App\Models\Product::where('is_raw_material', 0)
     ->orderBy('created_at', 'desc')
     ->first();
+$clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
 @endphp
 <div class="row">
     <div class="col-md-4">
@@ -25,6 +26,18 @@ $recent_product = App\Models\Product::where('is_raw_material', 0)
             <label for="active"><strong>
                     @lang('lang.active')
                 </strong></label>
+        </div>
+    </div>
+    <div class="col-md-4 ">
+        <div class="i-checks">
+            <input id="clear_all_input_form" name="clear_all_input_form"
+                   type="checkbox" @if ($clear_all_input_form == null || $clear_all_input_form == '1') checked @endif value="1"
+                   class="form-control-custom">
+            <label for="clear_all_input_form">
+                <strong>
+                    @lang('lang.clear_all_input_form')
+                </strong>
+            </label>
         </div>
     </div>
     <div class="col-md-4">
@@ -60,6 +73,7 @@ $recent_product = App\Models\Product::where('is_raw_material', 0)
         </div>
         <div class="error-msg text-red"></div>
     </div>
+
     @if (session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket')
         <div class="col-md-4">
             {!! Form::label('category_id', __('lang.category') . ' *', []) !!}
@@ -282,14 +296,14 @@ $recent_product = App\Models\Product::where('is_raw_material', 0)
         </div>
     </div>
     @can('product_module.purchase_price.create_and_edit')
-        <div class="col-md-4">
+        <div class="col-md-4 supplier_div">
             <div class="form-group">
                 {!! Form::label('purchase_price', session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket' ? __('lang.purchase_price') : __('lang.cost') . ' *', []) !!}
                 {!! Form::text('purchase_price', !empty($recent_product) ? @num_format($recent_product->purchase_price) : null, ['class' => 'clear_input_form form-control', 'placeholder' => session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket' ? __('lang.purchase_price') : __('lang.cost'), 'required']) !!}
             </div>
         </div>
     @endcan
-    <div class="col-md-4">
+    <div class="col-md-4 supplier_div">
         <div class="form-group">
             {!! Form::label('sell_price', __('lang.sell_price') . ' *', []) !!}
             {!! Form::text('sell_price', !empty($recent_product) ? @num_format($recent_product->sell_price) : null, ['class' => 'clear_input_form form-control', 'placeholder' => __('lang.sell_price'), 'required']) !!}
