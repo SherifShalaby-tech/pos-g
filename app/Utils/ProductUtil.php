@@ -241,16 +241,22 @@ class ProductUtil extends Util
         $variations = $request->variations;
         $keey_variations = [];
         if (!empty($variations)) {
-                $unit_id=!empty($request->multiple_units) ? $request->multiple_units[0] : null;
             foreach ($variations as $v) {
-                if(count($variations) > 1){
-                    $unit_id=$v['unit_id'] ??null;
-                }
+
                 $c = Variation::where('product_id', $product->id)
                     ->count() + 1;
                 if ($v['name'] == 'Default') {
                     $sub_sku = $product->sku;
+                    $color_id = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
+                    $size_id = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
+                    $grade_id = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
+                    $unit_id = !empty($request->multiple_units) ? $request->multiple_units[0] : null;
+
                 } else {
+                    $unit_id=$v['unit_id'] ??null;
+                    $color_id=$v['color_id'] ??null;
+                    $size_id=$v['size_id'] ??null;
+                    $grade_id=$v['grade_id'] ??null;
                     $sub_sku = !empty($v['sub_sku']) ? $v['sub_sku'] : $this->generateSubSku($product->sku, $c, $product->barcode_type);
                 }
 
@@ -260,9 +266,9 @@ class ProductUtil extends Util
                     $variation = Variation::find($v['id']);
                     $variation->name = $v['name'];
                     $variation->sub_sku = $sub_sku;
-                    $variation->color_id = $v['color_id'] ?? null;
-                    $variation->size_id = $v['size_id'] ?? null;
-                    $variation->grade_id = $v['grade_id'] ?? null;
+                    $variation->color_id = $color_id;
+                    $variation->size_id = $size_id ;
+                    $variation->grade_id = $grade_id  ;
                     $variation->unit_id = $unit_id;
                     $variation->number_vs_base_unit= $v['number_vs_base_unit'] ?? 0;
                     $variation->default_purchase_price = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);

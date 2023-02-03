@@ -191,7 +191,7 @@ class ProductImport implements ToCollection, WithHeadingRow, WithValidation
         return [
             'product_name' => 'required',
             'class' => 'required',
-            'sku' => 'sometimes|unique:products',
+            'sku' => 'sometimes|unique:products,sku',
         ];
     }
 }
