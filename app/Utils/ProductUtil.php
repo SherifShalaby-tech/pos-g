@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\EarningOfPoint;
 use App\Models\Product;
 use App\Models\ProductClass;
+use App\Models\ProductDiscount;
 use App\Models\ProductStore;
 use App\Models\PurchaseOrderLine;
 use App\Models\PurchaseReturnLine;
@@ -241,16 +242,22 @@ class ProductUtil extends Util
         $variations = $request->variations;
         $keey_variations = [];
         if (!empty($variations)) {
-                $unit_id=!empty($request->multiple_units) ? $request->multiple_units[0] : null;
             foreach ($variations as $v) {
-                if(count($variations) > 1){
-                    $unit_id=$v['unit_id'] ??null;
-                }
+
                 $c = Variation::where('product_id', $product->id)
                     ->count() + 1;
                 if ($v['name'] == 'Default') {
                     $sub_sku = $product->sku;
+                    $color_id = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
+                    $size_id = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
+                    $grade_id = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
+                    $unit_id = !empty($request->multiple_units) ? $request->multiple_units[0] : null;
+
                 } else {
+                    $unit_id=$v['unit_id'] ??null;
+                    $color_id=$v['color_id'] ??null;
+                    $size_id=$v['size_id'] ??null;
+                    $grade_id=$v['grade_id'] ??null;
                     $sub_sku = !empty($v['sub_sku']) ? $v['sub_sku'] : $this->generateSubSku($product->sku, $c, $product->barcode_type);
                 }
 
@@ -260,9 +267,9 @@ class ProductUtil extends Util
                     $variation = Variation::find($v['id']);
                     $variation->name = $v['name'];
                     $variation->sub_sku = $sub_sku;
-                    $variation->color_id = $v['color_id'] ?? null;
-                    $variation->size_id = $v['size_id'] ?? null;
-                    $variation->grade_id = $v['grade_id'] ?? null;
+                    $variation->color_id = $color_id;
+                    $variation->size_id = $size_id ;
+                    $variation->grade_id = $grade_id  ;
                     $variation->unit_id = $unit_id;
                     $variation->number_vs_base_unit= $v['number_vs_base_unit'] ?? 0;
                     $variation->default_purchase_price = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);
@@ -623,8 +630,10 @@ class ProductUtil extends Util
             $customer_type_id = (string) $customer->customer_type_id;
         }
         if (!empty($customer_type_id)) {
+
             $product = Product::whereJsonContains('discount_customer_types', $customer_type_id)
                 ->where('id', $product_id)
+                ->where('discount', '>',0)
                 ->select(
                     'products.discount_type',
                     'products.discount',
@@ -632,6 +641,17 @@ class ProductUtil extends Util
                     'products.discount_end_date',
                 )
                 ->first();
+            if(!$product){
+                $product = ProductDiscount::whereJsonContains('discount_customer_types', $customer_type_id)
+                    ->where('product_id', $product_id)
+                    ->select(
+                        'discount_type',
+                        'discount',
+                        'discount_start_date',
+                        'discount_end_date',
+                    )
+                    ->first();
+            }
 
             if (!empty($product)) {
                 if (!empty($product->discount_start_date) && !empty($product->discount_end_date)) {
@@ -700,7 +720,8 @@ class ProductUtil extends Util
 
         $customer_type_id = (string) $customer->customer_type_id;
         if (!empty($customer_type_id)) {
-            $sales_promotions = SalesPromotion::whereJsonContains('customer_type_ids', $customer_type_id)
+            $sales_promotions = SalesPromotion::
+            whereJsonContains('customer_type_ids', $customer_type_id)
                 ->whereJsonContains('store_ids', $store_id)
                 ->whereDate('start_date', '<=', date('Y-m-d'))
                 ->whereDate('end_date', '>=', date('Y-m-d'))
@@ -720,7 +741,8 @@ class ProductUtil extends Util
                     $package_promotion_qty = $sales_promotion->package_promotion_qty;
 
                     $is_valid = $this->comparePackagePromotionData($package_promotion_qty, $qty_array);
-                    if ($is_valid) {
+                    if ($is_valid > 0) {
+                        $sales_promotion->count_discount_number=$is_valid;
                         return $sales_promotion;
                     }
                 }
@@ -738,15 +760,19 @@ class ProductUtil extends Util
      */
     public function comparePackagePromotionData($package_promotion_qty, $qty_array)
     {
+        $count_discount_array=[];
         foreach ($package_promotion_qty as $product_id => $qty) {
             if (!isset($qty_array[$product_id])) {
-                return false;
+                return 0;
             }
             if ($qty_array[$product_id] < $qty) {
-                return false;
+                return 0;
             }
+
+            $count_discount_for=(int)($qty_array[$product_id]/(float)$qty );
+            array_push($count_discount_array,$count_discount_for);
         }
-        return true;
+        return min($count_discount_array);
     }
 
     //function to compare two array have equal value or not
@@ -994,6 +1020,12 @@ class ProductUtil extends Util
                 $qty =  $this->num_uf($line['quantity']);
                 $keep_lines_ids[] = $add_stock->id;
                 $this->updateProductQuantityStore($line['product_id'], $line['variation_id'], $transaction->store_id,  $qty, 0);
+            }
+            if(!empty($line['stock_pricechange'])){
+                AddStockLine::where('variation_id',$line['variation_id'])
+                    ->whereColumn('quantity',">",'quantity_sold')->update([
+                        'sell_price' => $line['selling_price'],
+                    ]);
             }
         }
 
@@ -1347,7 +1379,19 @@ class ProductUtil extends Util
         return (array)$product_ids;
     }
 
-    public function getProductDetailsUsingArrayIds($array, $store_ids = null)
+    public function extractProductVariationIdsfromProductTree($data_selected)
+    {
+        $product_ids = [];
+        if (!empty($data_selected['product_selected'])) {
+            $p = array_values(Variation::whereIn('id', $data_selected['product_selected'])->select('id')->pluck('id')->toArray());
+            $product_ids = array_merge($product_ids, $p);
+        }
+
+        $product_ids  = array_unique($product_ids);
+
+        return (array)$product_ids;
+    }
+    public function getProductDetailsUsingArrayIds($array, $store_ids = null,$variations= null)
     {
         $query = Product::leftjoin('variations', 'products.id', 'variations.product_id')
             ->leftjoin('product_stores', 'variations.id', 'product_stores.variation_id');
@@ -1355,16 +1399,29 @@ class ProductUtil extends Util
         if (!empty($store_ids)) {
             $query->whereIn('product_stores.store_id', $store_ids);
         }
-        $query->whereIn('products.id', $array)
-            ->select(
-                'products.*',
-                DB::raw('SUM(product_stores.qty_available) as current_stock'),
-                DB::raw("(SELECT transaction_date FROM transactions LEFT JOIN add_stock_lines ON transactions.id=add_stock_lines.transaction_id WHERE add_stock_lines.product_id=products.id ORDER BY transaction_date DESC LIMIT 1) as date_of_purchase")
-            )
-            ->groupBy('products.id');
+        if (!empty($variations)) {
+            $query->whereIn('variations.id', $array);
+        }else{
+            $query->whereIn('products.id', $array);
+        }
+
+        $query->select(
+            'products.*',
+            'variations.id as variations_id',
+            'variations.name as variations_name',
+            'variations.sub_sku as variations_sku',
+            'variations.default_sell_price as variations_sell_price',
+            'variations.default_purchase_price as variations_purchase_price',
+            DB::raw('SUM(product_stores.qty_available) as current_stock'),
+            DB::raw("(SELECT transaction_date FROM transactions LEFT JOIN add_stock_lines ON transactions.id=add_stock_lines.transaction_id WHERE add_stock_lines.product_id=products.id ORDER BY transaction_date DESC LIMIT 1) as date_of_purchase")
+        );
+        if(!empty($variations)){
+            $query->groupBy('variations.id');
+        }else{
+            $query ->groupBy('products.id');
+        }
 
         $products = $query->get();
-
         return $products;
     }
 
