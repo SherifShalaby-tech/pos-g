@@ -355,8 +355,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
            value="{{ App\Models\System::getProperty('default_purchase_price_percentage') ?? 75 }}">
     <input type="hidden" name="default_profit_percentage" id="default_profit_percentage"
            value="{{ App\Models\System::getProperty('default_profit_percentage') ?? 0 }}">
-    <div class="col-md-4">
-    </div>
+  
     <div class="col-md-4">
         <div class="i-checks">
             <input id="show_to_customer" name="show_to_customer" type="checkbox" checked value="1"
