@@ -276,6 +276,10 @@
                                                 <span class="totals-title">{{ __('lang.delivery') }}</span><span
                                                     id="delivery-cost">0.00</span>
                                             </div>
+                                            <div class="col-sm-4 red">
+                                                <span class="totals-title red">{{ __('lang.sales_promotion') }}</span><span
+                                                    id="sales_promotion-cost_span">0.00</span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -296,6 +300,7 @@
                                                 <div class="row">
                                                     <b>@lang('lang.grand_total'): <span class="final_total_span">0.00</span></b>
                                                 </div>
+
                                             </div>
                                         </div>
                                         <div class="row pt-4">

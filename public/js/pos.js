@@ -336,6 +336,7 @@ function get_label_product_row(
                 calculate_sub_totals();
                 $("input#search_product").val("");
                 $("input#search_product").focus();
+                $(this).insertBefore($("#product_table  tbody tr:first"));
             }
         });
 
@@ -399,7 +400,7 @@ function check_for_sale_promotion() {
     var added_products = [];
     var added_qty = [];
     $("#product_table > tbody  > tr").each((ele, tr) => {
-        let product_id_tr = __read_number($(tr).find(".product_id"));
+        let product_id_tr = __read_number($(tr).find(".variation_id"));
         let qty_tr = {
             product_id: product_id_tr,
             qty: __read_number($(tr).find(".quantity")),
@@ -471,12 +472,13 @@ function check_for_sale_promotion() {
                         result.sale_promotion_details.discount_type === "fixed"
                     ) {
                         discount =
-                            parseFloat(
-                                result.sale_promotion_details.actual_sell_price
-                            ) -
-                            parseFloat(
-                                result.sale_promotion_details.discount_value
-                            );
+                            ( parseFloat(
+                                    result.sale_promotion_details.actual_sell_price
+                                ) -
+                                parseFloat(
+                                    result.sale_promotion_details.discount_value
+                                ) ) *  parseFloat(result.sale_promotion_details.count_discount_number);
+
                     }
                     if (
                         result.sale_promotion_details.discount_type ===
@@ -484,16 +486,17 @@ function check_for_sale_promotion() {
                     ) {
                         let discount_value =
                             (parseFloat(
-                                result.sale_promotion_details.actual_sell_price
-                            ) *
+                                    result.sale_promotion_details.actual_sell_price
+                                ) *
                                 parseFloat(
                                     result.sale_promotion_details.discount_value
                                 )) /
                             100;
                         discount =
-                            parseFloat(
+                            (parseFloat(
                                 result.sale_promotion_details.actual_sell_price
-                            ) - discount_value;
+                            ) - discount_value ) *  parseFloat(result.sale_promotion_details.count_discount_number);;
+
                     }
                     if (result.sale_promotion_details.purchase_condition) {
                         let purchase_condition_amount =
@@ -518,7 +521,11 @@ function check_for_sale_promotion() {
                         }
                     });
                     __write_number($("#total_pp_discount"), discount);
+                    $("span#sales_promotion-cost_span").text(
+                        __currency_trans_from_en(discount, false)
+                    );
                 }
+
                 calculate_sub_totals();
             }
         },

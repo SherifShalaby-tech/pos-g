@@ -1013,12 +1013,13 @@ class SellPosController extends Controller
 
             $product_id = $request->input('product_id');
             $variation_id = $request->input('variation_id');
+            $store_pos_id = $request->input('store_pos_id');
             $store_id = $request->input('store_id');
             $customer_id = $request->input('customer_id');
             $currency_id = $request->input('currency_id');
             $dining_table_id = $request->input('dining_table_id');
             $is_direct_sale = $request->input('is_direct_sale');
-            $edit_quantity = !empty($request->input('edit_quantity')) ? $request->input('edit_quantity') : 1;
+
             $added_products = json_decode($request->input('added_products'), true);
 
             $currency_id = $request->currency_id;
@@ -1027,24 +1028,40 @@ class SellPosController extends Controller
 
             //Check for weighing scale barcode
             $weighing_barcode = request()->get('weighing_scale_barcode');
-            if (empty($variation_id) && !empty($weighing_barcode)) {
-                $product_details = $this->__parseWeighingBarcode($weighing_barcode);
-                if ($product_details['success']) {
-                    $product_id = $product_details['product_id'];
-                    $variation_id = $product_details['variation_id'];
-                    $quantity = $product_details['qty'];
-                    $edit_quantity = $quantity;
-                } else {
-                    $output['success'] = false;
-                    $output['msg'] = $product_details['msg'];
-                    return $output;
-                }
-            }
 
             if (!empty($product_id)) {
                 $index = $request->input('row_count');
                 $products = $this->productUtil->getDetailsFromProductByStore($product_id, $variation_id, $store_id);
+                $System=System::where('key','weight_product'.$store_pos_id)->first();
+                if(!$System){
+                    System::Create([
+                        'key' => 'weight_product'.$store_pos_id,
+                        'value' => 0,
+                        'date_and_time' => Carbon::now(),
+                        'created_by' => Auth::id()
+                    ]);
+                }
 
+                $have_weight = System::getProperty('weight_product'.$store_pos_id);
+
+                $quantity =  $have_weight? (float)$have_weight: 1;
+                $edit_quantity = !$products->first()->have_weight ? $request->input('edit_quantity') : $quantity;
+
+                if (empty($variation_id) && !empty($weighing_barcode) && $products->first()->have_weight != 1) {
+
+                    $product_details = $this->__parseWeighingBarcode($weighing_barcode);
+                    if ($product_details['success']) {
+                        $product_id = $product_details['product_id'];
+                        $variation_id = $product_details['variation_id'];
+                        $quantity = $product_details['qty'];
+                        $edit_quantity = $quantity;
+                    } else {
+                        $output['success'] = false;
+                        $output['msg'] = $product_details['msg'];
+                        return $output;
+                    }
+
+                }
                 $product_discount_details = $this->productUtil->getProductDiscountDetails($product_id, $customer_id);
                 // $sale_promotion_details = $this->productUtil->getSalesPromotionDetail($product_id, $store_id, $customer_id, $added_products);
                 $sale_promotion_details = null; //changed, now in pos.js check_for_sale_promotion method
@@ -1184,19 +1201,20 @@ class SellPosController extends Controller
             $added_products = json_decode($request->input('added_products'), true);
             $added_qty = json_decode($request->input('added_qty'), true);
             $qty_array = [];
+
             foreach ($added_qty as $value) {
                 $qty_array[$value['product_id']] = $value['qty'];
             }
 
             $sale_promotion_details = $this->productUtil->getSalePromotionDetailsIfValidForThisSale($store_id, $customer_id, $added_products, $qty_array);
+
             if (!empty($sale_promotion_details)) {
                 $result = ['valid' => true, 'sale_promotion_details' => $sale_promotion_details];
+
             }
         }
-
         return $result;
     }
-
     /**
      * list of recent transactions
      *
