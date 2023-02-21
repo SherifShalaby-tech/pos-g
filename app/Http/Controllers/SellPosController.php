@@ -1201,7 +1201,6 @@ class SellPosController extends Controller
             $added_products = json_decode($request->input('added_products'), true);
             $added_qty = json_decode($request->input('added_qty'), true);
             $qty_array = [];
-
             foreach ($added_qty as $value) {
                 $qty_array[$value['product_id']] = $value['qty'];
             }
