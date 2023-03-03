@@ -12,6 +12,8 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+    'have_weight'=>'يعتمد علي الميزان',
+
     'change_current_stock' => 'تغيير سعر البيع للمخزون الحالى ',
     'clear_all_input_form'=>'الاحتفاظ بالبيانات بعد عملية الإدخال',
     'add_a_free_amount'=>'اضافة كمية مجانية من نفس المنتج',

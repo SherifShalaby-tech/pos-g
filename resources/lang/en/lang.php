@@ -13,6 +13,8 @@ return [
     |
     */
     'change_current_stock' => 'change price of current stock',
+    'have_weight'=>'depends on weight',
+
     'clear_all_input_form'=>'Keeping data after saving product',
     'add_a_free_amount'=>'add a free amount of the same product',
     'free_amount'=>'free amount',
