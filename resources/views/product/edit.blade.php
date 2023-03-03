@@ -14,7 +14,7 @@
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
                             {!! Form::open(['url' => action('ProductController@update', $product->id), 'id' => 'product-edit-form', 'method' => 'PUT', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="i-checks">
                                         <input id="is_service" name="is_service" type="checkbox"
                                             @if (!empty($product->is_service)) checked @endif value="1"
@@ -28,7 +28,7 @@
                                             </strong></label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="i-checks">
                                         <input id="active" name="active" type="checkbox"
                                             @if (!empty($product->active)) checked @endif value="1"
@@ -38,6 +38,17 @@
                                             </strong></label>
                                     </div>
                                 </div>
+
+                                <div class="col-md-3">
+                                    <div class="i-checks">
+                                        <input id="have_weight" name="have_weight" type="checkbox"
+                                               @if (!empty($product->have_weight)) checked @endif value="1" class="form-control-custom">
+                                        <label for="have_weight"><strong>
+                                                @lang('lang.have_weight')
+                                            </strong></label>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-4 supplier_div @if (empty($product->is_service)) hide @endif">
                                     <div class="form-group ">
                                         {!! Form::label('supplier_id', __('lang.supplier'), []) !!}

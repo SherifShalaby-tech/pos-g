@@ -565,7 +565,7 @@ class ProductController extends Controller
             ['purchase_price' => ['required', 'max:25', 'decimal']],
             ['sell_price' => ['required', 'max:25', 'decimal']],
         );
-//        try {
+        try {
             $discount_customers = $this->getDiscountCustomerFromType($request->discount_customer_types);
 
             $product_data = [
@@ -598,6 +598,7 @@ class ProductController extends Controller
                 'buy_from_supplier' => !empty($request->buy_from_supplier) ? 1 : 0,
                 'type' => !empty($request->this_product_have_variant) ? 'variable' : 'single',
                 'active' => !empty($request->active) ? 1 : 0,
+                'have_weight' => !empty($request->have_weight) ? 1 : 0,
                 'created_by' => Auth::user()->id
             ];
 
@@ -668,17 +669,31 @@ class ProductController extends Controller
                 'success' => true,
                 'msg' => __('lang.success')
             ];
-//        } catch (\Exception $e) {
-//            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-//            $output = [
-//                'success' => false,
-//                'msg' => __('lang.something_went_wrong')
-//            ];
-//        }
+        } catch (\Exception $e) {
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('lang.something_went_wrong')
+            ];
+        }
 
         return $output;
     }
+    /**
+     * get raw material row
+     *
+     * @return void
+     */
+    public function getRawDiscount()
+    {
+        $row_id = request()->row_id ?? 0;
+        $discount_customer_types = CustomerType::pluck('name', 'id');
 
+        return view('product.partial.raw_discount')->with(compact(
+            'row_id',
+            'discount_customer_types',
+        ));
+    }
     public function getDiscountCustomerFromType($customer_types)
     {
         $discount_customers = [];
@@ -830,6 +845,7 @@ class ProductController extends Controller
                 'buy_from_supplier' => !empty($request->buy_from_supplier) ? 1 : 0,
                 'type' => !empty($request->this_product_have_variant) ? 'variable' : 'single',
                 'active' => !empty($request->active) ? 1 : 0,
+                'have_weight' => !empty($request->have_weight) ? 1 : 0,
                 'edited_by' => Auth::user()->id,
             ];
 

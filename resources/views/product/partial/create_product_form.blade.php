@@ -5,12 +5,12 @@ $recent_product = App\Models\Product::where('is_raw_material', 0)
 $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
 @endphp
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="i-checks">
             <input id="is_service" name="is_service" type="checkbox"
                 @if (session('system_mode') == 'restaurant') checked
                 @elseif(!empty($recent_product) && $recent_product->is_service == 1) checked @endif
-                value="0" class="form-control-custom">
+                 class="form-control-custom">
             <label for="is_service"><strong>
                     @if (session('system_mode') == 'restaurant')
                         @lang('lang.or_add_new_product')
@@ -20,7 +20,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                 </strong></label>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="i-checks">
             <input id="active" name="active" type="checkbox" checked value="1" class="form-control-custom">
             <label for="active"><strong>
@@ -28,7 +28,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                 </strong></label>
         </div>
     </div>
-    <div class="col-md-4 ">
+    <div class="col-md-3 ">
         <div class="i-checks">
             <input id="clear_all_input_form" name="clear_all_input_form"
                    type="checkbox" @if ($clear_all_input_form == null || $clear_all_input_form == '1') checked @endif value="1"
@@ -38,6 +38,13 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                     @lang('lang.clear_all_input_form')
                 </strong>
             </label>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="i-checks">
+            <input id="have_weight" name="have_weight" type="checkbox"  value="1"
+                   class="form-control-custom">
+            <label for="have_weight"><strong>@lang('lang.have_weight')</strong></label>
         </div>
     </div>
     <div class="col-md-4">
