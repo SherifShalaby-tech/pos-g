@@ -12,6 +12,13 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+    'enable_tekstil_?'=>'تفعيل تك سكيل',
+    'thread_colors'=>'الوان الخيط',
+
+
+
+
+
     'have_weight'=>'يعتمد علي الميزان',
 
     'change_current_stock' => 'تغيير سعر البيع للمخزون الحالى ',

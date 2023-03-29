@@ -186,6 +186,22 @@
                                             </span>
                                         </div>
                                     </div>
+                                    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                                    <div class="col-md-4">
+                                        {!! Form::label('multiple_thread_colors', __('lang.thread_colors'), []) !!}
+                                        <div class="input-group my-group">
+                                            {!! Form::select('multiple_thread_colors[]', $colors, $product->multiple_thread_colors, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'disabled' => $product->type == 'variable' ? true : false, 'style' => 'width: 80%', 'multiple', 'id' => 'multiple_thread_colors']) !!}
+                                            <span class="input-group-btn">
+                                                @can('product_module.color.create_and_edit')
+                                                    <button type="button" class="btn-modal btn btn-default bg-white btn-flat"
+                                                            data-href="{{ action('ColorController@create') }}?quick_add=1"
+                                                            data-container=".view_modal"><i
+                                                            class="fa fa-plus-circle text-primary fa-lg"></i></button>
+                                                @endcan
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @endif
                                 @endif
                                 <div class="col-md-4">
                                     {!! Form::label('multiple_sizes', __('lang.size'), []) !!}

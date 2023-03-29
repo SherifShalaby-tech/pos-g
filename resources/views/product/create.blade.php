@@ -11,9 +11,7 @@
                             <div class="card-header d-flex align-items-center col-md-7">
                                 <h4>@lang('lang.add_new_product')</h4>
                             </div>
-
                         </div>
-
                         <div class="card-body">
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
                             {!! Form::open(['url' => action('ProductController@store'), 'id' => 'product-form', 'method' => 'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}

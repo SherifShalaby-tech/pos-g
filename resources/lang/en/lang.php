@@ -12,6 +12,10 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+    'enable_tekstil_?'=>'Enable TEKSTIL ?',
+    'thread_colors'=>'Thread Colors',
+
+
     'change_current_stock' => 'change price of current stock',
     'have_weight'=>'depends on weight',
 

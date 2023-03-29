@@ -64,6 +64,18 @@
                                 </strong></label>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="i-checks">
+                            <label><strong>
+                                @lang('lang.enable_tekstil_?')
+                                </strong></label>
+                            <select  name="enable_tekstil" class="form-control">
+                                <option @if (!empty($settings['enable_tekstil']) && $settings['enable_tekstil'] == 'true') selected @endif value="true">True</option>
+                                <option @if (!empty($settings['enable_tekstil']) && $settings['enable_tekstil'] == 'false') selected @endif value="false">False</option>
+                            </select>
+
+                        </div>
+                    </div>
 
                     @if (session('system_mode') == 'restaurant')
                         <div class="col-md-3">

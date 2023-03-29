@@ -27,6 +27,7 @@ class CreateProductsTable extends Migration
             $table->string('sku');
             $table->string('multiple_units')->nullable();
             $table->string('multiple_colors')->nullable();
+            $table->string('multiple_thread_colors')->nullable();
             $table->string('multiple_sizes')->nullable();
             $table->string('multiple_grades')->nullable();
             $table->boolean('is_service')->default(0);
