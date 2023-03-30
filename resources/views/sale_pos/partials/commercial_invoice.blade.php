@@ -402,13 +402,13 @@
                            {{ $obj["name"] }}
                         </td>
                         <td style="width: 10% !important;">
-                            {{ array_sum($obj["quantity"]) }}
+                            {{ @num_format(array_sum($obj["quantity"])) }}
                         </td>
                         <td style="width: 30% !important;">
-                            {{ array_sum($obj["discount"]) }}
+                            {{@num_format(array_sum($obj["discount"])) }}
                         </td>
                         <td style="width: 30% !important;">
-                            {{ array_sum($obj["sub_total"]) }}
+                            {{ @num_format(array_sum($obj["sub_total"])) }}
                         </td>
                     </tr>
                     @if ($i == 20)
@@ -424,9 +424,9 @@
                     <tr>
                         <td style="width: 5% !important;"></td>
                         <td style="width: 35% !important;"></td>
-                        <td style="width: 10% !important;">{{ $total["quantities"] }}</td>
-                        <td style="width: 25% !important;">{{ $total["discounts"] }} </td>
-                        <td style="width: 25% !important;">{{ $total["sub_totals"] }} </td>
+                        <td style="width: 10% !important;">{{ @num_format($total["quantities"]) }}</td>
+                        <td style="width: 25% !important;">{{ @num_format($total["discounts"]) }} </td>
+                        <td style="width: 25% !important;">{{ @num_format($total["sub_totals"]) }} </td>
                     </tr>
                     </tfoot>
                 </table>

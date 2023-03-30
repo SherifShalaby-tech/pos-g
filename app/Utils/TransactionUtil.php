@@ -1951,17 +1951,17 @@ class TransactionUtil extends Util
     public function getProductTableDetails(object $transaction): array
     {
         $data = [];
-        $total["quantities"] = 0;
-        $total["discounts"] = 0;
-        $total["sub_totals"] = 0;
+        $total["quantities"] = $this->num_uf(0);
+        $total["discounts"] = $this->num_uf(0);
+        $total["sub_totals"] = $this->num_uf(0);
         foreach ($transaction->transaction_sell_lines as $line) {
             $data[$line->product->id]["name"] = $line->product->name;
-            $data[$line->product->id]["quantity"][] = $line->quantity;
-            $data[$line->product->id]["discount"][] = $line->product_discount_amount;
-            $data[$line->product->id]["sub_total"][] = $line->sub_total;
-            $total["quantities"] += $line->quantity;
-            $total["discounts"] += $line->product_discount_amount;
-            $total["sub_totals"] += $line->sub_total;
+            $data[$line->product->id]["quantity"][] = $this->num_uf($line->quantity);
+            $data[$line->product->id]["discount"][] = $this->num_uf($line->product_discount_amount);
+            $data[$line->product->id]["sub_total"][] = $this->num_uf($line->sub_total);
+            $total["quantities"] += $this->num_uf($line->quantity);
+            $total["discounts"] += $this->num_uf($line->product_discount_amount);
+            $total["sub_totals"] +=$this->num_uf( $line->sub_total);
         }
         return array($data, $total);
     }
