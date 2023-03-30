@@ -119,14 +119,14 @@ class SettingController extends Controller
             $languages[$key] = $value['full_name'];
         }
         $currencies  = $this->commonUtil->allCurrencies();
-
         $timezone_list = $this->commonUtil->allTimeZones();
         $terms_and_conditions = TermsAndCondition::where('type', 'invoice')->orderBy('name', 'asc')->pluck('name', 'id');
-
+        $enable_tekstils = ["true","false"];
         return view('settings.general_setting')->with(compact(
             'settings',
             'currencies',
             'timezone_list',
+            'enable_tekstils',
             'terms_and_conditions',
             'languages'
         ));
@@ -137,6 +137,10 @@ class SettingController extends Controller
             System::updateOrCreate(
                 ['key' => 'site_title'],
                 ['value' => $request->site_title, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+            );
+            System::updateOrCreate(
+                ['key' => 'enable_tekstil'],
+                ['value' => $request->enable_tekstil, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
             System::updateOrCreate(
                 ['key' => 'developed_by'],

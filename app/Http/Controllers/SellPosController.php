@@ -75,11 +75,7 @@ class SellPosController extends Controller
     }
 
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $sales = Transaction::where('type', 'sell')->get();
@@ -91,11 +87,6 @@ class SellPosController extends Controller
         ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //Check if there is a open register, if no then redirect to Create Register screen.
@@ -133,7 +124,6 @@ class SellPosController extends Controller
 
             return redirect()->to('/home')->with('status', $output);
         }
-
         return view('sale_pos.pos')->with(compact(
             'categories',
             'walk_in_customer',
@@ -422,7 +412,6 @@ class SellPosController extends Controller
             }
             if ($request->action == 'print') {
                 $html_content = $this->transactionUtil->getInvoicePrint($transaction, $payment_types);
-
                 $output = [
                     'success' => true,
                     'html_content' => $html_content,
@@ -490,12 +479,7 @@ class SellPosController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         $transaction = Transaction::findOrFail($id);
@@ -1255,8 +1239,8 @@ class SellPosController extends Controller
             if (!empty(request()->created_by)) {
                 $query->where('transactions.created_by', request()->created_by);
             }
-            if (!empty(request()->method)) {
-                $query->where('transaction_payments.method', request()->method);
+            if (!empty($request["method"])) {
+                $query->where('transaction_payments.method', $request["method"]);
             }
             if (!empty($pos_id)) {
                 $query->where('store_pos_id', $pos_id);
@@ -1320,8 +1304,8 @@ class SellPosController extends Controller
                 })
                 ->addColumn('method', function ($row) use ($payment_types, $request) {
                     $methods = '';
-                    if (!empty($request->method)) {
-                        $payments = $row->transaction_payments->where('method', $request->method);
+                    if (!empty($request["method"])) {
+                        $payments = $row->transaction_payments->where('method', $request["method"]);
                     } else {
                         $payments = $row->transaction_payments;
                     }
@@ -1364,8 +1348,8 @@ class SellPosController extends Controller
                 })
                 ->addColumn('paid', function ($row) use ($request) {
                     $amount_paid = 0;
-                    if (!empty($request->method)) {
-                        $payments = $row->transaction_payments->where('method', $request->method);
+                    if (!empty($request["method"])) {
+                        $payments = $row->transaction_payments->where('method', $request["method"]);
                     } else {
                         $payments = $row->transaction_payments;
                     }
