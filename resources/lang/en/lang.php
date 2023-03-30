@@ -14,6 +14,7 @@ return [
     */
     'enable_tekstil_?'=>'Enable TEKSTIL ?',
     'thread_colors'=>'Thread Colors',
+    'product_variations'=>'Product Variations',
 
 
     'change_current_stock' => 'change price of current stock',

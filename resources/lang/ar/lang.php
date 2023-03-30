@@ -14,6 +14,7 @@ return [
     */
     'enable_tekstil_?'=>'تفعيل تك سكيل',
     'thread_colors'=>'الوان الخيط',
+    'product_variations'=>'اختلافات المنتج',
 
 
 

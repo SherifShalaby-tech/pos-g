@@ -1340,7 +1340,7 @@ class TransactionUtil extends Util
     public function getInvoicePrint($transaction, $payment_types, $transaction_invoice_lang = null)
     {
         $print_gift_invoice = request()->print_gift_invoice;
-
+        list($data, $total) = $this->getProductTableDetails($transaction);
         if (!empty($transaction_invoice_lang)) {
             $invoice_lang = $transaction_invoice_lang;
         } else {
@@ -1366,10 +1366,13 @@ class TransactionUtil extends Util
         }
 
         if ($transaction->is_direct_sale == 1) {
+
             $sale = $transaction;
             $payment_type_array = $payment_types;
             $html_content = view('sale_pos.partials.commercial_invoice')->with(compact(
                 'sale',
+                'data',
+                'total',
                 'payment_type_array',
                 'invoice_lang',
                 'print_gift_invoice',
@@ -1381,11 +1384,13 @@ class TransactionUtil extends Util
             $payment_type_array = $payment_types;
             $html_content = view('sale_pos.partials.commercial_invoice')->with(compact(
                 'sale',
+                'data',
+                'total',
                 'payment_type_array',
                 'invoice_lang'
             ))->render();
         }
-
+//        dd($html_content);
         return $html_content;
     }
 
@@ -1937,5 +1942,27 @@ class TransactionUtil extends Util
 
         $product_ids = !empty($product_ids) ? $product_ids : [];
         return (array)$product_ids;
+    }
+
+    /**
+     * @param object $transaction
+     * @return array
+     */
+    public function getProductTableDetails(object $transaction): array
+    {
+        $data = [];
+        $total["quantities"] = 0;
+        $total["discounts"] = 0;
+        $total["sub_totals"] = 0;
+        foreach ($transaction->transaction_sell_lines as $line) {
+            $data[$line->product->id]["name"] = $line->product->name;
+            $data[$line->product->id]["quantity"][] = $line->quantity;
+            $data[$line->product->id]["discount"][] = $line->product_discount_amount;
+            $data[$line->product->id]["sub_total"][] = $line->sub_total;
+            $total["quantities"] += $line->quantity;
+            $total["discounts"] += $line->product_discount_amount;
+            $total["sub_totals"] += $line->sub_total;
+        }
+        return array($data, $total);
     }
 }

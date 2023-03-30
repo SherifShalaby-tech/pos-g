@@ -268,8 +268,11 @@
                 </div>
             </div>
         </div>
-
-        <br>
+        <div class="row text-center" style="background-color:transparent !important;">
+            <div class="col-md-12">
+                <h4>@lang('lang.product_variations')</h4>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table-bordered" style="text-align: center; background-color:transparent !important;"
@@ -298,7 +301,6 @@
                                         src="@if (!empty($line->product) && !empty($line->product->getFirstMediaUrl('product'))) {{ $line->product->getFirstMediaUrl('product') }}@else{{ asset('/uploads/' . session('logo')) }} @endif"
                                         alt="photo" width="50" height="50"></td>
                                 <td style="width: 20% !important;">
-                                    {{ $line->product->name ?? '' }}
                                     @if (!empty($line->variation))
                                         @if ($line->variation->name != 'Default')
                                             <b>{{ $line->variation->name }}</b>
@@ -371,14 +373,72 @@
             </div>
         </div>
         <br>
-        <br>
+        <div class="row text-center" style="background-color:transparent !important;">
+            <div class="col-md-12">
+                <h4>@lang('lang.products')</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table-bordered" style="text-align: center; background-color:transparent !important;"
+                       id="product_table_view">
+                    <thead class="">
+                    <tr>
+                        <th style="width: 5% !important;">#</th>
+                        <th style="width: 25% !important;">@lang('lang.product')</th>
+                        <th style="width: 10% !important;">@lang('lang.quantity')</th>
+                        <th style="width: 30% !important;">@lang('lang.discount')</th>
+                        <th style="width: 30% !important;">@lang('lang.sub_total')</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @php
+                        $i = 0;
+                    @endphp
+                    @foreach ($data as $obj)
+                    <tr>
+                        <td style="width: 5% !important;">{{ $loop->iteration }}</td>
+                        <td style="width: 25% !important;">
+                           {{ $obj["name"] }}
+                        </td>
+                        <td style="width: 10% !important;">
+                            {{ array_sum($obj["quantity"]) }}
+                        </td>
+                        <td style="width: 30% !important;">
+                            {{ array_sum($obj["discount"]) }}
+                        </td>
+                        <td style="width: 30% !important;">
+                            {{ array_sum($obj["sub_total"]) }}
+                        </td>
+                    </tr>
+                    @if ($i == 20)
+                        <div class="pageBreak"></div>
+                    @endif
+                    @php
+                        $i++;
+                    @endphp
+                    @endforeach
+                    </tbody>
+                    <tfoot>
 
+                    <tr>
+                        <td style="width: 5% !important;"></td>
+                        <td style="width: 35% !important;"></td>
+                        <td style="width: 10% !important;">{{ $total["quantities"] }}</td>
+                        <td style="width: 25% !important;">{{ $total["discounts"] }} </td>
+                        <td style="width: 25% !important;">{{ $total["sub_totals"] }} </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <br>
+        <br>
         @if ($sale->status != 'draft')
             <div class="row text-center" style="background-color:transparent !important;">
                 <div class="col-md-12">
                     <h4>@lang('lang.payment_details')</h4>
                 </div>
-
             </div>
             <div class="row">
                 <div class="col-md-12">
