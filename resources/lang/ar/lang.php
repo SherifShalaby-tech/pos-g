@@ -12,7 +12,7 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    'enable_tekstil_?'=>'تفعيل تك سكيل',
+    'enable_tekstil_?'=>'هذا متجر اقمشه ؟',
     'thread_colors'=>'الوان الخيط',
     'product_variations'=>'اختلافات المنتج',
 

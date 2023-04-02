@@ -275,19 +275,23 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table class="table-bordered" style="text-align: center; background-color:transparent !important;"
+                <table class="table-bordered" style="table-layout: auto;text-align: center; background-color:transparent !important;"
                     id="product_table_view">
                     <thead class="">
-                        <tr>
-                            <th style="width: 5% !important;">#</th>
-                            <th style="width: 10% !important;">@lang('lang.image')</th>
-                            <th style="width: 20% !important;">@lang('lang.products')</th>
-                            <th style="width: 10% !important;">@lang('lang.sku')</th>
-                            <th style="width: 10% !important;">@lang('lang.batch_number')</th>
-                            <th style="width: 10% !important;">@lang('lang.quantity')</th>
-                            <th style="width: 10% !important;">@lang('lang.sell_price')</th>
-                            <th style="width: 8% !important;">@lang('lang.discount')</th>
-                            <th style="width: 15% !important;">@lang('lang.sub_total')</th>
+                        <tr style="padding: 10px">
+                            <th  style="padding: 10px">#</th>
+                            <th  style="padding: 10px">@lang('lang.image')</th>
+                            <th  style="padding: 10px">@lang('lang.products')</th>
+                            @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                            <th  style="padding: 10px">@lang('lang.color')</th>
+                            <th  style="padding: 10px">@lang('lang.thread_colors')</th>
+                            @endif
+                            <th style="padding: 10px">@lang('lang.sku')</th>
+                            <th style="padding: 10px">@lang('lang.batch_number')</th>
+                            <th style="padding: 10px">@lang('lang.quantity')</th>
+                            <th style="padding: 10px">@lang('lang.sell_price')</th>
+                            <th style="padding: 10px">@lang('lang.discount')</th>
+                            <th style="padding: 10px">@lang('lang.sub_total')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -311,6 +315,11 @@
                                     @endif
 
                                 </td>
+                                @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                                <td>{{ $line->product->colors->pluck("name")->first() }}</td>
+
+                                <td>{{ $line->product->thread_colors->pluck("name")->first() }}</td>
+                                @endif
                                 <td style="width: 10% !important;">
                                     @if (!empty($line->variation))
                                         @if ($line->variation->name != 'Default')
@@ -353,12 +362,18 @@
                             @php
                                 $i++;
                             @endphp
+
                         @endforeach
                     </tbody>
+
                     <tfoot>
                         <tr>
                             <td style="width: 5% !important;"></td>
                             <td style="width: 10% !important;"></td>
+                            @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                            <td style="width: 10% !important;"></td>
+                            <td style="width: 10% !important;"></td>
+                            @endif
                             <td style="width: 20% !important;"></td>
                             <td style="width: 10% !important;"></td>
                             <td style="width: 10% !important;"></td>
@@ -373,6 +388,7 @@
             </div>
         </div>
         <br>
+{{--        @dd("123")--}}
         <div class="row text-center" style="background-color:transparent !important;">
             <div class="col-md-12">
                 <h4>@lang('lang.products')</h4>

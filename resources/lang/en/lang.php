@@ -12,7 +12,7 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    'enable_tekstil_?'=>'Enable TEKSTIL ?',
+    'enable_tekstil_?'=>'This Is Tekstial Store ?',
     'thread_colors'=>'Thread Colors',
     'product_variations'=>'Product Variations',
 

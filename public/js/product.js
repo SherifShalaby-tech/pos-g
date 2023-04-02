@@ -599,6 +599,12 @@ $(document).on("submit", "form#quick_add_color_form", function (e) {
                             "val",
                             multiple_colors_array
                         );
+                        $("#multiple_thread_colors").empty().append(data_html);
+                        $("#multiple_thread_colors").selectpicker("refresh");
+                        $("#multiple_thread_colors").selectpicker(
+                            "val",
+                            multiple_colors_array
+                        );
                     },
                 });
             } else {
