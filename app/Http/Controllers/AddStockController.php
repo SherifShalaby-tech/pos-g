@@ -324,7 +324,6 @@ class AddStockController extends Controller
     
  public function store(Request $request)
     {
-
          try {
         $data = $request->except('_token');
 
@@ -743,13 +742,13 @@ class AddStockController extends Controller
             $product_id = $request->input('product_id');
             $variation_id = $request->input('variation_id');
             $store_id = $request->input('store_id');
-
+            $qty = $request->qty?$request->qty:null;
             if (!empty($product_id)) {
                 $index = $request->input('row_count');
                 $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
 
                 return view('add_stock.partials.product_row')
-                    ->with(compact('products', 'index', 'currency', 'exchange_rate'));
+                    ->with(compact('products', 'index', 'currency', 'exchange_rate','qty'));
             }
         }
     }
