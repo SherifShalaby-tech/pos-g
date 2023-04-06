@@ -18,6 +18,7 @@ use App\Models\RedemptionOfPoint;
 use App\Models\RemoveStockLine;
 use App\Models\SalesPromotion;
 use App\Models\Store;
+use App\Models\System;
 use App\Models\Transaction;
 use App\Models\TransferLine;
 use App\Models\Variation;
@@ -237,13 +238,12 @@ class ProductUtil extends Util
      * @param object $request
      * @return boolean
      */
-    public function createOrUpdateVariations($product, $request)
+    public function createOrUpdateVariations($product, $request ,$enable_tekstil = false)
     {
         $variations = $request->variations;
         $keey_variations = [];
         if (!empty($variations)) {
             foreach ($variations as $v) {
-
                 $c = Variation::where('product_id', $product->id)
                     ->count() + 1;
                 if ($v['name'] == 'Default') {
@@ -295,8 +295,9 @@ class ProductUtil extends Util
                     $keey_variations[] = $variation->id;
                 }
             }
-        } else {
-            $variation_data['name'] = 'Default';
+        }
+        else {
+            $variation_data['name'] = $enable_tekstil ? $request->name : 'Default';
             $variation_data['product_id'] = $product->id;
             $variation_data['sub_sku'] = $product->sku;
             $variation_data['color_id'] = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;

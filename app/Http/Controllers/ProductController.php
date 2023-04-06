@@ -19,6 +19,7 @@ use App\Models\Size;
 use App\Models\Store;
 use App\Models\Supplier;
 use App\Models\SupplierProduct;
+use App\Models\System;
 use App\Models\Tax;
 use App\Models\Transaction;
 use App\Models\Unit;
@@ -480,11 +481,7 @@ class ProductController extends Controller
         ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         if (!auth()->user()->can('product_module.product.create_and_edit')) {
@@ -510,7 +507,7 @@ class ProductController extends Controller
         $raw_material_units  = Unit::orderBy('name', 'asc')->pluck('name', 'id');
         $suppliers = Supplier::pluck('name', 'id');
         $printers = Printer::get(['id','name']);
-
+        $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
         if ($quick_add) {
             return view('product.create_quick_add')->with(compact(
                 'quick_add',
@@ -523,6 +520,7 @@ class ProductController extends Controller
                 'brands',
                 'units',
                 'colors',
+                'enable_tekstil',
                 'sizes',
                 'grades',
                 'taxes',
@@ -540,6 +538,7 @@ class ProductController extends Controller
             'raw_material_units',
             'product_classes',
             'categories',
+            'enable_tekstil',
             'sub_categories',
             'brands',
             'units',
@@ -555,14 +554,9 @@ class ProductController extends Controller
         ));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+//        dd($request->all());
         if (!auth()->user()->can('product_module.product.create_and_edit')) {
             abort(403, 'Unauthorized action.');
         }
@@ -574,7 +568,7 @@ class ProductController extends Controller
         );
         try {
             $discount_customers = $this->getDiscountCustomerFromType($request->discount_customer_types);
-
+            $tekstil_value = false;
             $product_data = [
                 'name' => $request->name,
                 'translations' => !empty($request->translations) ? $request->translations : [],
@@ -585,6 +579,7 @@ class ProductController extends Controller
                 'sku' => !empty($request->sku) ? $request->sku : $this->productUtil->generateSku($request->name),
                 'multiple_units' => $request->multiple_units,
                 'multiple_colors' => $request->multiple_colors,
+                'multiple_thread_colors' => $request->multiple_thread_colors ?? null,
                 'multiple_sizes' => $request->multiple_sizes,
                 'multiple_grades' => $request->multiple_grades,
                 'is_service' => !empty($request->is_service) ? 1 : 0,
@@ -608,11 +603,13 @@ class ProductController extends Controller
                 'have_weight' => !empty($request->have_weight) ? 1 : 0,
                 'created_by' => Auth::user()->id
             ];
-
-
             DB::beginTransaction();
-
             $product = Product::create($product_data);
+            $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
+            if (!is_null($enable_tekstil)){
+                $tekstil_value =  $enable_tekstil->value == "true" ? true: false;
+            }
+
             if($request->printers){
                 // loop printers
                 foreach ($request->printers as $printer){
@@ -633,7 +630,6 @@ class ProductController extends Controller
         if(count($request->discount_type)>0){
             $index_discounts=array_keys($request->discount_type);
         }
-
         foreach ($index_discounts as $index_discount){
             $discount_customers = $this->getDiscountCustomerFromType($request->get('discount_customer_types_'.$index_discount));
             $data_des=[
@@ -648,7 +644,8 @@ class ProductController extends Controller
 
             ProductDiscount::create($data_des);
         }
-            $this->productUtil->createOrUpdateVariations($product, $request);
+
+            $this->productUtil->createOrUpdateVariations($product, $request,$tekstil_value);
 
             if (!empty($request->consumption_details)) {
                 $variations = $product->variations()->get();
@@ -747,12 +744,6 @@ class ProductController extends Controller
         ));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         if (!auth()->user()->can('product_module.product.create_and_edit')) {
@@ -773,6 +764,7 @@ class ProductController extends Controller
         $customer_types = CustomerType::orderBy('name', 'asc')->pluck('name', 'id');
         $discount_customer_types = CustomerType::pluck('name', 'id');
         $stores  = Store::all();
+        $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
 
         $raw_materials  = Product::where('is_raw_material', 1)->orderBy('name', 'asc')->pluck('name', 'id');
         $raw_material_units  = Unit::orderBy('name', 'asc')->pluck('name', 'id');
@@ -783,6 +775,7 @@ class ProductController extends Controller
             'raw_material_units',
             'product',
             'product_classes',
+            'enable_tekstil',
             'categories',
             'sub_categories',
             'brands',
@@ -832,6 +825,7 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'multiple_units' => $request->multiple_units,
                 'multiple_colors' => $request->multiple_colors,
+                'multiple_thread_colors' => $request->multiple_thread_colors??"",
                 'multiple_sizes' => $request->multiple_sizes,
                 'multiple_grades' => $request->multiple_grades,
                 'is_service' => !empty($request->is_service) ? 1 : 0,
@@ -1141,7 +1135,7 @@ class ProductController extends Controller
      */
     public function getImport()
     {
-       
+
 
         return view('product.import');
     }

@@ -26,6 +26,7 @@ class Product extends Model implements HasMedia
     protected $casts = [
         'multiple_units' => 'json',
         'multiple_colors' => 'array',
+        'multiple_thread_colors' => 'array',
         'multiple_sizes' => 'array',
         'multiple_grades' => 'array',
         'discount_customer_types' => 'array',
