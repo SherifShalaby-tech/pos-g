@@ -185,7 +185,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                             <button class="btn-modal btn btn-default bg-white btn-flat"
                                     data-href="{{ action('ColorController@create') }}?quick_add=1" data-container=".view_modal"><i
                                     class="fa fa-plus-circle text-primary fa-lg"></i></button>
-                        @endcan
+                    @endcan
                 </span>
                 </div>
             </div>

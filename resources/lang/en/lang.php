@@ -12,7 +12,37 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    'enable_tekstil_?'=>'Enable TEKSTIL ?',
+    'manufacturers' => 'Manufacturers',
+    'add_manufacturer' => 'Add New Manufacturer',
+    'edit_manufacturer' => 'Edit Manufacturer',
+    'manufacturings' => 'Out Manufacturings',
+    'view_all_manufacturings' => 'Manufacturing',
+    'view_all_processes' => 'Processes',
+    'manufacturing' => 'Manufacturing',
+    'manufacturer' => 'Manufacturer',
+    'manufacturing_status' => 'Manufacturing Status',
+    'edit_manufacturing_status' => 'Edit Manufacturing Status',
+    'manufacturing_material' => 'Manufacturing Material',
+    'product_received' => 'Products Received',
+    'product_received_quantity' => 'Product Received Quantity',
+    'product_received_date' => 'Product Received Date',
+    'processed' => 'Processed',
+    'under_processing' => 'Under Processing',
+    'path' => 'Path',
+    'delete_all' => 'Delete All',
+    'productions'=>'Productions',
+    'received' => 'Received',
+    'underManufacturing' => 'Under Manufacturing',
+    'manufactured' => 'Manufactured',
+    'edit_manufacturing_status' => 'Edit Manufacturing Status',
+    'add_new_manufacturing' => 'Add New Manufacturing',
+    'add_new_production' => 'Add New Manufacturing',
+
+
+
+
+
+    'enable_tekstil_?'=>'This Is Tekstial Store ?',
     'thread_colors'=>'Thread Colors',
     'product_variations'=>'Product Variations',
 

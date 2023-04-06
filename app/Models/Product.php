@@ -86,6 +86,10 @@ class Product extends Model implements HasMedia
     {
         return $this->hasManyThrough(Color::class, Variation::class, 'product_id', 'id', 'id', 'color_id');
     }
+    public function thread_colors(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(Color::class, Variation::class, 'product_id', 'id', 'id', 'color_id');
+    }
     public function sizes()
     {
         return $this->hasManyThrough(Size::class, Variation::class, 'product_id', 'id', 'id', 'size_id');

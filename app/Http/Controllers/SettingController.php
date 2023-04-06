@@ -121,18 +121,18 @@ class SettingController extends Controller
         $currencies  = $this->commonUtil->allCurrencies();
         $timezone_list = $this->commonUtil->allTimeZones();
         $terms_and_conditions = TermsAndCondition::where('type', 'invoice')->orderBy('name', 'asc')->pluck('name', 'id');
-        $enable_tekstils = ["true","false"];
+
         return view('settings.general_setting')->with(compact(
             'settings',
             'currencies',
             'timezone_list',
-            'enable_tekstils',
             'terms_and_conditions',
             'languages'
         ));
     }
     public function updateGeneralSetting(Request $request)
     {
+        $enable_tekstil =  isset($request->enable_tekstil) && $request->enable_tekstil == "1" ? "true" : "false";
         try {
             System::updateOrCreate(
                 ['key' => 'site_title'],
@@ -140,7 +140,7 @@ class SettingController extends Controller
             );
             System::updateOrCreate(
                 ['key' => 'enable_tekstil'],
-                ['value' => $request->enable_tekstil, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                ['value' =>$enable_tekstil, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
             System::updateOrCreate(
                 ['key' => 'developed_by'],
