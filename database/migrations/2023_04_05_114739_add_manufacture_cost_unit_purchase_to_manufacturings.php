@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSellPriceToAddStockLinesTable extends Migration
+class AddManufactureCostUnitPurchaseToManufacturings extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddSellPriceToAddStockLinesTable extends Migration
      */
     public function up()
     {
-        Schema::table('add_stock_lines', function (Blueprint $table) {
-            // $table->decimal('sell_price', 15, 4);
+        Schema::table('manufacturings', function (Blueprint $table) {
+            // $table->decimal('manufacture_cost_unit_purchase', 15, 4)->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AddSellPriceToAddStockLinesTable extends Migration
      */
     public function down()
     {
-        Schema::table('add_stock_lines', function (Blueprint $table) {
-            //
+        Schema::table('manufacturings', function (Blueprint $table) {
+            $table->dropColumn('manufacture_cost_unit_purchase');
         });
     }
 }

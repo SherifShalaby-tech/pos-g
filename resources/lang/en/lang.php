@@ -37,7 +37,9 @@ return [
     'edit_manufacturing_status' => 'Edit Manufacturing Status',
     'add_new_manufacturing' => 'Add New Manufacturing',
     'add_new_production' => 'Add New Manufacturing',
-
+    'manufactured_cost'=>'Cost',
+    'manufactured_unit_cost_purchase'=>'Unit cost purchasing',
+    'manufactured_unit_cost_sell'=>'Unit cost selling',
 
 
 
@@ -272,7 +274,7 @@ return [
     'amount' => 'Amount',
     'notes' => 'Notes',
     'is_service' => 'Is Service',
-    'is_have_service'=>'No Service',
+    'is_have_service'=>'Service',
     'paid_amount' => 'Paid Amount',
     'pending_amount' => 'Pending Amount',
     'invoice_date' => 'Invoice Date',

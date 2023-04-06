@@ -39,7 +39,9 @@ return [
     'add_new_production' => 'اضافه عملية تصنيع جديدة',
 
     'productions'=>'عمليات التصنيع',
-
+    'manufactured_cost'=>'التكلفة',
+    'manufactured_unit_cost_sell'=>'تكلفة الوحده للبيع ',
+    'manufactured_unit_cost_purchase'=>'تكلفة الوحده للشراء ',
 
 
 
@@ -277,7 +279,7 @@ return [
     'amount' => 'المبلغ',
     'notes' => 'ملاحظات',
     'is_service' => ' خدمة',
-    'is_have_service'=>'بدون خدمه',
+    'is_have_service'=>'خدمة',
     'paid_amount' => 'المبلغ المدفوع',
     'pending_amount' => 'المبلغ المتبقي',
     'invoice_date' => 'تاريخ الفاتورة',
