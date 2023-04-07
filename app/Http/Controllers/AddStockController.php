@@ -84,11 +84,19 @@ class AddStockController extends Controller
             $store_id = $this->transactionUtil->getFilterOptionValues($request)['store_id'];
             $pos_id = $this->transactionUtil->getFilterOptionValues($request)['pos_id'];
 
-            $query = Transaction::leftjoin('add_stock_lines', 'transactions.id', 'add_stock_lines.transaction_id')
-                ->leftjoin('suppliers', 'transactions.supplier_id', '=', 'suppliers.id')
-                ->leftjoin('users', 'transactions.created_by', '=', 'users.id')
-                ->leftjoin('currencies as paying_currency', 'transactions.paying_currency_id', 'paying_currency.id')
-                ->where('type', 'add_stock')->where('status', '!=', 'draft');
+            $query=Transaction::leftjoin('add_stock_lines', 'transactions.id', 'add_stock_lines.transaction_id')
+            ->leftjoin('suppliers', 'transactions.supplier_id', '=', 'suppliers.id')
+            ->leftjoin('users', 'transactions.created_by', '=', 'users.id')
+            ->leftjoin('currencies as paying_currency', 'transactions.paying_currency_id', 'paying_currency.id')
+            ->where('manufacturing_id','!=',null)
+            ->whereIn('type',['material_manufactured','add_stock'])
+           ->orWhere(function($query){
+                $manufacturingIds=Transaction::where('type','material_manufactured')->pluck('manufacturing_id');
+                $query->whereNotIn('manufacturing_id',$manufacturingIds)->where('type','material_under_manufacture');
+            })
+            ->where('status', '!=', 'draft');
+
+            
 
             if (!empty($store_id)) {
                 $query->where('transactions.store_id', $store_id);

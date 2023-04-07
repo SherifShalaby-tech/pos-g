@@ -169,7 +169,7 @@
                         'placeholder' => __('lang.please_select')]) !!}
 
                     </div>
-                    <div class="error-msg text-red"></div>
+                    <div class="error-mszg text-red"></div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">

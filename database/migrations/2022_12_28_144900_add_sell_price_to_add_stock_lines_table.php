@@ -14,7 +14,7 @@ class AddSellPriceToAddStockLinesTable extends Migration
     public function up()
     {
         Schema::table('add_stock_lines', function (Blueprint $table) {
-            // $table->decimal('sell_price', 15, 4);
+            $table->decimal('sell_price', 15, 4);
         });
     }
 

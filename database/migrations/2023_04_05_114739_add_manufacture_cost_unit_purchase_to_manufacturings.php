@@ -14,7 +14,7 @@ class AddManufactureCostUnitPurchaseToManufacturings extends Migration
     public function up()
     {
         Schema::table('manufacturings', function (Blueprint $table) {
-            // $table->decimal('manufacture_cost_unit_purchase', 15, 4)->default(0);
+            $table->decimal('manufacture_cost_unit_purchase', 15, 4)->default(0);
         });
     }
 
