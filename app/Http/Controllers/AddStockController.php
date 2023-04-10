@@ -27,6 +27,7 @@ use App\Models\Tax;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\Variation;
 use App\Utils\CashRegisterUtil;
 use App\Utils\MoneySafeUtil;
 use App\Utils\NotificationUtil;
@@ -40,6 +41,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Stmt\Return_;
 use Yajra\DataTables\Facades\DataTables;
 
 class AddStockController extends Controller
@@ -332,7 +334,8 @@ class AddStockController extends Controller
     
  public function store(Request $request)
     {
-         try {
+        // return $request->add_stock_lines;
+        try {
         $data = $request->except('_token');
 
         if (!empty($data['po_no'])) {
@@ -750,17 +753,50 @@ class AddStockController extends Controller
             $product_id = $request->input('product_id');
             $variation_id = $request->input('variation_id');
             $store_id = $request->input('store_id');
-            $qty = $request->qty?$request->qty:null;
+            $qty = $request->qty?$request->qty:0;
+            $is_batch = $request->is_batch;
             if (!empty($product_id)) {
                 $index = $request->input('row_count');
                 $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
 
                 return view('add_stock.partials.product_row')
-                    ->with(compact('products', 'index', 'currency', 'exchange_rate','qty'));
+                    ->with(compact('products', 'index', 'currency', 'exchange_rate','qty','is_batch'));
             }
         }
     }
 
+    public function addProductBatchRow(Request $request)
+    {
+        if ($request->ajax()) {
+            $currency_id = $request->currency_id;
+            $currency = Currency::find($currency_id);
+            $exchange_rate = $this->commonUtil->getExchangeRateByCurrency($currency_id, $request->store_id);
+
+            $product_id = $request->input('product_id');
+            $variation_id = $request->input('variation_id');
+            $store_id = $request->input('store_id');
+            if (!empty($product_id)) {
+                $index = $request->input('row_count');
+                $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+
+                return view('add_stock.partials.product_batch_row')
+                    ->with(compact('products', 'index', 'currency', 'exchange_rate'));
+            }
+        }
+    }
+    // public function addNewBatchProduct(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         // // $product->sku=$request->productSkuBatch;
+    //         $variation=Variation::where('product_id',$request->product_id)->first()->replicate();
+    //         $latestid=Variation::latest('id')->first();
+    //         $variation->sub_sku=$request->productSkuBatch;
+    //         $variation->id=($latestid->id)+1;
+    //         $variation->save();
+    //         return  response()->json(['productId'=>$variation->product_id,'variationId'=>$variation->id]); 
+
+    //     }
+    // }
     public function getPurchaseOrderDetails($id)
     {
         $purchase_order = Transaction::find($id);

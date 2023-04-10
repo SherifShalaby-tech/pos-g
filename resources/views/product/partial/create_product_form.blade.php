@@ -444,6 +444,9 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                     <th>@lang('lang.name')</th>
                     <th>@lang('lang.sku')</th>
                     <th>@lang('lang.color')</th>
+                    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                    <th>@lang('lang.thread_colors')</th>
+                    @endif
                     <th>@lang('lang.size')</th>
                     <th>@lang('lang.grade')</th>
                     <th>@lang('lang.unit')</th>

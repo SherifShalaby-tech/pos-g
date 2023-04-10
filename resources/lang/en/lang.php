@@ -99,6 +99,7 @@ return [
     'required_fields_info' => 'The field labels marked with * are required input fields.',
     'product' => 'Product',
     'add_new_product' => 'Add New Product',
+    'add_a_new_batch'=>"Add New Batch",
     'class' => 'Class',
     'submit' => 'Submit',
     'class_name' => 'Class Name',

@@ -855,13 +855,47 @@ class SellPosController extends Controller
             if (empty($term)) {
                 return json_encode([]);
             }
-
-            $q = Product::leftJoin(
+            $result = [];
+            $qProduct = Product::leftjoin('product_stores','products.id','=','product_stores.product_id')->leftJoin(
                 'variations',
                 'products.id',
                 '=',
                 'variations.product_id'
-            )->leftjoin('product_stores', 'variations.id', 'product_stores.variation_id')
+            )
+            ->where(function ($query) use ($term) {
+                $query->where('products.name', 'like', '%' . $term . '%');
+                $query->orWhere('variations.name', 'like', '%' . $term . '%');
+                $query->orWhere('sku', 'like', '%' . $term . '%');
+                $query->orWhere('sub_sku', 'like', '%' . $term . '%');
+            })
+            ->where('is_raw_material', 0)
+            ->whereNull('variations.deleted_at')
+            ->select(
+                'products.id as product_id',
+                'products.name',
+                'products.type',
+                'products.multiple_colors',
+                'products.multiple_sizes',
+                'products.is_service',
+                'variations.id as variation_id',
+                'variations.name as variation',
+                'variations.sub_sku as sub_sku',
+                'product_stores.qty_available',
+                'product_stores.block_qty',
+            );
+            $productwithoutBatchs = $qProduct->get();
+            if (!empty(request()->store_id)) {
+                $qProduct->where('product_stores.store_id', request()->store_id);
+            }
+            $qProducts=$qProduct->get();
+            ////////////////////////
+            $q = Product::leftjoin('product_stores','products.id','=','product_stores.product_id')->leftJoin(
+                    'variations',
+                    'products.id',
+                    '=',
+                    'variations.product_id'
+                )
+                ->leftjoin('add_stock_lines', 'variations.id','=','add_stock_lines.variation_id')
                 ->where(function ($query) use ($term) {
                     $query->where('products.name', 'like', '%' . $term . '%');
                     $query->orWhere('variations.name', 'like', '%' . $term . '%');
@@ -882,20 +916,25 @@ class SellPosController extends Controller
                     'variations.sub_sku as sub_sku',
                     'product_stores.qty_available',
                     'product_stores.block_qty',
+                    'add_stock_lines.batch_number',
+                    'add_stock_lines.quantity'
                 );
 
             if (!empty(request()->store_id)) {
                 $q->where('product_stores.store_id', request()->store_id);
+                $q->where('add_stock_lines.batch_number', '!=',null);
             }
 
-            $products = $q->groupBy('variation_id')->get();
+            $products = $q->get();
+            
+            foreach($qProducts as $p) {
+                $products->add($p);
+            }
             $products_array = [];
             foreach ($products as $product) {
                 $products_array[$product->product_id]['name'] = $product->name;
                 $products_array[$product->product_id]['sku'] = $product->sub_sku;
                 $products_array[$product->product_id]['type'] = $product->type;
-                $products_array[$product->product_id]['color'] =array_key_exists(0, $product->multiple_colors) ?$product->multiple_colors[0]:null ;
-                $products_array[$product->product_id]['size'] = array_key_exists(0, $product->multiple_sizes) ? $product->multiple_sizes[0]:null;
                 $products_array[$product->product_id]['is_service'] = $product->is_service;
                 $products_array[$product->product_id]['qty'] = $this->productUtil->num_uf($product->qty_available - $product->block_qty);
                 $products_array[$product->product_id]['variations'][]
@@ -905,36 +944,21 @@ class SellPosController extends Controller
                         'sub_sku' => $product->sub_sku,
                         'qty' => $product->qty_available
                     ];
+                $products_array[$product->product_id]['add_stock_lines'][]
+                = [
+                    'batch_number' => $product->batch_number,
+                    'quantity' => $product->quantity,
+                ];
             }
 
-            $result = [];
+            
             $i = 1;
-            $no_of_records = $products->count();
+            // $no_of_records = $products->count();
             if (!empty($products_array)) {
                 foreach ($products_array as $key => $value) {
                     $name = $value['name'];
                     foreach ($value['variations'] as $variation) {
                         $v = Variation::find($variation['variation_id']);
-                        if($v->color->name)
-                        {
-                            $color =  $v->color->name;
-                        }else{
-                            $colorId = $value['color'];
-                            $color_m = Color::whereId($colorId)->first();
-                            if($color_m){
-                              $color=  $color_m->name;
-                            }
-                        }
-                        if($v->size->name)
-                        {
-                            $size =  $v->size->name;
-                        }else{
-                            $sizeId = $value['size'];
-                            $size_m = Size::whereId($sizeId)->first();
-                            if($size_m){
-                              $size=  $size_m->name;
-                            }
-                        }
                         $text = $name;
                         if ($value['type'] == 'variable') {
                             if ($variation['variation_name'] != 'Default') {
@@ -945,14 +969,27 @@ class SellPosController extends Controller
                         $i++;
                         $result[] = [
                             'id' => $i,
-                            'text' =>$color.' - '.$size.' - ' .$text . ' - ' . $variation['sub_sku'],
+                            'text' =>$text . ' - ' . $variation['sub_sku'],
                             'product_id' => $key,
                             'variation_id' => $variation['variation_id'],
                             'qty_available' => $variation['qty'],
-                            'is_service' => $value['is_service'],
-                            'color' => $color,
-                            'size' => $size
+                            'is_service' => $value['is_service']
                         ];
+                    }
+
+                    $x=0;
+                    foreach ($value['add_stock_lines'] as $add_stock) {
+                            $result[$x] = [
+                                'id' => $i,
+                                'text' => $text . ' - ' . $variation['sub_sku'],
+                                'product_id' => $key,
+                                'variation_id' => $variation['variation_id'],
+                                'qty_available' => $variation['qty'],
+                                'is_service' => $value['is_service'],
+                                'batch_number' => $add_stock['batch_number'],
+                                'quantity' => $add_stock['quantity'],
+                            ];
+                        $x++;
                     }
                     $i++;
                 }
@@ -984,7 +1021,6 @@ class SellPosController extends Controller
         }
     }
 
-
     /**
      * Returns the html for product row
      *
@@ -994,7 +1030,7 @@ class SellPosController extends Controller
     {
         if ($request->ajax()) {
             $weighing_scale_barcode = $request->input('weighing_scale_barcode');
-
+            $batch_number = $request->input('batch_number');
 
             $product_id = $request->input('product_id');
             $variation_id = $request->input('variation_id');
@@ -1016,7 +1052,7 @@ class SellPosController extends Controller
 
             if (!empty($product_id)) {
                 $index = $request->input('row_count');
-                $products = $this->productUtil->getDetailsFromProductByStore($product_id, $variation_id, $store_id);
+                $products = $this->productUtil->getDetailsFromProductByStore($product_id, $variation_id, $store_id, $batch_number);
                 $System=System::where('key','weight_product'.$store_pos_id)->first();
                 if(!$System){
                     System::Create([

@@ -16,12 +16,15 @@ class Variation extends Model
      * @var array
      */
     protected $guarded = ['id'];
-
+    // protected $casts=['multiple_thread_colors' => 'array'];
     public function product()
     {
         return $this->belongsTo(Product::class)->withDefault(['name' => '']);
     }
-
+    public function addStockLines()
+    {
+        return $this->hasMany(AddStockLine::class);
+    }
     public function color()
     {
         return $this->belongsTo(Color::class)->withDefault(['name' => '']);

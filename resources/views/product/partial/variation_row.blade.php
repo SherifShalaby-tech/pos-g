@@ -34,6 +34,14 @@
         => 'form-control selectpicker v_color', 'data-live-search'=>"true", 'placeholder' => ''])
         !!}
     </td>
+
+    @if($enable_tekstil)
+    <td>{!! Form::select('variations['.$row_id.'][multiple_thread_colors]', $colors, !empty($item) ? $item->color_id: false,
+        ['class'
+        => 'form-control selectpicker v_color', 'data-live-search'=>"true", 'placeholder' => ''])
+        !!}
+    </td>
+    @endif
     <td>{!! Form::select('variations['.$row_id.'][size_id]', $sizes, !empty($item) ? $item->size_id: false, ['class'
         =>
         'form-control selectpicker v_size', 'data-live-search'=>"true", 'placeholder' => '']) !!}

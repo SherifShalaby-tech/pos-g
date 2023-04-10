@@ -248,6 +248,7 @@ class ProductUtil extends Util
                     ->count() + 1;
                 if ($v['name'] == 'Default') {
                     $sub_sku = $product->sku;
+                    $multiple_thread_colors = $product->multiple_thread_colors;
                     $color_id = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
                     $size_id = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
                     $grade_id = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
@@ -258,6 +259,7 @@ class ProductUtil extends Util
                     $color_id=$v['color_id'] ??null;
                     $size_id=$v['size_id'] ??null;
                     $grade_id=$v['grade_id'] ??null;
+                    $multiple_thread_colors=$v['multiple_thread_colors'] ?? null;
                     $sub_sku = !empty($v['sub_sku']) ? $v['sub_sku'] : $this->generateSubSku($product->sku, $c, $product->barcode_type);
                 }
 
@@ -267,6 +269,7 @@ class ProductUtil extends Util
                     $variation = Variation::find($v['id']);
                     $variation->name = $v['name'];
                     $variation->sub_sku = $sub_sku;
+                    $variation->multiple_thread_colors = $multiple_thread_colors;
                     $variation->color_id = $color_id;
                     $variation->size_id = $size_id ;
                     $variation->grade_id = $grade_id  ;
@@ -281,6 +284,7 @@ class ProductUtil extends Util
                     $variation_data['name'] = $v['name'];
                     $variation_data['product_id'] = $product->id;
                     $variation_data['sub_sku'] = !empty($v['sub_sku']) ? $v['sub_sku'] : $this->generateSubSku($product->sku, $c, $product->barcode_type);
+                    $variation_data['multiple_thread_colors'] = !empty($v['multiple_thread_colors']) ? $v['multiple_thread_colors'] : null;
                     $variation_data['color_id'] = $v['color_id'] ?? null;
                     $variation_data['size_id'] = $v['size_id'] ?? null;
                     $variation_data['grade_id'] = $v['grade_id'] ?? null;
@@ -300,6 +304,7 @@ class ProductUtil extends Util
             $variation_data['name'] = $enable_tekstil ? $request->name : 'Default';
             $variation_data['product_id'] = $product->id;
             $variation_data['sub_sku'] = $product->sku;
+            $variation_data['multiple_thread_colors'] = !empty($request->multiple_thread_colors) ?$product->multiple_thread_colors[0]: null;
             $variation_data['color_id'] = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
             $variation_data['size_id'] = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
             $variation_data['grade_id'] = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
@@ -508,7 +513,7 @@ class ProductUtil extends Util
         if (!is_null($variation_id) && $variation_id !== '0') {
             $product->where('v.id', $variation_id);
         }
-        if (is_null($store_id) && $store_id == '0') {
+        if (!is_null($store_id) && $store_id !== '0') {
             $product->where('product_stores.store_id', $store_id);
         }
         $product->where('products.id', $product_id)->groupBy('v.id');
@@ -578,42 +583,83 @@ class ProductUtil extends Util
      *
      * @return Obj
      */
-    public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null)
-    {
-        $product = Product::leftjoin('variations as v', 'products.id', '=', 'v.product_id')
+    public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null,$batch_number)
+    {   $product='';
+        if($batch_number==null){
+            $product = Product::
+            leftjoin('variations as v', 'products.id', '=', 'v.product_id')
             ->leftjoin('taxes', 'products.tax_id', '=', 'taxes.id')
             ->leftjoin('product_stores', 'v.id', '=', 'product_stores.variation_id')
-
             ->whereNull('v.deleted_at');
-
-        if (!is_null($variation_id) && $variation_id !== '0') {
-            $product->where('v.id', $variation_id);
+            if (!is_null($variation_id) && $variation_id !== '0') {
+                $product->where('v.id', $variation_id);
+            }
+            if (!is_null($store_id) && $store_id !== '0') {
+                $product->where('product_stores.store_id', $store_id);
+            }
+    
+            $product->where('products.id', $product_id);
+    
+            $products = $product->select(
+                'products.id as product_id',
+                'products.name as product_name',
+                'products.is_service',
+                'products.alert_quantity',
+                'products.tax_id',
+                'products.tax_method',
+                'product_stores.qty_available',
+                'products.sell_price',
+                'taxes.rate as tax_rate',
+                'v.id as variation_id',
+                'v.name as variation_name',
+                'v.default_purchase_price',
+                'v.default_sell_price',
+                'v.sub_sku'
+            )->groupBy('v.id')
+                ->get();
+    
+            return $products;
         }
-        if (!is_null($store_id) && $store_id !== '0') {
-            $product->where('product_stores.store_id', $store_id);
+        else{
+            $product = Product::
+            leftjoin('add_stock_lines', 'products.id', '=', 'add_stock_lines.product_id')
+            ->leftjoin('variations as v', 'products.id', '=', 'v.product_id')
+            ->leftjoin('taxes', 'products.tax_id', '=', 'taxes.id')
+            ->leftjoin('product_stores', 'v.id', '=', 'product_stores.variation_id')
+            ->whereNull('v.deleted_at');
+            if (!is_null($variation_id) && $variation_id !== '0') {
+                $product->where('v.id', $variation_id);
+            }
+            if (!is_null($store_id) && $store_id !== '0') {
+                $product->where('product_stores.store_id', $store_id);
+            }
+            if (!is_null($batch_number) && $batch_number !== '0') {
+                $product->where('add_stock_lines.batch_number', $batch_number);
+            }
+    
+            $product->where('products.id', $product_id);
+    
+            $products = $product->select(
+                'products.id as product_id',
+                'products.name as product_name',
+                'products.is_service',
+                'products.alert_quantity',
+                'products.tax_id',
+                'products.tax_method',
+                'product_stores.qty_available',
+                'add_stock_lines.batch_number',
+                'products.sell_price',
+                'taxes.rate as tax_rate',
+                'v.id as variation_id',
+                'v.name as variation_name',
+                'v.default_purchase_price',
+                'v.default_sell_price',
+                'v.sub_sku'
+            )->groupBy('v.id')
+                ->get();
+    
+            return $products;
         }
-
-        $product->where('products.id', $product_id);
-
-        $products = $product->select(
-            'products.id as product_id',
-            'products.name as product_name',
-            'products.is_service',
-            'products.alert_quantity',
-            'products.tax_id',
-            'products.tax_method',
-            'product_stores.qty_available',
-            'products.sell_price',
-            'taxes.rate as tax_rate',
-            'v.id as variation_id',
-            'v.name as variation_name',
-            'v.default_purchase_price',
-            'v.default_sell_price',
-            'v.sub_sku'
-        )->groupBy('v.id')
-            ->get();
-
-        return $products;
     }
 
     /**
@@ -993,8 +1039,18 @@ class ProductUtil extends Util
     {
 
         $keep_lines_ids = [];
-
+        
         foreach ($add_stocks as $line) {
+            //add product with batch 
+            // if(isset($line['sku_sub'])){
+            //     $variation=Variation::where('product_id',$line['product_id'])->where('id',$line['variation_id'])->first()->replicate();
+            //     $latestid=Variation::latest('id')->first();
+            //     $variation->id=($latestid->id)+1;
+            //     $variation->sub_sku=$line['sku_sub'];
+            //     $line['variation_id']=$variation->id;
+            //     $variation->save();
+            // }
+            //
             if (!empty($line['add_stock_line_id'])) {
                 $add_stock = AddStockLine::find($line['add_stock_line_id']);
                 $add_stock->product_id = $line['product_id'];
