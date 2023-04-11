@@ -266,7 +266,7 @@ $(document).ready(function () {
                             get_label_product_row(
                                 ui.item.product_id,
                                 ui.item.variation_id,
-                                ui.item.batch_number
+                                ui.item.add_stock_lines_id
                             );
                         } else {
                             out_of_stock_handle(
@@ -279,7 +279,7 @@ $(document).ready(function () {
                         get_label_product_row(
                             ui.item.product_id,
                             ui.item.variation_id,
-                            ui.item.batch_number
+                            ui.item.add_stock_lines_id
                         );
                     }
                 },
@@ -316,7 +316,7 @@ $(document).ready(function () {
 function get_label_product_row(
     product_id = null,
     variation_id = null,
-    batch_number=null,
+    add_stock_lines_id,
     edit_quantity = 1,
     edit_row_count = 0,
     weighing_scale_barcode = null
@@ -332,10 +332,10 @@ function get_label_product_row(
         .find("tr")
         .each(function () {
             var row_v_id = $(this).find(".variation_id").val();
-            var row_batch_number = $(this).find(".batch_number").val();
-            console.log(batch_number)
-            if(batch_number!=null){
-                if (row_v_id == variation_id && row_batch_number ==batch_number && !is_added) {
+            var row_batch_number = $(this).find(".batch_number_id").val();
+            console.log(add_stock_lines_id)
+            if(add_stock_lines_id!=null){
+                if (row_v_id == variation_id && row_batch_number ==add_stock_lines_id && !is_added) {
                     add_via_ajax = false;
                     is_added = true;
                     is_batch=true;
@@ -397,7 +397,7 @@ function get_label_product_row(
                 weighing_scale_barcode: weighing_scale_barcode,
                 dining_table_id: $("#dining_table_id").val(),
                 is_direct_sale: $("#is_direct_sale").val(),
-                batch_number:batch_number
+                batch_number_id:add_stock_lines_id
             },
             success: function (result) {
                 

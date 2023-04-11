@@ -100,6 +100,7 @@ return [
     'product' => 'Product',
     'add_new_product' => 'Add New Product',
     'add_a_new_batch'=>"Add New Batch",
+    'discount_category'=>'Discount Category',
     'class' => 'Class',
     'submit' => 'Submit',
     'class_name' => 'Class Name',

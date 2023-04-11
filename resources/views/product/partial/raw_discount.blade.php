@@ -15,6 +15,9 @@
             {!! Form::text('discount_end_date['.$row_id.']',  @format_date($discount->discount_end_date) , ['class' => 'clear_input_form form-control datepicker', 'placeholder' => __('lang.discount_end_date')]) !!}
         </td>
         <td>
+            {!! Form::text('discount_category['.$row_id.']',  @num_format($discount->discount_category), ['class' => 'clear_input_form form-control', 'placeholder' => __('lang.discount_category')]) !!}
+        </td>
+        <td>
             {!! Form::select('discount_customer_types_'.$row_id.'[]', $discount_customer_types,  $discount->discount_customer_types , ['class' => 'clear_input_form selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'multiple', 'data-actions-box' => 'true', 'id' => 'discount_customer_types']) !!}
         </td>
         <td><button type="button" class="btn btn-xs btn-danger remove_row remove_discount_btn"><i class="fa fa-times"></i></button></td>
@@ -35,6 +38,9 @@
         {!! Form::text('discount_end_date['.$row_id.']', !empty($discount_product->discount_end_date) ? @format_date($discount_product->discount_end_date) : null , ['class' => 'clear_input_form form-control datepicker', 'placeholder' => __('lang.discount_end_date')]) !!}
     </td>
     <td>
+        {!! Form::text('discount_category['.$row_id.']', !empty($discount_product->discount_category) ? $discount_product->discount_category : null, ['class' => 'clear_input_form form-control', 'placeholder' => __('lang.discount_category')]) !!}
+    </td>
+    <td>
         {!! Form::select('discount_customer_types_'.$row_id.'[]', $discount_customer_types, !empty($discount_product) ? $discount_product->discount_customer_types : false, ['class' => 'clear_input_form selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'multiple', 'data-actions-box' => 'true', 'id' => 'discount_customer_types']) !!}
     </td>
     <td><button type="button" class="btn btn-xs btn-danger remove_row remove_discount_btn"><i class="fa fa-times"></i></button></td>
@@ -53,6 +59,9 @@
         </td>
         <td>
             {!! Form::text('discount_end_date['.$row_id.']', !empty($recent_product) && !empty($recent_product->discount_end_date) ? @format_date($recent_product->discount_end_date) : null, ['class' => 'clear_input_form form-control datepicker', 'placeholder' => __('lang.discount_end_date')]) !!}
+        </td>
+        <td>
+            {!! Form::text('discount_category['.$row_id.']', !empty($recent_product) ? $recent_product->discount_category : null, ['class' => 'clear_input_form form-control', 'placeholder' => __('lang.discount_category')]) !!}
         </td>
         <td>
             {!! Form::select('discount_customer_types_'.$row_id.'[]', $discount_customer_types, !empty($recent_product) ? $recent_product->discount_customer_types : false, ['class' => 'clear_input_form selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'multiple', 'data-actions-box' => 'true', 'id' => 'discount_customer_types']) !!}

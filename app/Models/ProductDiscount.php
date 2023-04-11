@@ -22,6 +22,7 @@ class ProductDiscount extends Model
     protected $casts = [
 
         'discount_customer_types' => 'array',
+        'discount_category' => 'array',
         'discount_customers' => 'json',
 
     ];
