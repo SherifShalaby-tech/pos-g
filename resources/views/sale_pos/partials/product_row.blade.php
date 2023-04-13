@@ -134,7 +134,7 @@
     <td style="width: @if(session('system_mode')  != 'restaurant') 12% @else 15% @endif ">
         <input type="hidden" value="{{$product->product_id}}" class="p-id"/>
                 <select class="custom-select custom-select-sm discount_category discount_category{{$product->product_id}}" style="height:30% !important"
-                    @if(!auth()->user()->can('product_discount_module.product_category.create_and_edit')) disabled="disabled" @endif>
+                    @if(!auth()->user()->can('product_module.discount_category.create_and_edit')) disabled="disabled" @endif>
                     <option selected>select</option>
                     @foreach($product_discount_details as $discount)
                             <option value="{{$discount->id}}">{{$discount->discount_category}}</option>
