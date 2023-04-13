@@ -394,6 +394,7 @@
                                         <tr>
                                             <th style="width: 20%;">@lang('lang.discount_type')</th>
                                             <th style="width: 15%;">@lang('lang.discount')</th>
+                                            <th style="width: 7%;">@lang('lang.discount_category')</th>
                                             <th style="width: 20%;">@lang('lang.discount_start_date')</th>
                                             <th style="width: 20%;">@lang('lang.discount_end_date')</th>
                                             <th style="width: 20%;">@lang('lang.customer_type') <i class="dripicons-question" data-toggle="tooltip"
@@ -502,6 +503,9 @@
                                                 <th>@lang('lang.name')</th>
                                                 <th>@lang('lang.sku')</th>
                                                 <th>@lang('lang.color')</th>
+                                                @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                                                <th>@lang('lang.thread_colors')</th>
+                                                @endif
                                                 <th>@lang('lang.size')</th>
                                                 <th>@lang('lang.grade')</th>
                                                 <th>@lang('lang.unit')</th>

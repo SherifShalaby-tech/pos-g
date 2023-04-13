@@ -221,6 +221,8 @@ class ProductController extends Controller
                 'variations.name as variation_name',
                 'variations.default_purchase_price',
                 'variations.default_sell_price',
+                'variations.multiple_thread_colors as thread_colors',
+
                 'add_stock_lines.expiry_date as exp_date',
                 'users.name as created_by_name',
                 'edited.name as edited_by_name',
@@ -280,6 +282,19 @@ class ProductController extends Controller
                       }
                     }
                     return $color;
+                })
+                ->editColumn('thread_colors', function ($row){
+                    $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
+                    if($enable_tekstil ){
+                        $color='';
+                        if(isset($row->thread_colors)){
+                        $color_m=Color::whereId($row->thread_colors)->first();
+                        if($color_m){
+                            $color= $color_m ->name;
+                        }
+                        }
+                        return $color;
+                    }
                 })
                 ->editColumn('size', function ($row){
                     $size='';
@@ -430,6 +445,7 @@ class ProductController extends Controller
                     'brand',
                     'unit',
                     'color',
+                    'thread_colors',
                     'size',
                     'grade',
                     'is_service',
@@ -635,6 +651,7 @@ class ProductController extends Controller
             $data_des=[
                 'product_id' => $product->id,
                 'discount_type' => $request->discount_type[$index_discount],
+                'discount_category' => $request->discount_category[$index_discount],
                 'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                 'discount_customers' => $discount_customers,
                 'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),

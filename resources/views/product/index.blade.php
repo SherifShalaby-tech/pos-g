@@ -282,6 +282,7 @@
                     @endif
                     <th>@lang('lang.unit')</th>
                     <th>@lang('lang.color')</th>
+                    <th>@lang('lang.thread_colors')</th>
                     <th>@lang('lang.size')</th>
                     <th>@lang('lang.grade')</th>
                     <th class="sum">@lang('lang.current_stock')</th>
@@ -305,6 +306,7 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -391,6 +393,7 @@
                         d.supplier_id = $('#supplier_id').val();
                         d.unit_id = $('#unit_id').val();
                         d.color_id = $('#color_id').val();
+                        d.thread_colors = $('#thread_colors').val();
                         d.size_id = $('#size_id').val();
                         d.grade_id = $('#grade_id').val();
                         d.tax_id = $('#tax_id').val();
@@ -456,6 +459,10 @@
                     },
                     {
                         data: 'color',
+                        name: 'colors.name'
+                    },
+                    {
+                        data: 'thread_colors',
                         name: 'colors.name'
                     },
                     {

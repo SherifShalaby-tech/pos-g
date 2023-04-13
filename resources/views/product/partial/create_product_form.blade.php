@@ -360,9 +360,9 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
             <tr>
                 <th style="width: 20%;">@lang('lang.discount_type')</th>
                 <th style="width: 15%;">@lang('lang.discount')</th>
+                <th style="width: 10%;">@lang('lang.discount_category')</th>
                 <th style="width: 20%;">@lang('lang.discount_start_date')</th>
                 <th style="width: 20%;">@lang('lang.discount_end_date')</th>
-                <th style="width: 20%;">@lang('lang.discount_category')</th>
                 <th style="width: 20%;">@lang('lang.customer_type') <i class="dripicons-question" data-toggle="tooltip"
                                                                        title="@lang('lang.discount_customer_info')"></i></th>
                 <th style="width: 5%;"><button class="btn btn-xs btn-success add_discount_row"

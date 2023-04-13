@@ -248,7 +248,7 @@ class ProductUtil extends Util
                     ->count() + 1;
                 if ($v['name'] == 'Default') {
                     $sub_sku = $product->sku;
-                    $multiple_thread_colors = $product->multiple_thread_colors;
+                    $multiple_thread_colors = !empty($request->multiple_thread_colors) ? $request->multiple_thread_colors : null;
                     $color_id = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
                     $size_id = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
                     $grade_id = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
@@ -655,14 +655,16 @@ class ProductUtil extends Util
                 $product = ProductDiscount::whereJsonContains('discount_customer_types', $customer_type_id)
                     ->where('product_id', $product_id)
                     ->select(
+                        'id',
                         'discount_type',
                         'discount',
+                        'discount_category',
                         'discount_start_date',
                         'discount_end_date',
                     )
-                    ->first();
+                    ->get();
             }
-
+            
             if (!empty($product)) {
                 if (!empty($product->discount_start_date) && !empty($product->discount_end_date)) {
                     //if end date set then check for expiry
