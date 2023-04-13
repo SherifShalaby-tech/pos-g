@@ -249,7 +249,7 @@ class ProductUtil extends Util
                 if ($v['name'] == 'Default') {
                     $sub_sku = $product->sku;
                     $multiple_thread_colors = !empty($request->multiple_thread_colors) ? $request->multiple_thread_colors : null;
-                    $color_id = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
+                    $color_id = !empty($request->multiple_colors) ? $request->multiple_colors : null;
                     $size_id = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
                     $grade_id = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
                     $unit_id = !empty($request->multiple_units) ? $request->multiple_units[0] : null;
