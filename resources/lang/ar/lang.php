@@ -1009,7 +1009,7 @@ return [
     'compensated' => 'تعويض',
     'compensated_at' => 'تعويض في',
     'compensated_from_supplier' => 'التعويضات من الموردين',
-
+    'watsapp_numbers'=>'ارقام واتساب للتواصل',
     'tac_to_be_printed' => 'الشروط والاحكام ليتم طباعتها',
     'surplus' => 'فائض',
     'total_surplus' => 'إجمالي الفائض',

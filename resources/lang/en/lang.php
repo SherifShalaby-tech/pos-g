@@ -1009,6 +1009,7 @@ return [
     'product_class_has_category' => 'Product class has category. delete category first',
     'sub_category_exsist' => 'Category has sub category. delete sub category first',
     'tac_to_be_printed' => 'Terms and condition to be printed',
+    'watsapp_numbers'=>'Watsapp Numbers',
     'surplus' => 'Surplus',
     'total_surplus' => 'Total Surplus',
     'partially_paid' => 'Partially Paid',
