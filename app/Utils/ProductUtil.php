@@ -1006,16 +1006,6 @@ class ProductUtil extends Util
         $keep_lines_ids = [];
         
         foreach ($add_stocks as $line) {
-            //add product with batch 
-            // if(isset($line['sku_sub'])){
-            //     $variation=Variation::where('product_id',$line['product_id'])->where('id',$line['variation_id'])->first()->replicate();
-            //     $latestid=Variation::latest('id')->first();
-            //     $variation->id=($latestid->id)+1;
-            //     $variation->sub_sku=$line['sku_sub'];
-            //     $line['variation_id']=$variation->id;
-            //     $variation->save();
-            // }
-            //
             if (!empty($line['add_stock_line_id'])) {
                 $add_stock = AddStockLine::find($line['add_stock_line_id']);
                 $add_stock->product_id = $line['product_id'];
@@ -1067,8 +1057,18 @@ class ProductUtil extends Util
                     'bounce_manufacturing_date' => $line['bounce_manufacturing_date'],
                     'bounce_batch_number' => $line['bounce_batch_number'],
                 ];
-
+              
                 $add_stock = AddStockLine::create($add_stock_data);
+                if(!empty($line['new_batch_number']) ){
+                    $add_batch_stock=$add_stock->replicate();
+                    $add_batch_stock->id=$add_stock->id+1;
+                    $add_batch_stock->batch_number=$line['new_batch_number'];
+                    $add_batch_stock->quantity=$line['bounce_qty'] > 0 ? $this->num_uf($line['batch_quantity'])+$line['bounce_qty']: $this->num_uf($line['quantity']);
+                    $add_batch_stock->final_cost=$this->num_uf($line['batch_final_cost']);
+                    $add_batch_stock->manufacturing_date=!empty($line['batch_manufacturing_date']) ? $this->uf_date($line['batch_manufacturing_date']) : null;
+                    $add_batch_stock->sell_price=$line['batch_selling_price'];
+                    $add_batch_stock->save();
+                }
                 if(isset($line['bounce_purchase_price'])){
                     $product = Product::where('id',$line['product_id'])->update(['purchase_price' =>$line['bounce_purchase_price'] ,'purchase_price_depends' => $line['bounce_purchase_price']]);
                 }
@@ -1083,7 +1083,7 @@ class ProductUtil extends Util
                     ]);
             }
         }
-
+        // return $keep_lines_ids;
         if (!empty($keep_lines_ids)) {
             $deleted_lines = AddStockLine::where('transaction_id', $transaction->id)->whereNotIn('id', $keep_lines_ids)->get();
             foreach ($deleted_lines as $deleted_line) {
