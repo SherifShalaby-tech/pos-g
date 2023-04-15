@@ -477,8 +477,9 @@ class ProductController extends Controller
 
         $stores  = Store::getDropdown();
         $users = User::Notview()->pluck('name', 'id');
-
+        $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
         return view('product.index')->with(compact(
+            'enable_tekstil',
             'product_classes',
             'categories',
             'sub_categories',

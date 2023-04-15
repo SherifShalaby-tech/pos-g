@@ -282,7 +282,9 @@
                     @endif
                     <th>@lang('lang.unit')</th>
                     <th>@lang('lang.color')</th>
+                    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
                     <th>@lang('lang.thread_colors')</th>
+                    @endif
                     <th>@lang('lang.size')</th>
                     <th>@lang('lang.grade')</th>
                     <th class="sum">@lang('lang.current_stock')</th>
@@ -311,7 +313,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    {{-- <td></td> --}}
                     <td></td>
                     <td></td>
                     <td></td>
@@ -461,10 +463,12 @@
                         data: 'color',
                         name: 'colors.name'
                     },
+                    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
                     {
                         data: 'thread_colors',
                         name: 'colors.name'
                     },
+                    @endif
                     {
                         data: 'size',
                         name: 'sizes.name'
