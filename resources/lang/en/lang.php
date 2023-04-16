@@ -1343,6 +1343,8 @@ return [
     'createdBy' => 'Created By',
     'printer_deleted' => 'Printer Deleted',
     'printer_updated' => 'Printer Updated',
-    'returned_by' => 'Returned By'
+    'returned_by' => 'Returned By',
+    'new_batch'=>'New Batch Number',
+
 
 ];

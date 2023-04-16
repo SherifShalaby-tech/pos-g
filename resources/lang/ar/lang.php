@@ -1009,7 +1009,7 @@ return [
     'compensated' => 'تعويض',
     'compensated_at' => 'تعويض في',
     'compensated_from_supplier' => 'التعويضات من الموردين',
-    'watsapp_numbers'=>'ارقام واتساب للتواصل',
+    'watsapp_numbers'=>'رقم واتساب للتواصل',
     'tac_to_be_printed' => 'الشروط والاحكام ليتم طباعتها',
     'surplus' => 'فائض',
     'total_surplus' => 'إجمالي الفائض',
@@ -1332,7 +1332,9 @@ return [
     'createdBy' => 'انشئ بواسطة',
     'printer_deleted' => 'تم حذف الطابعة',
     'printer_updated' => 'تم تحديث الطابعة',
-    'returned_by' => 'ارتجع بواسطة'
+    'returned_by' => 'ارتجع بواسطة',
+    'new_batch'=>'رقم التشغيلة الجديدة',
+
 
 
 ];

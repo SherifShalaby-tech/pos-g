@@ -70,11 +70,22 @@ $(document).on("click", ".add_bounce_btn", function () {
     }
 
 });
+
 $(document).on("click", "#addBatch", function () {
     var index=$(this).data('index');
     $('#batch_number_row'+index).toggle();
-    $('#batch_number_row'+index+' .batchNumber').prop('required', true);
-    $('.stockId'+index).prop('checked', false);
+    if($('#batch_number_row'+index+' .batchNumber').prop('required')){
+        $('#batch_number_row'+index+' .batchNumber').prop('required', false);
+    } else {
+        $('#batch_number_row'+index+' .batchNumber').prop('required', true);
+    }
+    ///
+    if($('.stockId'+index).prop('checked')){
+        $('.stockId'+index).prop('checked', false);
+    } else {
+        $('.stockId'+index).prop('checked', true);
+    }
+    
 });
 // $(document).on("click", ".addProductBatchBtn", function () {
 //     var productId=$('.productbatch_id').val();

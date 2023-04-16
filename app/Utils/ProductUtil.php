@@ -1087,6 +1087,8 @@ class ProductUtil extends Util
                         ];
                         // $batch_number=$add_stock->batch_number;
                         $add_stock_batch = AddStockLine::create($add_stock_batch_data);
+                        $batch_numbers[]=$add_stock_batch->batch_number;
+
                         // return $add_stock_batch;
                 }
             }
@@ -1096,7 +1098,6 @@ class ProductUtil extends Util
                 $qty =  $this->num_uf($line['quantity']);
                 $keep_lines_ids[] = $add_stock->id;
                 $batch_numbers[]=$add_stock->batch_number;
-                $batch_numbers[]=$add_stock_batch->batch_number;
                 $this->updateProductQuantityStore($line['product_id'], $line['variation_id'], $transaction->store_id,  $qty, 0);
             }
             if(!empty($line['stock_pricechange'])){
