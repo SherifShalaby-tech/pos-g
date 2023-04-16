@@ -373,7 +373,7 @@ class AddStockController extends Controller
 
         DB::beginTransaction();
         $transaction = Transaction::create($transaction_data);
-
+        // return AddStockLine::where('transaction_id',422)->get();
         $this->productUtil->createOrUpdateAddStockLines($request->add_stock_lines, $transaction);
 
         if ($request->files) {

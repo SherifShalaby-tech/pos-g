@@ -27,6 +27,7 @@ use App\Models\TermsAndCondition;
 use App\Models\Transaction;
 use App\Models\DiningTable;
 use App\Models\MoneySafeTransaction;
+use App\Models\ProductDiscount;
 use App\Models\ServiceFee;
 use App\Models\TransactionPayment;
 use App\Models\TransactionSellLine;
@@ -846,170 +847,7 @@ class SellPosController extends Controller
      *
      * @return json
      */
-    // public function getProducts()
-    // {
-    //     if (request()->ajax()) {
 
-    //         $term = request()->term;
-
-    //         if (empty($term)) {
-    //             return json_encode([]);
-    //         }
-    //         $result = [];
-    //         $qProduct = Product::leftjoin('variations', 'products.id', 'variations.product_id')
-    //         ->where(function ($query) use ($term) {
-    //             $query->where('products.name', 'like', '%' . $term . '%');
-    //             $query->orWhere('variations.name', 'like', '%' . $term . '%');
-    //             $query->orWhere('sku', 'like', '%' . $term . '%');
-    //             $query->orWhere('sub_sku', 'like', '%' . $term . '%');
-    //         })
-    //         // ->where('is_raw_material', 0)
-    //         // ->whereNull('variations.deleted_at')
-    //         ->select(
-    //             'products.id as product_id',
-    //             'products.name',
-    //             'products.type',
-    //             'products.multiple_colors',
-    //             'products.multiple_sizes',
-    //             'products.is_service',
-    //             'variations.id as variation_id',
-    //             'variations.name as variation',
-    //             'variations.sub_sku as sub_sku',
-    //         );
-    //         // if (!empty(request()->store_id)) {
-    //         //     $qProduct->where('product_stores.store_id', request()->store_id);
-    //         // }
-    //         $qProducts=$qProduct->get();
-    //         ////////////////////////
-    //         $q = Product::leftJoin(
-    //                 'variations',
-    //                 'products.id',
-    //                 '=',
-    //                 'variations.product_id'
-    //             )
-    //             ->leftjoin('add_stock_lines', 'variations.id','=','add_stock_lines.variation_id')
-    //             ->where(function ($query) use ($term) {
-    //                 $query->where('products.name', 'like', '%' . $term . '%');
-    //                 $query->orWhere('variations.name', 'like', '%' . $term . '%');
-    //                 $query->orWhere('sku', 'like', '%' . $term . '%');
-    //                 $query->orWhere('sub_sku', 'like', '%' . $term . '%');
-    //             })
-    //             // ->where('is_raw_material', 0)
-    //             ->whereNull('variations.deleted_at')
-    //             ->select(
-    //                 'products.id as product_id',
-    //                 'products.name',
-    //                 'products.type',
-    //                 'products.multiple_colors',
-    //                 'products.multiple_sizes',
-    //                 'products.is_service',
-    //                 'variations.id as variation_id',
-    //                 'variations.name as variation',
-    //                 'variations.sub_sku as sub_sku',
-    //                 'add_stock_lines.batch_number',
-    //                 'add_stock_lines.quantity'
-    //             );
-
-    //         // if (!empty(request()->store_id)) {
-    //         //     $q->where('product_stores.store_id', request()->store_id);
-    //             $q->where('add_stock_lines.batch_number', '!=',null);
-    //         // }
-
-    //         $products = $q->get();
-            
-    //         foreach($qProducts as $p) {
-    //             $products->add($p);
-    //         }
-    //         $products_array = [];
-    //         foreach ($products as $product) {
-    //             $products_array[$product->product_id]['name'] = $product->name;
-    //             $products_array[$product->product_id]['sku'] = $product->sub_sku;
-    //             $products_array[$product->product_id]['type'] = $product->type;
-    //             $products_array[$product->product_id]['is_service'] = $product->is_service;
-    //             // $products_array[$product->product_id]['qty'] = $this->productUtil->num_uf($product->qty_available - $product->block_qty);
-    //             $products_array[$product->product_id]['variations'][]
-    //                 = [
-    //                     'variation_id' => $product->variation_id,
-    //                     'variation_name' => $product->variation,
-    //                     'sub_sku' => $product->sub_sku,
-    //                     'qty' => $product->qty_available
-    //                 ];
-    //             $products_array[$product->product_id]['add_stock_lines'][]
-    //             = [
-    //                 'batch_number' => $product->batch_number,
-    //                 'quantity' => $product->quantity,
-    //             ];
-    //         }
-
-            
-    //         $i = 1;
-    //         // $no_of_records = $products->count();
-    //         if (!empty($products_array)) {
-    //             foreach ($products_array as $key => $value) {
-    //                 $name = $value['name'];
-    //                 foreach ($value['variations'] as $variation) {
-    //                     $v = Variation::find($variation['variation_id']);
-    //                     $text = $name;
-    //                     if ($value['type'] == 'variable') {
-    //                         if ($variation['variation_name'] != 'Default') {
-    //                             $text = $variation['variation_name'];
-    //                         }
-    //                         // $text .= $v->size->name ?? '';
-    //                     }
-    //                     $i++;
-    //                     $result[] = [
-    //                         'id' => $i,
-    //                         'text' =>$text . ' - ' . $variation['sub_sku'],
-    //                         'product_id' => $key,
-    //                         'variation_id' => $variation['variation_id'],
-    //                         'qty_available' => $variation['qty'],
-    //                         'is_service' => $value['is_service']
-    //                     ];
-    //                 }
-
-    //                 $x=0;
-    //                 foreach ($value['add_stock_lines'] as $add_stock) {
-    //                         $result[$x] = [
-    //                             'id' => $i,
-    //                             'text' => $text . ' - ' . $variation['sub_sku'],
-    //                             'product_id' => $key,
-    //                             'variation_id' => $variation['variation_id'],
-    //                             'qty_available' => $variation['qty'],
-    //                             'is_service' => $value['is_service'],
-    //                             'batch_number' => $add_stock['batch_number'],
-    //                             'quantity' => $add_stock['quantity'],
-    //                         ];
-    //                     $x++;
-    //                 }
-    //                 $i++;
-    //             }
-    //         }
-
-    //         $sp_query = SalesPromotion::whereDate('start_date', '<', Carbon::now())->whereDate('end_date', '>', Carbon::now());
-    //         $sp_query->where(function ($query) use ($term) {
-    //             $query->where('name', 'like', '%' . $term . '%');
-    //             $query->orWhere('code', 'like', '%' . $term . '%');
-    //         });
-    //         $sp_query->where('generate_barcode', 1);
-
-    //         $sales_promotions = $sp_query->get();
-
-    //         foreach ($sales_promotions as $sales_promotion) {
-    //             $result[] = [
-    //                 'id' => $i,
-    //                 'text' => $sales_promotion->name . ' - ' . $sales_promotion->code,
-    //                 'sale_promotion_id' => $sales_promotion->id,
-    //                 'variation_id' => null,
-    //                 'qty_available' => null,
-    //                 'is_sale_promotion' => 1
-    //             ];
-    //             $i++;
-    //         }
-
-
-    //         return json_encode($result);
-    //     }
-    // }
 
     public function getProducts()
     {
@@ -1166,7 +1004,6 @@ class SellPosController extends Controller
 
             //Check for weighing scale barcode
             $weighing_barcode = request()->get('weighing_scale_barcode');
-
             if (!empty($product_id)) {
                 $index = $request->input('row_count');
                 $products = $this->productUtil->getDetailsFromProductByStore($product_id, $variation_id, $store_id, $batch_number_id);
@@ -1203,8 +1040,9 @@ class SellPosController extends Controller
                 $product_discount_details = $this->productUtil->getProductDiscountDetails($product_id, $customer_id);
                 // $sale_promotion_details = $this->productUtil->getSalesPromotionDetail($product_id, $store_id, $customer_id, $added_products);
                 $sale_promotion_details = null; //changed, now in pos.js check_for_sale_promotion method
+                $product_discounts=Product::find($product_id);
                 $html_content =  view('sale_pos.partials.product_row')
-                    ->with(compact('products', 'index', 'sale_promotion_details', 'product_discount_details', 'edit_quantity', 'is_direct_sale', 'dining_table_id', 'exchange_rate'))->render();
+                    ->with(compact('products','product_discounts', 'index', 'sale_promotion_details', 'product_discount_details', 'edit_quantity', 'is_direct_sale', 'dining_table_id', 'exchange_rate'))->render();
 
                 $output['success'] = true;
                 $output['html_content'] = $html_content;
@@ -1216,6 +1054,26 @@ class SellPosController extends Controller
         }
     }
 
+    public function addDiscounts(Request $request){
+        if($request->ajax()){
+            $customer_id = $request->input('customer_id');
+            $product_id = $request->input('product_id');
+            $result = $this->productUtil->getProductDiscountDetails($product_id, $customer_id);
+            return response()->json(['result'=>$result]);
+        }
+    }
+    public function getProductDiscount(Request $request)
+    {
+        if($request->ajax()){
+            $product_discount_id = $request->input('product_discount_id');
+            $result=ProductDiscount::find($product_discount_id);
+            if($result==null){
+                return response()->json(['result'=>0]);
+            }else{
+                return response()->json(['result'=>$result]);
+            }
+        }
+    }
     /**
      * get the row for non identifiable products
      *
@@ -1251,7 +1109,7 @@ class SellPosController extends Controller
 
         if (!empty($product_id)) {
             $index = $request->input('row_count');
-            $products = $this->productUtil->getDetailsFromProductByStore($product_id, $variation_id, $store_id);
+            $products = $this->productUtil->getDetailsFromProductByStore($product_id, $variation_id, $store_id,null);
 
             $product_discount_details = $this->productUtil->getProductDiscountDetails($product_id, $customer_id);
             // $sale_promotion_details = $this->productUtil->getSalesPromotionDetail($product_id, $store_id, $customer_id, $added_products);

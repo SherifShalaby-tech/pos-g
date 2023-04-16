@@ -35,10 +35,10 @@
         !!}
     </td>
 
-    @if($enable_tekstil)
+    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
     <td>{!! Form::select('variations['.$row_id.'][multiple_thread_colors]', $colors, !empty($item) ? $item->color_id: false,
         ['class'
-        => 'form-control selectpicker v_color', 'data-live-search'=>"true", 'placeholder' => ''])
+        => 'form-control selectpicker v_color', 'data-live-search'=>"true", 'placeholder' => '','style'=>"width:50%"])
         !!}
     </td>
     @endif
