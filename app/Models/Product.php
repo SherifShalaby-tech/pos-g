@@ -17,7 +17,6 @@ class Product extends Model implements HasMedia
      * @var array
      */
     protected $guarded = ['id'];
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -83,6 +82,10 @@ class Product extends Model implements HasMedia
         return $this->belongsToJson(Unit::class, 'multiple_units');
     }
     public function colors()
+    {
+        return $this->hasManyThrough(Color::class, Variation::class, 'product_id', 'id', 'id', 'color_id');
+    }
+    public function thread_colors(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
     {
         return $this->hasManyThrough(Color::class, Variation::class, 'product_id', 'id', 'id', 'color_id');
     }

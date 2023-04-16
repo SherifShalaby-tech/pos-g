@@ -153,6 +153,8 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
 
     Route::get('add-stock/get-source-by-type-dropdown/{type}', 'AddStockController@getSourceByTypeDropdown');
     Route::get('add-stock/add-product-row', 'AddStockController@addProductRow');
+    Route::get('add-stock/add-product-different-batch-row', 'AddStockController@addProductBatchRow');
+
     Route::get('add-stock/get-purchase-order-details/{id}', 'AddStockController@getPurchaseOrderDetails');
     Route::post('add-stock/save-import', 'AddStockController@saveImport');
     Route::get('add-stock/get-import', 'AddStockController@getImport');
@@ -392,7 +394,17 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::get('money-safe/get-dropdown', 'MoneySafeController@getDropdown');
     Route::get('money-safe/get-details-by-id/{id}', 'MoneySafeController@getDetailsById');
     Route::resource('money-safe', MoneySafeController::class);
+
+
+    // manufacturers
+    Route::resource('manufacturers', 'ManufacturerController');
+    Route::resource('manufacturing-s', 'ManufacturingController');
+    Route::get('manufacturing-s/getReceivedProductsPage/{id}', 'ManufacturingController@getReceivedProductsPage')->name("manufacturing.getReceivedProductsPage");
+    Route::post('manufacturing-s/getReceivedProductsPage', 'ManufacturingController@postReceivedProductsPage');
+    Route::post('manufacturing-s/update', 'ManufacturingController@updates');
 });
+Route::get('manufacturing/add-product-row', 'ManufacturingController@addProductRow')->name("manufacturing.add_product_row");
+Route::get('manufacturing/add-product-to-stock', 'ManufacturingController@add_product_stock')->name("manufacturing.add_product_stock");
 
 
 Route::get('contact-us', 'ContactUsController@getContactUs');

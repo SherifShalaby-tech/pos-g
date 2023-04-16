@@ -1349,6 +1349,7 @@ class TransactionUtil extends Util
                 $invoice_lang = request()->session()->get('language');
             }
         }
+        $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
 
         if ($invoice_lang == 'ar_and_en') {
             $html_content = view('sale_pos.partials.invoice_ar_and_end')->with(compact(
@@ -1364,7 +1365,6 @@ class TransactionUtil extends Util
                 'print_gift_invoice'
             ))->render();
         }
-
         if ($transaction->is_direct_sale == 1) {
 
             $sale = $transaction;
@@ -1373,6 +1373,7 @@ class TransactionUtil extends Util
                 'sale',
                 'data',
                 'total',
+                'enable_tekstil',
                 'payment_type_array',
                 'invoice_lang',
                 'print_gift_invoice',
@@ -1386,6 +1387,7 @@ class TransactionUtil extends Util
                 'sale',
                 'data',
                 'total',
+                'enable_tekstil',
                 'payment_type_array',
                 'invoice_lang'
             ))->render();

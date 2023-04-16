@@ -12,7 +12,42 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    'enable_tekstil_?'=>'تفعيل تك سكيل',
+    'manufacturers' => 'المصنعين',
+    'add_manufacturer' => 'اضافة مصنع جديد',
+    'edit_manufacturer' => 'تعديل مصنع',
+    'manufacturings' => 'التصنيع الخارجي',
+    'view_all_manufacturings' => 'عمليات التصنيع',
+    'view_all_processes' => 'عمليات المعالجة',
+    'manufacturing' => 'تصنيع',
+    'manufacturer' => 'المصنع',
+    'manufacturing_status' => 'حالة التصنيع',
+    'edit_manufacturing_status' => 'تعديل حالة التصنيع ',
+    'manufacturing_material' => 'مادة التصنيع ',
+    'product_received' => 'المنتجات المستلمة',
+    'product_received_quantity' => 'الكميه المستلمه',
+    'product_received_date' => 'تاريخ الاستلام',
+    'processed' => 'العمليات المستلمة',
+    'under_processing' => 'تحت التصنيع',
+    'path' => 'مسار القسم الفرعي',
+    'delete_all' => 'حذف جماعي',
+
+    'received' => 'استلام',
+    'underManufacturing' => 'تحت التصنيع',
+    'manufactured' => 'تم تصنيعها',
+    'edit_manufacturing_status' => 'تعديل حالة تصنيع',
+    'add_new_manufacturing' => 'اضافه عملية تصنيع جديدة',
+    'add_new_production' => 'اضافه عملية تصنيع جديدة',
+
+    'productions'=>'عمليات التصنيع',
+    'manufactured_cost'=>'التكلفة',
+    'manufactured_unit_cost_sell'=>'تكلفة الوحده للبيع ',
+    'manufactured_unit_cost_purchase'=>'تكلفة الوحده للشراء ',
+
+
+
+
+
+    'enable_tekstil_?'=>'هذا متجر اقمشه ؟',
     'thread_colors'=>'الوان الخيط',
     'product_variations'=>'اختلافات المنتج',
 
@@ -65,10 +100,12 @@ return [
     'December' => 'ديسمبر',
     'site_title' => 'عنوان الموقع',
     'help' => 'مساعدة',
-
+    'required_field'=>'يجب الادخال',
     'required_fields_info' => 'الحقول المميزة بعلامة * هي حقول إدخال مطلوبة.',
     'product' => 'منتج',
     'add_new_product' => 'اضافة منتج جديد',
+    'add_a_new_batch'=>'تشغيلة جديدة',
+    'discount_category'=>'تحديد فئة للخصم',
     'class' => 'فئة',
     'submit' => 'ارسل',
     'class_name' => 'اسم الفئة',
@@ -243,7 +280,8 @@ return [
     'bank_name' => 'اسم البنك',
     'amount' => 'المبلغ',
     'notes' => 'ملاحظات',
-    'is_service' => 'هي خدمة',
+    'is_service' => ' خدمة',
+    'is_have_service'=>'خدمة',
     'paid_amount' => 'المبلغ المدفوع',
     'pending_amount' => 'المبلغ المتبقي',
     'invoice_date' => 'تاريخ الفاتورة',

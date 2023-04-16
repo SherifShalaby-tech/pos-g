@@ -185,7 +185,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                             <button class="btn-modal btn btn-default bg-white btn-flat"
                                     data-href="{{ action('ColorController@create') }}?quick_add=1" data-container=".view_modal"><i
                                     class="fa fa-plus-circle text-primary fa-lg"></i></button>
-                        @endcan
+                    @endcan
                 </span>
                 </div>
             </div>
@@ -362,6 +362,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                 <th style="width: 15%;">@lang('lang.discount')</th>
                 <th style="width: 20%;">@lang('lang.discount_start_date')</th>
                 <th style="width: 20%;">@lang('lang.discount_end_date')</th>
+                <th style="width: 20%;">@lang('lang.discount_category')</th>
                 <th style="width: 20%;">@lang('lang.customer_type') <i class="dripicons-question" data-toggle="tooltip"
                                                                        title="@lang('lang.discount_customer_info')"></i></th>
                 <th style="width: 5%;"><button class="btn btn-xs btn-success add_discount_row"
@@ -444,6 +445,9 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                     <th>@lang('lang.name')</th>
                     <th>@lang('lang.sku')</th>
                     <th>@lang('lang.color')</th>
+                    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                    <th>@lang('lang.thread_colors')</th>
+                    @endif
                     <th>@lang('lang.size')</th>
                     <th>@lang('lang.grade')</th>
                     <th>@lang('lang.unit')</th>

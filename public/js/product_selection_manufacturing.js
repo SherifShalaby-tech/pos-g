@@ -22,6 +22,7 @@ $(document).ready(function () {
         ajax: {
             url: "/product",
             data: function (d) {
+                d.process_type = $("#process_type").val();
                 d.product_class_id = $("#filter_product_class_id").val();
                 d.category_id = $("#filter_category_id").val();
                 d.sub_category_id = $("#filter_sub_category_id").val();
@@ -50,6 +51,7 @@ $(document).ready(function () {
                 searchable: false,
             },
         ],
+
         columns: [
             {
                 data: "selection_checkbox",
@@ -87,6 +89,16 @@ $(document).ready(function () {
             {
                 data: "default_purchase_price",
                 name: "default_purchase_price",
+                searchable: false,
+            },
+            {
+                data: "selling_price_depends",
+                name: "products.selling_price_depends",
+                searchable: false,
+            },
+            {
+                data: "default_purchase_price",
+                name: "products.purchase_price_depends",
                 searchable: false,
             },
             { data: "supplier", name: "supplier" },
@@ -137,7 +149,6 @@ $(document).on("click", ".column-toggle", function () {
 function toggleColumnVisibility(column_index, this_btn) {
     column = product_table.column(column_index);
     column.visible(!column.visible());
-
     if (column.visible()) {
         $(this_btn).addClass("badge-primary");
         $(this_btn).removeClass("badge-warning");

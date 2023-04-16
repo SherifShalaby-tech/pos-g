@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
-
+use Lang;
 class ProductController extends Controller
 {
     /**
@@ -239,6 +239,9 @@ class ProductController extends Controller
                 ->editColumn('variation_name', '@if($variation_name != "Default"){{$variation_name}} @else {{$name}}
                 @endif')
                 ->editColumn('sub_sku', '{{$sub_sku}}')
+                ->editColumn('is_service',function ($row) {
+                    return $row->is_service=='1'?'<span class="badge badge-danger">'.Lang::get('lang.is_have_service').'</span>':'';
+                })
                 ->addColumn('product_class', '{{$product_class}}')
                 ->addColumn('category', '{{$category}}')
                 ->addColumn('sub_category', '{{$sub_category}}')
@@ -340,14 +343,18 @@ class ProductController extends Controller
                     return $query->name;*/
                 })
                 ->addColumn('selection_checkbox', function ($row) use ($is_add_stock) {
-                    if ($row->is_service == 1 || $is_add_stock == 1) {
-                        $html = '<input type="checkbox" name="product_selected" class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
-                    } else {
-                        if ($row->current_stock > 0) {
+                    if($row->is_service == 0 ){
+                        if ($is_add_stock == 1) {
                             $html = '<input type="checkbox" name="product_selected" class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
                         } else {
-                            $html = '<input type="checkbox" name="product_selected" disabled class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
+                            if ($row->current_stock >= 0 ) {
+                                $html = '<input type="checkbox" name="product_selected" class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
+                            } else {
+                                $html = '<input type="checkbox" name="product_selected" disabled class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
+                            }
                         }
+                    }else{
+                        $html = '<input type="checkbox" name="product_selected" disabled class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
                     }
 
                     return $html;
@@ -998,6 +1005,7 @@ class ProductController extends Controller
         $purchase_price = request()->purchase_price;
         $sell_price = request()->sell_price;
         $is_service = request()->is_service;
+        $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
 
         return view('product.partial.variation_row')->with(compact(
             'units',
@@ -1010,7 +1018,8 @@ class ProductController extends Controller
             'purchase_price',
             'sell_price',
             'units_js',
-            'is_service'
+            'is_service',
+            'enable_tekstil'
         ));
     }
 

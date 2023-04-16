@@ -26,6 +26,10 @@ class TransactionPayment extends Model implements HasMedia
     /**
      * Get child payments
      */
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
     public function child_payments()
     {
         return $this->hasMany(TransactionPayment::class, 'parent_id');

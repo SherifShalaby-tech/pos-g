@@ -12,7 +12,39 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    'enable_tekstil_?'=>'Enable TEKSTIL ?',
+    'manufacturers' => 'Manufacturers',
+    'add_manufacturer' => 'Add New Manufacturer',
+    'edit_manufacturer' => 'Edit Manufacturer',
+    'manufacturings' => 'Out Manufacturings',
+    'view_all_manufacturings' => 'Manufacturing',
+    'view_all_processes' => 'Processes',
+    'manufacturing' => 'Manufacturing',
+    'manufacturer' => 'Manufacturer',
+    'manufacturing_status' => 'Manufacturing Status',
+    'edit_manufacturing_status' => 'Edit Manufacturing Status',
+    'manufacturing_material' => 'Manufacturing Material',
+    'product_received' => 'Products Received',
+    'product_received_quantity' => 'Product Received Quantity',
+    'product_received_date' => 'Product Received Date',
+    'processed' => 'Processed',
+    'under_processing' => 'Under Processing',
+    'path' => 'Path',
+    'delete_all' => 'Delete All',
+    'productions'=>'Productions',
+    'received' => 'Received',
+    'underManufacturing' => 'Under Manufacturing',
+    'manufactured' => 'Manufactured',
+    'edit_manufacturing_status' => 'Edit Manufacturing Status',
+    'add_new_manufacturing' => 'Add New Manufacturing',
+    'add_new_production' => 'Add New Manufacturing',
+    'manufactured_cost'=>'Cost',
+    'manufactured_unit_cost_purchase'=>'Unit cost purchasing',
+    'manufactured_unit_cost_sell'=>'Unit cost selling',
+
+
+
+
+    'enable_tekstil_?'=>'This Is Tekstial Store ?',
     'thread_colors'=>'Thread Colors',
     'product_variations'=>'Product Variations',
 
@@ -63,10 +95,12 @@ return [
     'December' => 'December',
     'site_title' => 'Site Title',
     'help' => 'Help',
-
+    'required_field'=>'required',
     'required_fields_info' => 'The field labels marked with * are required input fields.',
     'product' => 'Product',
     'add_new_product' => 'Add New Product',
+    'add_a_new_batch'=>"Add New Batch",
+    'discount_category'=>'Discount Category',
     'class' => 'Class',
     'submit' => 'Submit',
     'class_name' => 'Class Name',
@@ -242,6 +276,7 @@ return [
     'amount' => 'Amount',
     'notes' => 'Notes',
     'is_service' => 'Is Service',
+    'is_have_service'=>'Service',
     'paid_amount' => 'Paid Amount',
     'pending_amount' => 'Pending Amount',
     'invoice_date' => 'Invoice Date',
