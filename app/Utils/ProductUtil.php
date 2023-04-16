@@ -583,7 +583,7 @@ class ProductUtil extends Util
      *
      * @return Obj
      */
-    public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null,$batch_number_id)
+    public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null,$batch_number_id=null)
     {  
             $product = Product::
             leftjoin('variations as v', 'products.id', '=', 'v.product_id')
