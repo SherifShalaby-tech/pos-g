@@ -269,15 +269,16 @@
 @section('javascript')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
     <script>
-        const fileInput = document.querySelector('#file-input');
-        const previewContainer = document.querySelector('.preview-container');
-        const croppieModal = document.querySelector('#croppie-modal');
-        const croppieContainer = document.querySelector('#croppie-container');
-        const croppieCancelBtn = document.querySelector('#croppie-cancel-btn');
-        const croppieSubmitBtn = document.querySelector('#croppie-submit-btn');
+        var fileInput = document.querySelector('#file-input');
+        var previewContainer = document.querySelector('.preview-container');
+        var croppieModal = document.querySelector('#croppie-modal');
+        var croppieContainer = document.querySelector('#croppie-container');
+        var croppieCancelBtn = document.querySelector('#croppie-cancel-btn');
+        var croppieSubmitBtn = document.querySelector('#croppie-submit-btn');
 
         // let currentFiles = [];
         fileInput.addEventListener('change', () => {
+            previewContainer.innerHTML = '';
             let files = Array.from(fileInput.files)
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
@@ -299,11 +300,26 @@
                         deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
                         deleteBtn.addEventListener('click', (e) => {
                             e.preventDefault();
-                            if (window.confirm('Are you sure you want to delete this image?')) {
-                                files.splice(file, 1)
-                                preview.remove();
-                                getImages()
-                            }
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getImages()
+                                }
+                            });
                         });
 
                         preview.appendChild(deleteBtn);
