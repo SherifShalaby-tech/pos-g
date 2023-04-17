@@ -98,9 +98,11 @@ return [
     'required_field'=>'required',
     'required_fields_info' => 'The field labels marked with * are required input fields.',
     'product' => 'Product',
+    'select_discount'=>'select',
     'add_new_product' => 'Add New Product',
     'add_a_new_batch'=>"Add New Batch",
-    'discount_category'=>'Discount Category',
+    'discount_category'=>'Brief Discount Name',
+    'category_discount'=>'Category',
     'class' => 'Class',
     'submit' => 'Submit',
     'class_name' => 'Class Name',
@@ -1007,6 +1009,7 @@ return [
     'product_class_has_category' => 'Product class has category. delete category first',
     'sub_category_exsist' => 'Category has sub category. delete sub category first',
     'tac_to_be_printed' => 'Terms and condition to be printed',
+    'watsapp_numbers'=>'Watsapp Numbers',
     'surplus' => 'Surplus',
     'total_surplus' => 'Total Surplus',
     'partially_paid' => 'Partially Paid',
@@ -1340,6 +1343,8 @@ return [
     'createdBy' => 'Created By',
     'printer_deleted' => 'Printer Deleted',
     'printer_updated' => 'Printer Updated',
-    'returned_by' => 'Returned By'
+    'returned_by' => 'Returned By',
+    'new_batch'=>'New Batch Number',
+
 
 ];
