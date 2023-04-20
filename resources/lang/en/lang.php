@@ -951,6 +951,7 @@ return [
     'creation_date' => 'Creation Date',
     'product_add_stock_transaction_exist' => 'Product add stock transaction exist, delete add stock transaction first ',
     'sku_already_in_use' => 'SKU is already in use, please try a different SKU',
+    'sku_cant_null' => 'SKU Cant Be Null',
     'add_product_class' => 'Add Product Class',
     'add_coupon' => 'Add Coupon',
     'edit_coupon' => 'Edit Coupon',

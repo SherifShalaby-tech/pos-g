@@ -955,6 +955,7 @@ return [
     'creation_date' => 'تاريخ الإنشاء',
     'product_add_stock_transaction_exist' => 'توجد معاملة مخزون إضافة المنتج ، احذف معاملة البيع أولاً ',
     'sku_already_in_use' => 'SKU قيد الاستخدام بالفعل ، يرجى تجربة SKU مختلف',
+    'sku_cant_null' => 'لا  يمكن ترك قيمه SKU فارغه',
     'add_product_class' => 'أضف فئة المنتج',
     'add_coupon' => 'أضف عرض',
     'edit_coupon' => 'تعديل القسيمة',

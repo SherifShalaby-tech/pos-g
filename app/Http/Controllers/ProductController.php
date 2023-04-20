@@ -1177,17 +1177,11 @@ class ProductController extends Controller
         return redirect()->back()->with('status', $output);
     }
 
-    /**
-     * check sku if already in use
-     *
-     * @param string $sku
-     * @return array
-     */
+
     public function checkSku($sku)
     {
         $product_sku = Product::leftjoin('variations', 'products.id', 'variations.product_id')
             ->where('sub_sku', $sku)->first();
-
         if (!empty($product_sku)) {
             $output = [
                 'success' => false,
