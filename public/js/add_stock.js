@@ -28,9 +28,10 @@ $(document).ready(function () {
                             .data("ui-autocomplete")
                             ._trigger("select", "autocompleteselect", ui);
                         $(this).autocomplete("close");
-                    } else if (ui.content.length == 0) {
-                        swal("Product not found");
-                    }
+                    } 
+                    // else if (ui.content.length == 0) {
+                    //     swal("Product not found");
+                    // }
                 },
                 focus: function (event, ui) {},
                 select: function (event, ui) {
@@ -70,6 +71,28 @@ $(document).on("click", ".add_bounce_btn", function () {
     }
 
 });
+
+$(document).on("click", "#addBatch", function () {
+    var index=$(this).data('index');
+    $('#batch_number_row'+index).toggle();
+    if($('#batch_number_row'+index+' .batchNumber').prop('required')){
+        $('#batch_number_row'+index+' .batchNumber').prop('required', false);
+    } else {
+        $('#batch_number_row'+index+' .batchNumber').prop('required', true);
+    }
+    ///
+    if($('.stockId'+index).prop('checked')){
+        $('.stockId'+index).prop('checked', false);
+    } else {
+        $('.stockId'+index).prop('checked', true);
+    }
+    
+});
+// $(document).on("click", ".addProductBatchBtn", function () {
+//     var productId=$('.productbatch_id').val();
+//     var variationId=$('.variationbatch_id').val();
+//     get_label_product_row(productId,variationId,true);
+// });
 function getCurrencyDropDown() {
     let store_id = $("#store_id").val();
     let default_currency_id = $("#default_currency_id").val();
@@ -103,34 +126,36 @@ $(document).on("change", "select#paying_currency_id", function () {
         },
     });
 });
-
-function get_label_product_row(product_id, variation_id) {
+function get_label_product_row(product_id, variation_id,is_batch=false) {
     //Get item addition method
     var add_via_ajax = true;
     var store_id = $("#store_id").val();
     var is_added = false;
+    var qty;
     //Search for variation id in each row of pos table
-    $("#product_table tbody")
-        .find("tr")
-        .each(function () {
-            var row_v_id = $(this).find(".variation_id").val();
-
-            if (row_v_id == variation_id && !is_added) {
-                add_via_ajax = false;
-                is_added = true;
-
-                //Increment product quantity
-                qty_element = $(this).find(".quantity");
-                var qty = __read_number(qty_element);
-                __write_number(qty_element, qty + 1);
-                qty_element.change;
-                calculate_sub_totals();
-                $("input#search_product").val("");
-                $("input#search_product").focus();
-            }
-        });
-
-    if (add_via_ajax) {
+        $("#product_table tbody")
+            .find("tr")
+            .each(function () {
+                var row_v_id = $(this).find(".variation_id").val();
+                if (row_v_id == variation_id && !is_added) {
+                    add_via_ajax = false;
+                    is_added = true;
+                    //Increment product quantity
+                    //get product qty
+                    qty_element = $(this).find(".quantity");
+                    qty = __read_number(qty_element);
+                    qty+=1;
+                    calculate_sub_totals();
+                    $("input#search_product").val("");
+                    $("input#search_product").focus();
+                    //remove if exist
+                    $(this).closest("tr").next().remove();
+                    $(this).closest("tr").next().next().remove();
+                    $(this).closest("tr").remove();
+                }
+            });
+    // }
+    // if (add_via_ajax) {
         var row_count = parseInt($("#row_count").val());
         let currency_id = $('#paying_currency_id').val()
         $("#row_count").val(row_count + 1);
@@ -145,17 +170,93 @@ function get_label_product_row(product_id, variation_id) {
                 variation_id: variation_id,
                 store_id: store_id,
                 currency_id: currency_id,
+                qty:qty,
+                is_batch:is_batch,
             },
             success: function (result) {
-                $("table#product_table tbody").prepend(result);
+                $("#product_table tbody").prepend(result);
                 $("input#search_product").val("");
                 $("input#search_product").focus();
                 calculate_sub_totals();
                 reset_row_numbering();
             },
         });
-    }
+    // }
 }
+
+// function get_label_product_row(product_id, variation_id,is_batch=false) {
+//     //Get item addition method
+//     var add_via_ajax = true;
+//     var store_id = $("#store_id").val();
+//     var is_added = false;
+//     var qty;
+//     if(is_batch==true){
+//         if ( product_id!=null && variation_id!=null) {
+//             $('#addNewBatch').modal('hide');
+//             qty_element = $('tr td').find(".batchquantity");
+//             $('.stockId'+product_id).prop('checked', false);
+//             qty = __read_number(qty_element);
+//             calculate_sub_totals();
+//             $("input#search_product").val("");
+//             $("input#search_product").focus();
+//         }
+//     }else{
+//     //Search for variation id in each row of pos table
+//         $("#product_table tbody")
+//             .find("tr")
+//             .each(function () {
+//                 var row_v_id = $(this).find(".variation_id").val();
+//                 var is_row_batch;
+//                 is_row_batch = $(this).find(".is_batch_product").val();
+//                 if (row_v_id == variation_id && !is_added && is_row_batch=="false") {
+//                     add_via_ajax = false;
+//                     is_added = true;
+//                     //Increment product quantity
+//                     //get product qty
+//                     qty_element = $(this).find(".quantity");
+//                     qty = __read_number(qty_element);
+//                     qty+=1;
+//                     calculate_sub_totals();
+//                     $("input#search_product").val("");
+//                     $("input#search_product").focus();
+//                     //remove if exist
+//                     $(this).closest("tr").next().remove();
+//                     $(this).closest("tr").next().next().remove();
+//                     $(this).closest("tr").remove();
+//                 }
+//             });
+//     }
+//     // if (add_via_ajax) {
+//         var row_count = parseInt($("#row_count").val());
+//         let currency_id = $('#paying_currency_id').val()
+//         $("#row_count").val(row_count + 1);
+//         $.ajax({
+//             method: "GET",
+//             url: "/add-stock/add-product-row",
+//             dataType: "html",
+//             async: false,
+//             data: {
+//                 product_id: product_id,
+//                 row_count: row_count,
+//                 variation_id: variation_id,
+//                 store_id: store_id,
+//                 currency_id: currency_id,
+//                 qty:qty,
+//                 is_batch:is_batch,
+//             },
+//             success: function (result) {
+//                 $("#product_table tbody").prepend(result);
+//                 $("input#search_product").val("");
+//                 $("input#search_product").focus();
+//                 calculate_sub_totals();
+//                 reset_row_numbering();
+//                 if(is_batch==true){
+//                     $('#product_batch_table tbody').html('');
+//                 }
+//             },
+//         });
+//     // }
+// }
 function calculate_sub_totals() {
     var total = 0;
     $("#product_table > tbody  > tr").each((ele, tr) => {
@@ -198,13 +299,15 @@ $(document).on("change", "#amount", function () {
 function calculate_final_cost_for_products() {
     var total_qauntity = 0;
     var item_count = 0;
-    $("#product_table > tbody  > tr").each((ele, tr) => {
+    $("#product_table > tbody  > .product_row").each((ele, tr) => {
         let quantity = __read_number($(tr).find(".quantity"));
         total_qauntity += quantity;
-        item_count++;
+        if($(tr).find(".quantity").val()){
+            item_count++;
+        }
     });
 
-    $('.items_count_span').text(item_count / 2);
+    $('.items_count_span').text(item_count);
     $('.items_quantity_span').text(total_qauntity);
     let unit_other_expenses =
         __read_number($("#other_expenses")) / total_qauntity;
@@ -250,6 +353,7 @@ $(document).on("click", ".remove_row", function () {
     $(this).closest("tr").remove();
     $(".row_details_" + index).remove();
     $(".bounce_details_td_" + index).remove();
+    $(".row_batch_details_" + index).remove();
 
     calculate_sub_totals();
     reset_row_numbering();

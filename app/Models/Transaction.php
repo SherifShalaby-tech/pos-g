@@ -23,6 +23,10 @@ class Transaction extends Model  implements HasMedia
      *
      * @var array
      */
+    // public function manufacturing()
+    // {
+    //     return $this->belongsTo(Manufacturin::class);
+    // }
     protected $casts = [
         'commissioned_employees' => 'array'
     ];
@@ -46,6 +50,10 @@ class Transaction extends Model  implements HasMedia
         }
 
         return $source->name ?? null;
+    }
+    public function manufacturing()
+    {
+        return $this->belongsTo(Manufacturing::class);
     }
     public function purchase_order_lines()
     {

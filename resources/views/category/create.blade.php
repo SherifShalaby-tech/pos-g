@@ -199,7 +199,6 @@
 </style>
 <div class="modal-dialog" role="document">
     <div class="modal-content">
-
         {!! Form::open(['url' => action('CategoryController@store'), 'method' => 'post', 'id' => $quick_add ? 'quick_add_category_form' : 'category_add_form', 'files' => true]) !!}
 
         <div class="modal-header">

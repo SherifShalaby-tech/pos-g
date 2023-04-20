@@ -37,7 +37,9 @@ return [
     'edit_manufacturing_status' => 'Edit Manufacturing Status',
     'add_new_manufacturing' => 'Add New Manufacturing',
     'add_new_production' => 'Add New Manufacturing',
-
+    'manufactured_cost'=>'Cost',
+    'manufactured_unit_cost_purchase'=>'Unit cost purchasing',
+    'manufactured_unit_cost_sell'=>'Unit cost selling',
 
 
 
@@ -93,10 +95,14 @@ return [
     'December' => 'December',
     'site_title' => 'Site Title',
     'help' => 'Help',
-
+    'required_field'=>'required',
     'required_fields_info' => 'The field labels marked with * are required input fields.',
     'product' => 'Product',
+    'select_discount'=>'select',
     'add_new_product' => 'Add New Product',
+    'add_a_new_batch'=>"Add New Batch",
+    'discount_category'=>'Brief Discount Name',
+    'category_discount'=>'Category',
     'class' => 'Class',
     'submit' => 'Submit',
     'class_name' => 'Class Name',
@@ -272,6 +278,7 @@ return [
     'amount' => 'Amount',
     'notes' => 'Notes',
     'is_service' => 'Is Service',
+    'is_have_service'=>'Service',
     'paid_amount' => 'Paid Amount',
     'pending_amount' => 'Pending Amount',
     'invoice_date' => 'Invoice Date',
@@ -1003,6 +1010,7 @@ return [
     'product_class_has_category' => 'Product class has category. delete category first',
     'sub_category_exsist' => 'Category has sub category. delete sub category first',
     'tac_to_be_printed' => 'Terms and condition to be printed',
+    'watsapp_numbers'=>'Watsapp Numbers',
     'surplus' => 'Surplus',
     'total_surplus' => 'Total Surplus',
     'partially_paid' => 'Partially Paid',
@@ -1336,6 +1344,8 @@ return [
     'createdBy' => 'Created By',
     'printer_deleted' => 'Printer Deleted',
     'printer_updated' => 'Printer Updated',
-    'returned_by' => 'Returned By'
+    'returned_by' => 'Returned By',
+    'new_batch'=>'New Batch Number',
+
 
 ];

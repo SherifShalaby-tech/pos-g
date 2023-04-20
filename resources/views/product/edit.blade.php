@@ -639,6 +639,7 @@
                                         <tr>
                                             <th style="width: 20%;">@lang('lang.discount_type')</th>
                                             <th style="width: 15%;">@lang('lang.discount')</th>
+                                            <th style="width: 7%;">@lang('lang.discount_category')</th>
                                             <th style="width: 20%;">@lang('lang.discount_start_date')</th>
                                             <th style="width: 20%;">@lang('lang.discount_end_date')</th>
                                             <th style="width: 20%;">@lang('lang.customer_type') <i
@@ -751,7 +752,25 @@
                                 <div class="col-md-12 this_product_have_variant_div">
                                     <table class="table" id="variation_table">
                                         <thead>
-                                        <tr>
+
+                                            <tr>
+                                                <th>@lang('lang.name')</th>
+                                                <th>@lang('lang.sku')</th>
+                                                <th>@lang('lang.color')</th>
+                                                @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                                                <th>@lang('lang.thread_colors')</th>
+                                                @endif
+                                                <th>@lang('lang.size')</th>
+                                                <th>@lang('lang.grade')</th>
+                                                <th>@lang('lang.unit')</th>
+                                                <th>@lang('lang.number_vs_base_unit')</th>
+                                                <th class="supplier_div @if (empty($product->is_service)) hide @endif">@lang('lang.purchase_price')</th>
+                                                <th class="supplier_div @if (empty($product->is_service)) hide @endif">@lang('lang.sell_price')</th>
+                                                <th><button type="button" class="btn btn-success btn-xs add_row mt-2"><i
+                                                            class="dripicons-plus"></i></button></th>
+                                            </tr>
+
+                                     {{--   <tr>
                                             <th>@lang('lang.name')</th>
                                             <th>@lang('lang.sku')</th>
                                             <th>@lang('lang.color')</th>
@@ -765,7 +784,7 @@
                                                 <button type="button" class="btn btn-success btn-xs add_row mt-2"><i
                                                         class="dripicons-plus"></i></button>
                                             </th>
-                                        </tr>
+                                        </tr> --}}
                                         </thead>
                                         <tbody>
                                         @foreach ($product->variations as $item)

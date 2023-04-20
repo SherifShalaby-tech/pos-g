@@ -17,7 +17,6 @@ class Product extends Model implements HasMedia
      * @var array
      */
     protected $guarded = ['id'];
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -73,7 +72,10 @@ class Product extends Model implements HasMedia
     {
         return $this->hasMany(ProductStore::class);
     }
-
+    public function product_discounts()
+    {
+        return $this->hasMany(ProductDiscount::class,'product_id','id');
+    }
     public function alert_quantity_unit()
     {
         return $this->belongsTo(Unit::class, 'alert_quantity_unit_id');
