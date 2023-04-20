@@ -8,6 +8,13 @@
         !!}</td>
     <td>{!! Form::text('variations['.$row_id.'][sub_sku]', !empty($item) ? $item->sub_sku : null, ['class' =>
         'form-control']) !!}</td>
+    @if($enable_tekstil)
+    <td>{!! Form::select('variations['.$row_id.'][multiple_thread_colors]', $colors, !empty($item) ? $item->multiple_thread_colors: false,
+        ['class'
+        => 'form-control selectpicker v_color', 'data-live-search'=>"true", 'placeholder' => ''])
+        !!}
+    </td>
+    @endif
     <td>{!! Form::select('variations['.$row_id.'][color_id]', $colors, !empty($item) ? $item->color_id: false,
         ['class'
         => 'form-control selectpicker', 'data-live-search'=>"true", 'placeholder' => __('lang.please_select')]) !!}

@@ -282,6 +282,9 @@
                     @endif
                     <th>@lang('lang.unit')</th>
                     <th>@lang('lang.color')</th>
+                    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                    <th>@lang('lang.thread_colors')</th>
+                    @endif
                     <th>@lang('lang.size')</th>
                     <th>@lang('lang.grade')</th>
                     <th class="sum">@lang('lang.current_stock')</th>
@@ -310,6 +313,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    {{-- <td></td> --}}
                     <td></td>
                     <td></td>
                     <td></td>
@@ -391,6 +395,7 @@
                         d.supplier_id = $('#supplier_id').val();
                         d.unit_id = $('#unit_id').val();
                         d.color_id = $('#color_id').val();
+                        d.thread_colors = $('#thread_colors').val();
                         d.size_id = $('#size_id').val();
                         d.grade_id = $('#grade_id').val();
                         d.tax_id = $('#tax_id').val();
@@ -458,6 +463,12 @@
                         data: 'color',
                         name: 'colors.name'
                     },
+                    @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
+                    {
+                        data: 'thread_colors',
+                        name: 'colors.name'
+                    },
+                    @endif
                     {
                         data: 'size',
                         name: 'sizes.name'

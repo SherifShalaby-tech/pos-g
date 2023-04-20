@@ -219,7 +219,9 @@ class ProductController extends Controller
                 'variations.id as variation_id',
                 'variations.name as variation_name',
                 'variations.default_purchase_price',
-                'variations.default_sell_price as default_sell_price',
+                'variations.default_sell_price',
+                'variations.multiple_thread_colors as thread_colors',
+
                 'add_stock_lines.expiry_date as exp_date',
                 'users.name as created_by_name',
                 'edited.name as edited_by_name',
@@ -279,6 +281,19 @@ class ProductController extends Controller
                         $color = $row->color;
                     }
                     return $color;
+                })
+                ->editColumn('thread_colors', function ($row){
+                    $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
+                    if($enable_tekstil ){
+                        $color='';
+                        if(isset($row->thread_colors)){
+                        $color_m=Color::whereId($row->thread_colors)->first();
+                        if($color_m){
+                            $color= $color_m ->name;
+                        }
+                        }
+                        return $color;
+                    }
                 })
                 ->editColumn('size', function ($row){
                     $size='';
@@ -441,6 +456,7 @@ class ProductController extends Controller
                     'brand',
                     'unit',
                     'color',
+                    'thread_colors',
                     'size',
                     'grade',
                     'is_service',
@@ -470,8 +486,9 @@ class ProductController extends Controller
 
         $stores  = Store::getDropdown();
         $users = User::Notview()->pluck('name', 'id');
-
+        $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
         return view('product.index')->with(compact(
+            'enable_tekstil',
             'product_classes',
             'categories',
             'sub_categories',
@@ -565,7 +582,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-//        dd($request->all());
         if (!auth()->user()->can('product_module.product.create_and_edit')) {
             abort(403, 'Unauthorized action.');
         }
@@ -644,6 +660,7 @@ class ProductController extends Controller
             $data_des=[
                 'product_id' => $product->id,
                 'discount_type' => $request->discount_type[$index_discount],
+                'discount_category' => $request->discount_category[$index_discount],
                 'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                 'discount_customers' => $discount_customers,
                 'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),
@@ -662,13 +679,18 @@ class ProductController extends Controller
                     $this->productUtil->createOrUpdateRawMaterialToProduct($variation->id, $request->consumption_details);
                 }
             }
+            if ($request->has("cropImages") && count($request->cropImages) > 0) {
+                foreach ($request->cropImages as $imageData) {
+                    $extention = explode(";",explode("/",$imageData)[1])[0];
+                    $image = rand(1,1500)."_image.".$extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $fp = file_put_contents($filePath,base64_decode(explode(",",$imageData)[1]));
+                    $product->addMedia($filePath)->toMediaCollection('product');
 
-
-            if ($request->images) {
-                foreach ($request->images as $image) {
-                    $product->addMedia($image)->toMediaCollection('product');
                 }
             }
+
+
 
             if (!empty($request->supplier_id)) {
                 SupplierProduct::updateOrCreate(
@@ -802,13 +824,6 @@ class ProductController extends Controller
         ));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         if (!auth()->user()->can('product_module.product.create_and_edit')) {
@@ -884,6 +899,7 @@ class ProductController extends Controller
                     $data_des=[
                         'product_id' => $product->id,
                         'discount_type' => $request->discount_type[$index_discount],
+                        'discount_category' => $request->discount_category[$index_discount],
                         'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                         'discount_customers' => $discount_customers,
                         'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),
@@ -916,13 +932,22 @@ class ProductController extends Controller
             }
 
 
-            if ($request->images) {
-                $product->clearMediaCollection('product');
-                foreach ($request->images as $image) {
-                    $product->addMedia($image)->toMediaCollection('product');
+//            if ($request->images) {
+//                $product->clearMediaCollection('product');
+//                foreach ($request->images as $image) {
+//                    $product->addMedia($image)->toMediaCollection('product');
+//                }
+//            }
+            if ($request->has("cropImages") && count($request->cropImages) > 0) {
+                foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
+                    $product->clearMediaCollection('product');
+                    $extention = explode(";",explode("/",$imageData)[1])[0];
+                    $image = rand(1,1500)."_image.".$extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $fp = file_put_contents($filePath,base64_decode(explode(",",$imageData)[1]));
+                    $product->addMedia($filePath)->toMediaCollection('product');
                 }
             }
-
             if (!empty($request->supplier_id)) {
                 SupplierProduct::updateOrCreate(
                     ['product_id' => $product->id],
@@ -1298,5 +1323,30 @@ class ProductController extends Controller
         $raw_material = Product::find($raw_material_id);
 
         return ['raw_material' => $raw_material];
+    }
+    public function getBase64Image($Image)
+    {
+
+        $image_path = str_replace(env("APP_URL") . "/", "", $Image);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $image_path);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $image_content = curl_exec($ch);
+        curl_close($ch);
+//    $image_content = file_get_contents($image_path);
+        $base64_image = base64_encode($image_content);
+        $b64image = "data:image/jpeg;base64," . $base64_image;
+        return  $b64image;
+    }
+    public function getCroppedImages($cropImages){
+        $dataNewImages = [];
+        foreach ($cropImages as $img) {
+            if (strlen($img) < 200){
+                $dataNewImages[] = $this->getBase64Image($img);
+            }else{
+                $dataNewImages[] = $img;
+            }
+        }
+        return $dataNewImages;
     }
 }

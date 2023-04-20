@@ -105,7 +105,8 @@ return [
     'product' => 'منتج',
     'add_new_product' => 'اضافة منتج جديد',
     'add_a_new_batch'=>'تشغيلة جديدة',
-    'discount_category'=>'تحديد فئة للخصم',
+    'discount_category'=>'الاسم المختصر للخصم',
+    'category_discount'=>'فئة',
     'class' => 'فئة',
     'submit' => 'ارسل',
     'class_name' => 'اسم الفئة',
@@ -330,6 +331,7 @@ return [
     'items' => 'العناصر',
     'shipping' => 'شحن',
     'featured' => 'متميز',
+    'select_discount'=>'اختر',
     'choose_category' => 'اختر القسم',
     'choose_sub_category' => 'اختر قسم فرعي',
     'choose_brand' => 'اختر علامة تجارية',
@@ -1007,7 +1009,7 @@ return [
     'compensated' => 'تعويض',
     'compensated_at' => 'تعويض في',
     'compensated_from_supplier' => 'التعويضات من الموردين',
-
+    'watsapp_numbers'=>'رقم واتساب للتواصل',
     'tac_to_be_printed' => 'الشروط والاحكام ليتم طباعتها',
     'surplus' => 'فائض',
     'total_surplus' => 'إجمالي الفائض',
@@ -1330,7 +1332,9 @@ return [
     'createdBy' => 'انشئ بواسطة',
     'printer_deleted' => 'تم حذف الطابعة',
     'printer_updated' => 'تم تحديث الطابعة',
-    'returned_by' => 'ارتجع بواسطة'
+    'returned_by' => 'ارتجع بواسطة',
+    'new_batch'=>'رقم التشغيلة الجديدة',
+
 
 
 ];

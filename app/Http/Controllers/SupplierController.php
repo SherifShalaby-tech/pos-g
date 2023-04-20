@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\MoneySafe;
 use App\Models\Product;
 use App\Models\StorePos;
@@ -50,11 +51,6 @@ class SupplierController extends Controller
         $this->moneysafeUtil = $moneysafeUtil;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $query = Supplier::leftjoin('transactions', 'suppliers.id', 'transactions.supplier_id');
@@ -81,16 +77,11 @@ class SupplierController extends Controller
         ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $quick_add = request()->quick_add ?? null;
 
-        $supplier_categories = SupplierCategory::pluck('name', 'id');
+        $supplier_categories =Category::pluck('name', 'id');
         $products = Product::Active()->pluck('name', 'id');
 
         if ($quick_add) {
@@ -108,12 +99,7 @@ class SupplierController extends Controller
         ));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $validator = Validator::make(
@@ -150,8 +136,14 @@ class SupplierController extends Controller
             DB::beginTransaction();
             $supplier = Supplier::create($data);
 
-            if ($request->has('image')) {
-                $supplier->addMedia($request->image)->toMediaCollection('supplier_photo');
+            if ($request->has("cropImages") && count($request->cropImages) > 0) {
+                foreach ($request->cropImages as $imageData) {
+                    $extention = explode(";",explode("/",$imageData)[1])[0];
+                    $image = rand(1,1500)."_image.".$extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $fp = file_put_contents($filePath,base64_decode(explode(",",$imageData)[1]));
+                    $supplier->addMedia($filePath)->toMediaCollection('supplier_photo');
+                }
             }
 
             if (!empty($request->products)) {
