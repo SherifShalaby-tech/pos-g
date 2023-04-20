@@ -304,7 +304,7 @@ class ProductUtil extends Util
             $variation_data['name'] = $enable_tekstil ? $request->name : 'Default';
             $variation_data['product_id'] = $product->id;
             $variation_data['sub_sku'] = $product->sku;
-            $variation_data['multiple_thread_colors'] = isset($product->multiple_thread_colors[0]) && count($request->multiple_thread_colors) > 0 ?$product->multiple_thread_colors[0]: null;
+            $variation_data['multiple_thread_colors'] = !empty($request->multiple_thread_colors) ?$product->multiple_thread_colors[0]: null;
             $variation_data['color_id'] = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
             $variation_data['size_id'] = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
             $variation_data['grade_id'] = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
