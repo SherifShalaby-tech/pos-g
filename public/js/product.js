@@ -650,6 +650,7 @@ $(document).on("change", "#sku", function () {
         success: function (result) {
             if (!result.success) {
                 swal("Error", result.msg, "error");
+                $("#sku").val("");
             }
         },
     });
