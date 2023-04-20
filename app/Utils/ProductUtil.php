@@ -304,7 +304,7 @@ class ProductUtil extends Util
             $variation_data['name'] = $enable_tekstil ? $request->name : 'Default';
             $variation_data['product_id'] = $product->id;
             $variation_data['sub_sku'] = $product->sku;
-            $variation_data['multiple_thread_colors'] = !empty($request->multiple_thread_colors) ?$product->multiple_thread_colors[0]: null;
+            $variation_data['multiple_thread_colors'] = isset($product->multiple_thread_colors[0]) && count($request->multiple_thread_colors) > 0 ?$product->multiple_thread_colors[0]: null;
             $variation_data['color_id'] = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
             $variation_data['size_id'] = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
             $variation_data['grade_id'] = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
@@ -584,7 +584,7 @@ class ProductUtil extends Util
      * @return Obj
      */
     public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null,$batch_number_id=null)
-    {  
+    {
             $product = Product::
             leftjoin('variations as v', 'products.id', '=', 'v.product_id')
             ->leftjoin('taxes', 'products.tax_id', '=', 'taxes.id')
@@ -600,7 +600,7 @@ class ProductUtil extends Util
             if (!is_null($store_id) && $store_id !== '0') {
                 $product->where('product_stores.store_id', $store_id);
             }
-    
+
             $product->where('products.id', $product_id);
             $selectRaws=['products.id as product_id',
             'products.name as product_name',
@@ -664,7 +664,7 @@ class ProductUtil extends Util
                     )
                     ->get();
             }
-            
+
             if (!empty($product)) {
                 if (!empty($product->discount_start_date) && !empty($product->discount_end_date)) {
                     //if end date set then check for expiry
@@ -1058,7 +1058,7 @@ class ProductUtil extends Util
                     'bounce_manufacturing_date' => $line['bounce_manufacturing_date'],
                     'bounce_batch_number' => $line['bounce_batch_number'],
                 ];
-              
+
                 $add_stock = AddStockLine::create($add_stock_data);
                 if($add_stock){
                     if(!empty($line['new_batch_number'])){
