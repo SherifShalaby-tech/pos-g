@@ -3,7 +3,6 @@
 
 @section('content')
 <div class="container-fluid">
-
     <div class="col-md-12  no-print">
         <div class="card">
             <div class="card-body">
@@ -20,10 +19,12 @@
                         <tbody>
                             @foreach($categories as $category)
                             <tr>
-                                <td><img src="@if(!empty($category->getFirstMediaUrl('category'))){{$category->getFirstMediaUrl('category')}}@else{{asset('images/default.jpg')}}@endif"
-                                    alt="photo" width="50" height="50"></td>
+                                <td><img src="@if(!empty($category->getFirstMediaUrl('category'))){{$category->getFirstMediaUrl('category')}}@else{{asset('/uploads/'.session('logo'))}}@endif"
+                                         alt="photo" width="50" height="50">
+                                </td>
                                 <td>{{$category->name}}</td>
-                                <td>{!! "<a href='/product-class'>".$category->mainCategory->productClass?->name."</a>".' / '."<a href='/category'>".$category->mainCategory?->name.'</a>'." / ".$category->name !!}</td>
+                                <td> <a href='/product-class'>{{$category->mainCategory->productClass->name ?? null}}</a> / <a href='/category'>{{$category->mainCategory->name}} </a> /
+                                    {{$category->name}} </td>
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default btn-sm dropdown-toggle"

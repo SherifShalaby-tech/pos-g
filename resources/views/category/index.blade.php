@@ -27,12 +27,13 @@
                         </thead>
                         <tbody>
                             @foreach($categories as $category)
+
                             <tr>
                                 <td><img src="@if(!empty($category->getFirstMediaUrl('category'))){{$category->getFirstMediaUrl('category')}}@else{{asset('/uploads/'.session('logo'))}}@endif"
                                     alt="photo" width="50" height="50">
                                 </td>
                                 <td>{{$category->name}}</td>
-                                <td> {!! "<a href='/product-class'>".$category->productClass?->name."</a>".' / '.$category->name !!}</td>
+                                <td><a href='/product-class'>{{$category->productClass->name ?? null}} </a>  / {{$category->name}}</td>
                                 <td>{{$category->description}}</td>
                                 <td>
                                     <div class="btn-group">
