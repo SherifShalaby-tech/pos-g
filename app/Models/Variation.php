@@ -29,7 +29,10 @@ class Variation extends Model
     {
         return $this->belongsTo(Color::class)->withDefault(['name' => '']);
     }
-
+    public function thread_color()
+    {
+        return $this->belongsTo(Color::class,"multiple_thread_colors","id")->withDefault(['name' => '']);
+    }
     public function size()
     {
         return $this->belongsTo(Size::class)->withDefault(['name' => '']);
