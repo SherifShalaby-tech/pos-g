@@ -7,7 +7,7 @@
         @php
         $Variation=\App\Models\Variation::where('id',$product->variation_id)->first();
             if($Variation){
-                $stockLines=\App\Models\AddStockLine::where('variation_id',$Variation->id)->whereColumn('quantity',">",'quantity_sold')->first();
+                $stockLines=\App\Models\AddStockLine::where('variation_id',$Variation->id)->where('batch_number',$product->batch_number)->whereColumn('quantity',">",'quantity_sold')->first();
                 $default_sell_price=$stockLines?($stockLines->sell_price == 0? $Variation->default_sell_price : $stockLines->sell_price )  : $Variation->default_sell_price;
                 $default_purchase_price=$stockLines?($stockLines->purchase_price == 0? $Variation->default_purchase_price : $stockLines->purchase_price ) : $Variation->default_purchase_price;
 
@@ -19,10 +19,12 @@
         @else
         <b>{{$product->product_name}}</b>
         <p>
-             {{$product->sub_sku}}<br><small>@if($product->batch_number){{$product->batch_number}}@endif</small>
+             {{$product->sub_sku}}<br>
         </p>
         
         @endif
+        <br>
+        <small>@if($product->batch_number){{$product->batch_number}}@endif</small>
         {{-- {{$product->addStockLines}} --}}
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][is_service]" class="is_service"
             value="{{$product->is_service}}">
