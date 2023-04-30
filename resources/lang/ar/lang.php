@@ -106,7 +106,7 @@ return [
     'add_new_product' => 'اضافة منتج جديد',
     'add_a_new_batch'=>'تشغيلة جديدة',
     'discount_category'=>'الاسم المختصر للخصم',
-    'category_discount'=>'فئة',
+    'category_discount'=>'فئة الخصم',
     'class' => 'فئة',
     'submit' => 'ارسل',
     'class_name' => 'اسم الفئة',

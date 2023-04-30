@@ -90,7 +90,6 @@ class AddStockController extends Controller
             ->leftjoin('suppliers', 'transactions.supplier_id', '=', 'suppliers.id')
             ->leftjoin('users', 'transactions.created_by', '=', 'users.id')
             ->leftjoin('currencies as paying_currency', 'transactions.paying_currency_id', 'paying_currency.id')
-            ->where('manufacturing_id','!=',null)
             ->whereIn('type',['material_manufactured','add_stock'])
            ->orWhere(function($query){
                 $manufacturingIds=Transaction::where('type','material_manufactured')->pluck('manufacturing_id');
@@ -764,7 +763,42 @@ class AddStockController extends Controller
             }
         }
     }
+    public function addMultipleProductRow(Request $request)
+    {
+        if ($request->ajax()) {
+            $currency_id = $request->currency_id;
+            $currency = Currency::find($currency_id);
+            $exchange_rate = $this->commonUtil->getExchangeRateByCurrency($currency_id, $request->store_id);
 
+            $product_selected = $request->input('product_selected');
+            $store_id = $request->input('store_id');
+            if (!empty($product_selected)) {
+                $index = $request->input('row_count');
+                $products = $this->productUtil->getMultipleDetailsFromProduct($product_selected, $store_id);
+                return view('add_stock.partials.product_row')
+                    ->with(compact('products', 'index', 'currency', 'exchange_rate'));
+            }
+        }
+    }
+    // public function addProductBatchRow(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $currency_id = $request->currency_id;
+    //         $currency = Currency::find($currency_id);
+    //         $exchange_rate = $this->commonUtil->getExchangeRateByCurrency($currency_id, $request->store_id);
+
+    //         $product_id = $request->input('product_id');
+    //         $variation_id = $request->input('variation_id');
+    //         $store_id = $request->input('store_id');
+    //         if (!empty($product_id)) {
+    //             $index = $request->input('row_count');
+    //             $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+
+    //             return view('add_stock.partials.product_batch_row')
+    //                 ->with(compact('products', 'index', 'currency', 'exchange_rate'));
+    //         }
+    //     }
+    // }
     public function addProductBatchRow(Request $request)
     {
         if ($request->ajax()) {
@@ -775,13 +809,14 @@ class AddStockController extends Controller
             $product_id = $request->input('product_id');
             $variation_id = $request->input('variation_id');
             $store_id = $request->input('store_id');
-            if (!empty($product_id)) {
-                $index = $request->input('row_count');
-                $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+            $batch_count = $request->input('batch_count');
 
-                return view('add_stock.partials.product_batch_row')
-                    ->with(compact('products', 'index', 'currency', 'exchange_rate'));
-            }
+            // if (!empty($product_id)) {
+                 $row_count = $request->input('index');
+                $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+                return view('add_stock.partials.batch_row')
+                    ->with(compact('products','row_count','exchange_rate','batch_count'));
+            
         }
     }
     // public function addNewBatchProduct(Request $request)

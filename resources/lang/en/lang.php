@@ -102,7 +102,7 @@ return [
     'add_new_product' => 'Add New Product',
     'add_a_new_batch'=>"Add New Batch",
     'discount_category'=>'Brief Discount Name',
-    'category_discount'=>'Category',
+    'category_discount'=>'Discount Category',
     'class' => 'Class',
     'submit' => 'Submit',
     'class_name' => 'Class Name',

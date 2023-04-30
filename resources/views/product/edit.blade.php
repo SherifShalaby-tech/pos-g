@@ -384,13 +384,12 @@
                                     <div class="col-md-4">
                                         {!! Form::label('multiple_colors', __('lang.color'), []) !!}
                                         <div class="input-group my-group">
-                                            {!! Form::select('multiple_colors[]', $colors, $product->multiple_colors, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'disabled' => $product->type == 'variable' ? true : false, 'style' => 'width: 80%', 'multiple', 'id' => 'multiple_colors']) !!}
+                                            {!! Form::select('multiple_colors[]', $colors, $product->multiple_colors, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'disabled' => false, 'style' => 'width: 80%', 'multiple', 'id' => 'multiple_colors']) !!}
                                             <span class="input-group-btn">
                                                 @can('product_module.color.create_and_edit')
-                                                    <button type="button"
-                                                            class="btn-modal btn btn-default bg-white btn-flat"
-                                                            data-href="{{ action('ColorController@create') }}?quick_add=1"
-                                                            data-container=".view_modal"><i
+                                                    <button type="button" class="btn-modal btn btn-default bg-white btn-flat"
+                                                        data-href="{{ action('ColorController@create') }}?quick_add=1"
+                                                        data-container=".view_modal"><i
                                                             class="fa fa-plus-circle text-primary fa-lg"></i></button>
                                                 @endcan
                                             </span>
@@ -764,8 +763,9 @@
                                                 <th>@lang('lang.grade')</th>
                                                 <th>@lang('lang.unit')</th>
                                                 <th>@lang('lang.number_vs_base_unit')</th>
-                                                <th class="supplier_div @if (empty($product->is_service)) hide @endif">@lang('lang.purchase_price')</th>
-                                                <th class="supplier_div @if (empty($product->is_service)) hide @endif">@lang('lang.sell_price')</th>
+                                                {{-- @if(empty($is_service)) hide @endif  --}}
+                                                <th class="supplier_div @if(empty($is_service)) hide @endif ">@lang('lang.purchase_price')</th>
+                                                <th class="supplier_div @if(empty($is_service)) hide @endif ">@lang('lang.sell_price')</th>
                                                 <th><button type="button" class="btn btn-success btn-xs add_row mt-2"><i
                                                             class="dripicons-plus"></i></button></th>
                                             </tr>
