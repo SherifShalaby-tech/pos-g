@@ -20,7 +20,8 @@
     $product_purchase_price = $purchase_price;
     }
     @endphp
-    <td>{!! Form::hidden('name_hidden', $product_name,
+    <td>
+        {!! Form::hidden('name_hidden', $product_name,
         ['class' =>
         'form-control name_hidden'])
         !!}
@@ -66,12 +67,12 @@
 
 
 
-    <td class="default_purchase_price_td @if(isset($is_service)) hide @endif ">{!! Form::text('variations['.$row_id.'][default_purchase_price]', $product_purchase_price , ['class' =>
+    <td class="supplier_div default_purchase_price_td @if(isset($is_service) && $is_service!=1) hide @endif">{!! Form::text('variations['.$row_id.'][default_purchase_price]', $product_purchase_price , ['class' =>
         'form-control
         default_purchase_price']) !!}</td>
 
 
-    <td class="default_sell_price_td @if(isset($is_service)) hide @endif ">{!! Form::text('variations['.$row_id.'][default_sell_price]', $product_sale_price,
+    <td class="supplier_div default_sell_price_td @if(isset($is_service) && $is_service!=1) hide @endif ">{!! Form::text('variations['.$row_id.'][default_sell_price]', $product_sale_price,
         ['class' => 'form-control default_sell_price']) !!}</td>
     <td> <button type="button" class="btn btn-danger btn-xs remove_row mt-2"><i class="dripicons-cross"></i></button>
     </td>

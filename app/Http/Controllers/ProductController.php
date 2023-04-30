@@ -784,7 +784,7 @@ class ProductController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $product = Product::with('variations')->findOrFail($id);
-
+                // dd($product->is_service);
         $product_classes = ProductClass::orderBy('name', 'asc')->pluck('name', 'id');
         $categories = Category::whereNull('parent_id')->orderBy('name', 'asc')->pluck('name', 'id');
         $sub_categories = Category::whereNotNull('parent_id')->orderBy('name', 'asc')->pluck('name', 'id');
@@ -1042,7 +1042,7 @@ class ProductController extends Controller
         $purchase_price = request()->purchase_price;
         $sell_price = request()->sell_price;
         $is_service = request()->is_service;
-        // return $is_service;
+        // return $sell_price;
         $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
 
         return view('product.partial.variation_row')->with(compact(
