@@ -16,7 +16,7 @@ $i=$i+1;
         {{$product->product_name}}
         @endif
         <input type="hidden" name="is_batch_product" class="is_batch_product"
-            value="{{isset($is_batch)?$iS_batch:null}}">
+            value="{{isset($is_batch)?$is_batch:null}}">
         <input type="hidden" name="row_count" class="row_count" value="{{$i}}">
         <input type="hidden" name="add_stock_lines[{{$i}}][is_service]" class="is_service"
             value="{{$product->is_service}}">
