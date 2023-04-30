@@ -70,7 +70,7 @@
        
 
     </td>
-    <td style="width: @if(session('system_mode')  != 'restaurant') 16% @else 20% @endif">
+    <td style="width: @if(session('system_mode')  != 'restaurant') 14% @else 18% @endif">
         <div class="input-group"><span class="input-group-btn">
                 <button type="button" class="btn btn-danger btn-xs minus">
                     <span class="dripicons-minus"></span>
@@ -91,7 +91,7 @@
         </div>
 
     </td>
-    <td style="width: @if(session('system_mode')  != 'restaurant') 13% @else 15% @endif">
+    <td style="width: @if(session('system_mode')  != 'restaurant') 12% @else 14% @endif">
         <input type="text" class="form-control sell_price"
             name="transaction_sell_line[{{$loop->index + $index}}][sell_price]" required
             @if(!auth()->user()->can('product_module.sell_price.create_and_edit')) readonly @elseif(env('IS_SUB_BRANCH',false)) readonly @endif
@@ -133,13 +133,25 @@
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 12% @else 15% @endif ">
         <input type="hidden" value="{{$product->product_id}}" class="p-id"/>
-                <select class="custom-select custom-select-sm discount_category discount_category{{$product->product_id}}" style="height:30% !important"
-                    @if(!auth()->user()->can('product_module.discount_category.create_and_edit')) disabled="disabled" @endif>
+        @if(auth()->user()->can('sp_module.sales_promotion.view')
+                || auth()->user()->can('sp_module.sales_promotion.create_and_edit')
+                || auth()->user()->can('sp_module.sales_promotion.delete'))
+                <select class="custom-select custom-select-sm discount_category discount_category{{$product->product_id}}" style="height:30% !important">
                     <option selected>select</option>
                     @foreach($product_discount_details as $discount)
                             <option value="{{$discount->id}}">{{$discount->discount_category}}</option>
                     @endforeach
                 </select>
+        @else
+            <select class="custom-select custom-select-sm discount_category discount_category{{$product->product_id}}" style="height:30% !important"
+                 disabled="disabled">
+                <option selected>select</option>
+                @foreach($product_discount_details as $discount)
+                        <option value="{{$discount->id}}">{{$discount->discount_category}}</option>
+                @endforeach
+            </select>
+        @endif
+                
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 9% @else 15% @endif">
         <span class="sub_total_span" style="font-weight: bold;"></span>
@@ -153,7 +165,7 @@
         @if(isset($product->qty_available)){{@num_format($product->qty_available)}}@else{{0}}@endif @endif
     </td>
     @endif
-    <td style="width: @if(session('system_mode')  != 'restaurant') 9%; @else 15%; @endif padding: 0px;">
+    <td style="width: @if(session('system_mode')  != 'restaurant') 9%; @else 17%; @endif padding: 0px;">
         @if(!empty($dining_table_id))
             @if(auth()->user()->can('superadmin') || auth()->user()->is_admin == 1)
             <button type="button" class="btn btn-danger btn-xs remove_row" style="margin-top: 15px;"><i class="fa fa-times"></i></button>

@@ -1,3 +1,4 @@
+
 <tr class="row_{{$row_id}} variation_row" data-row_id="{{$row_id}}">
     @if(!empty($item))
     {!! Form::hidden('variations['.$row_id.'][id]', !empty($item) ? $item->id : null, ['class' => 'form-control'])
@@ -38,7 +39,7 @@
     @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
     <td>{!! Form::select('variations['.$row_id.'][multiple_thread_colors]', $colors, !empty($item) ? $item->color_id: false,
         ['class'
-        => 'form-control selectpicker v_color', 'data-live-search'=>"true", 'placeholder' => '','style'=>"width:50%"])
+        => 'form-control selectpicker ', 'data-live-search'=>"true", 'placeholder' => '','style'=>"width:50%"])
         !!}
     </td>
     @endif
@@ -60,10 +61,11 @@
                 'form-control
                 number_vs_base_unit', 'required','id'=>'number_vs_base_unit_'.$row_id]) !!}</td>
         @endif
-    <td class="@if(empty($is_service)) hide @endif default_purchase_price_td">{!! Form::text('variations['.$row_id.'][default_purchase_price]', $product_purchase_price , ['class' =>
+        {{-- @if(empty($is_service)) hide @endif --}}
+    <td class="default_purchase_price_td">{!! Form::text('variations['.$row_id.'][default_purchase_price]', $product_purchase_price , ['class' =>
         'form-control
         default_purchase_price', 'required']) !!}</td>
-    <td class="@if(empty($is_service)) hide @endif default_sell_price_td">{!! Form::text('variations['.$row_id.'][default_sell_price]', $product_sale_price,
+    <td class="default_sell_price_td">{!! Form::text('variations['.$row_id.'][default_sell_price]', $product_sale_price,
         ['class' => 'form-control default_sell_price', 'required']) !!}</td>
     <td> <button type="button" class="btn btn-danger btn-xs remove_row mt-2"><i class="dripicons-cross"></i></button>
     </td>

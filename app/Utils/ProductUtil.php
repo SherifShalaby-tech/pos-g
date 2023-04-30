@@ -243,6 +243,21 @@ class ProductUtil extends Util
         $variations = $request->variations;
         $keey_variations = [];
         if (!empty($variations)) {
+            $variation_data['name'] = 'Default';
+            $variation_data['product_id'] = $product->id;
+            $variation_data['sub_sku'] = $product->sku;
+            $variation_data['color_id'] = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
+            $variation_data['size_id'] = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
+            $variation_data['grade_id'] = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
+            $variation_data['unit_id'] = !empty($request->multiple_units) ? $request->multiple_units[0] : null;
+
+            $variation_data['is_dummy'] = 1;
+            $variation_data['default_purchase_price'] = $purchase_price;
+            $variation_data['default_sell_price'] = $sell_price;
+
+            $variation = Variation::create($variation_data);
+            $variation_array[] = ['variation' => $variation, 'variant_stores' =>  []];
+            $keey_variations[] = $variation->id;
             foreach ($variations as $v) {
                 $c = Variation::where('product_id', $product->id)
                     ->count() + 1;
@@ -583,8 +598,8 @@ class ProductUtil extends Util
      *
      * @return Obj
      */
-    public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null,$batch_number_id)
-    {  
+    public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null,$batch_number_id=null)
+    {
             $product = Product::
             leftjoin('variations as v', 'products.id', '=', 'v.product_id')
             ->leftjoin('taxes', 'products.tax_id', '=', 'taxes.id')
@@ -600,7 +615,7 @@ class ProductUtil extends Util
             if (!is_null($store_id) && $store_id !== '0') {
                 $product->where('product_stores.store_id', $store_id);
             }
-    
+
             $product->where('products.id', $product_id);
             $selectRaws=['products.id as product_id',
             'products.name as product_name',
@@ -664,7 +679,7 @@ class ProductUtil extends Util
                     )
                     ->get();
             }
-            
+
             if (!empty($product)) {
                 if (!empty($product->discount_start_date) && !empty($product->discount_end_date)) {
                     //if end date set then check for expiry
@@ -1005,6 +1020,7 @@ class ProductUtil extends Util
 
         $keep_lines_ids = [];
         $batch_numbers=[];
+        $qty=0;
         foreach ($add_stocks as $line) {
             if (!empty($line['add_stock_line_id'])) {
                 $add_stock = AddStockLine::find($line['add_stock_line_id']);
@@ -1058,8 +1074,9 @@ class ProductUtil extends Util
                     'bounce_manufacturing_date' => $line['bounce_manufacturing_date'],
                     'bounce_batch_number' => $line['bounce_batch_number'],
                 ];
-              
+
                 $add_stock = AddStockLine::create($add_stock_data);
+                $qty =  $this->num_uf($line['quantity']);
                 if($add_stock){
                     if(!empty($line['new_batch_number'])){
                         $add_stock_batch_data = [
@@ -1088,18 +1105,19 @@ class ProductUtil extends Util
                         // $batch_number=$add_stock->batch_number;
                         $add_stock_batch = AddStockLine::create($add_stock_batch_data);
                         $batch_numbers[]=$add_stock_batch->batch_number;
-
+                        $qty =  $this->num_uf($line['batch_quantity']);
                         // return $add_stock_batch;
                 }
             }
                 if(isset($line['bounce_purchase_price'])){
                     $product = Product::where('id',$line['product_id'])->update(['purchase_price' =>$line['bounce_purchase_price'] ,'purchase_price_depends' => $line['bounce_purchase_price']]);
                 }
-                $qty =  $this->num_uf($line['quantity']);
+               
                 $keep_lines_ids[] = $add_stock->id;
                 $batch_numbers[]=$add_stock->batch_number;
-                $this->updateProductQuantityStore($line['product_id'], $line['variation_id'], $transaction->store_id,  $qty, 0);
             }
+            $this->updateProductQuantityStore($line['product_id'], $line['variation_id'], $transaction->store_id,  $qty, 0);
+
             if(!empty($line['stock_pricechange'])){
                 AddStockLine::where('variation_id',$line['variation_id'])
                     ->whereColumn('quantity',">",'quantity_sold')->update([
