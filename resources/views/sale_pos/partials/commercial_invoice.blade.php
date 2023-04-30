@@ -316,9 +316,9 @@
 
                                 </td>
                                 @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
-                                <td>{{ $line->product->colors->pluck("name")->first() }}</td>
+                                <td>{{ $line->variation->color->name}}</td>
 
-                                <td>{{ $line->product->thread_colors->pluck("name")->first() }}</td>
+                                <td>{{ $line->variation->thread_color->name}}</td>
                                 @endif
                                 <td style="width: 10% !important;">
                                     @if (!empty($line->variation))
