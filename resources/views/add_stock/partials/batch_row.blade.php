@@ -31,7 +31,7 @@ $index=$batch_count;
     <td colspan="1">
         {!! Form::label('', __('lang.quantity'), []) !!}<br>
         
-        <input type="text" class="form-control quantity quantity" min=1 name="batch_row[{{$index}}][batch_quantity]" required
+        <input type="text" class="form-control quantity batch_quantity" min=1 name="batch_row[{{$index}}][batch_quantity]" required
             value="1"  index_id="">
          {{-- {!! Form::label('', __('lang.days_before_the_expiry_date'), []) !!}<br>
         {!! Form::text('batch_row['.$i.'][expiry_warning]', null, ['class' => 'form-control days_before_the_expiry_date']) !!} --}}

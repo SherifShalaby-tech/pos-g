@@ -1042,6 +1042,7 @@ class ProductController extends Controller
         $purchase_price = request()->purchase_price;
         $sell_price = request()->sell_price;
         $is_service = request()->is_service;
+        // return $is_service;
         $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
 
         return view('product.partial.variation_row')->with(compact(
