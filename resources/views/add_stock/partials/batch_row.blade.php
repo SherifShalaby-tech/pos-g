@@ -47,11 +47,11 @@ $index=$batch_count;
         <input type="text" class="form-control selling_price selling_price" name="batch_row[{{$index}}][batch_selling_price]" required index_id=""
                value="@if($product->selling_price_depends == null) {{@num_format($product->sell_price)}} @else {{@num_format($product->selling_price_depends)}} @endif"  >
     </td>
+    <td colspan="4"></td>
     <td colspan="1">
         <button style="margin-top: 33px;" type="button" class="btn btn-secodary text-danger btn-sx remove_batch_row" ><i
             class="fa fa-times"></i></button>
     </td>
-    <td colspan="2"></td>
 </tr>
 @empty
 
