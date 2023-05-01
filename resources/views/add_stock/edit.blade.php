@@ -123,7 +123,7 @@
                                                 </td>
                                                 <td>
                                                     <input type="text" class="form-control quantity  quantity_{{$loop->index}}" min=1 name="add_stock_lines[{{$loop->index}}][quantity]" required
-                                                        value="@if(isset($product->quantity)){{@num_format($product->quantity)}}@else{{1}}@endif" index_id="{{$loop->index}}">
+                                                        value="@if(isset($product->quantity)){{preg_match('/\.\d*[1-9]+/', (string)$product->quantity) ? $product->quantity : @num_format($product->quantity)}}@else{{1}}@endif" index_id="{{$loop->index}}">
                                                 </td>
                                                 <td>
                                                     {{$product->product->units->pluck('name')[0]??''}}
@@ -133,7 +133,7 @@
                                                             name="add_stock_lines[{{ $loop->index }}][purchase_price]"
                                                             required index_id="{{$loop->index}}"
                                                             value="@if (isset($product->purchase_price)) {{ @num_format($product->purchase_price) }}@else{{ 0 }} @endif">
-                                                        <input class="final_cost" type="hidden" 
+                                                        <input class="final_cost" type="hidden"
                                                             name="add_stock_lines[{{ $loop->index }}][final_cost]"
                                                             value="@if (isset($product->final_cost)) {{ @num_format($product->final_cost) }}@else{{ 0 }} @endif">
                                                 </td>
@@ -142,8 +142,8 @@
                                                             name="add_stock_lines[{{ $loop->index }}][selling_price]"
                                                             required index_id="{{$loop->index}}"
                                                             value="@if (isset($product->sell_price)) {{ @num_format($product->sell_price) }}@else{{ 0 }} @endif">
-                                                        
-                                                    
+
+
                                                 </td>
                                                 <td>
                                                     <span
@@ -151,7 +151,7 @@
                                                         <input type="hidden" class="form-control sub_total"
                                                             name="add_stock_lines[{{ $loop->index }}][sub_total]"
                                                             value="{{ $product->sub_total }}">
-                                                   
+
                                                 </td>
                                                  @php
                                                         $current_stock = App\Models\ProductStore::where('product_id', $product->product_id)
@@ -160,10 +160,10 @@
                                                     @endphp
                                                     <td>
                                                         <input type="hidden" name="current_stock" class="current_stock"
-                                                            value="@if (isset($current_stock)) {{ $current_stock }}@else{{ 0 }} @endif">
+                                                            value="@if (isset($current_stock)) {{ preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock : @num_format($current_stock) }}@else{{ 0 }} @endif">
                                                         <span class="current_stock_text">
                                                             @if (isset($current_stock))
-                                                                {{ @num_format($current_stock) }}@else{{ 0 }}
+                                                                {{ preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock : @num_format($current_stock) }}@else{{ 0 }}
                                                             @endif
                                                         </span>
                                                     </td>
@@ -203,7 +203,7 @@
                                                             {!! Form::text('add_stock_lines['.$loop->index.'][bounce_purchase_price]', null, ['class' => 'form-control bounce_purchase_price_'.$loop->index,'readonly']) !!}
                                                         </div>
                                                     </td>
-                                                
+
                                             </tr>
                                             <tr class="hide bounce_details_td_{{$loop->index}}">
                                                 <td>
@@ -225,7 +225,7 @@
                                                     {!! Form::text('add_stock_lines['.$loop->index.'][bounce_convert_status_expire]', null, ['class' => 'form-control']) !!}
                                                 </td>
                                             </tr>
-                                                
+
                                             @endforeach
                                         </tbody>
                                     </table>
