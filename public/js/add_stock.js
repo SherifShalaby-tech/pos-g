@@ -358,7 +358,7 @@ function calculate_sub_totals() {
     var total = 0;
     $("#product_table > tbody  > tr").each((ele, tr) => {
         let quantity = __read_number($(tr).find(".quantity"));
-        let purchase_price = __read_number($(tr).find(".purchase_price"));
+        let purchase_price = __read_number($(tr).find("input.purchase_price"));
         let sub_total = purchase_price * quantity;
         __write_number($(tr).find(".sub_total"), sub_total);
         $(tr)
@@ -440,22 +440,28 @@ $(document).on("change", ".quantity, .purchase_price", function () {
         new_qty = 0;
     }
     $(tr)
+    .find(".current_stock")
+    .val(__currency_trans_from_en(new_qty, false));
+    $(tr)
         .find("span.current_stock_text")
         .text(__currency_trans_from_en(new_qty, false));
     calculate_sub_totals();
 });
-// $(document).on("change", ".batch_quantity, .purchase_price", function () {
-//     let tr = $(this).closest("tr");
-//     // let current_stock = __read_number($(tr).find(".current_stock"));
-//     let qty = __read_number($(tr).find(".batch_quantity"));
-//     // let is_service = parseInt($(tr).find(".is_service").val());
-//     let new_qty = current_stock + qty;
+$(document).on("change", ".batch_quantity", function () {
+    let tr = $(this).closest("tr");
+    let productId=$(this).data('id');
+    
+    let current_stock = parseInt($(".current_stock"+productId).val());
+    let qty = parseInt($(this).val());
+    let new_qty = current_stock + qty;
+    console.log(new_qty)
 
-//     $(tr)
-//         .find("span.current_stock_text")
-//         .text(__currency_trans_from_en(new_qty, false));
-//     calculate_sub_totals();
-// });
+    $(".current_stock"+productId)
+    .val(__currency_trans_from_en(new_qty, false));
+    $("span.current_stock_text"+productId)
+        .text(__currency_trans_from_en(new_qty, false));
+    calculate_sub_totals();
+});
 $(document).on("click", ".remove_row", function () {
     let index = $(this).data("index");
 

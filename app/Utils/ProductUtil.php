@@ -1091,7 +1091,6 @@ class ProductUtil extends Util
      */
     public function createOrUpdateAddStockLines($add_stocks, $transaction,$batch_row=null)
     {
-
         $keep_lines_ids = [];
         $batch_numbers=[];
         $qty=0;

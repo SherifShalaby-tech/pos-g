@@ -58,7 +58,7 @@ $(document).on("click", ".remove_row", function () {
 
 $(document).on("click", ".add_row", function () {
     var row_id = parseInt($("#row_id").val());
-    console.log($(".is_edit_service").val());
+    // console.log($(".is_edit_service").val());
     var is_service_checked=document.querySelector('#is_service')
     let is_service=0;
     if(is_service_checked.checked == true){
