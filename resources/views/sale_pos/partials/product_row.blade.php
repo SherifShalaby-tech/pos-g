@@ -78,7 +78,7 @@
                     <span class="dripicons-minus"></span>
                 </button>
             </span>
-            <input type="number" class="form-control quantity  qty numkey input-number" min="0.01" step="any"
+            <input type="number" class="form-control quantity  qty numkey input-number" step="any"
                 autocomplete="off" style="width: 50px;"
                 @if(!$product->is_service)max="{{preg_match('/\.\d*[1-9]+/', (string)$product->qty_available) ? $product->qty_available : @num_format($product->qty_available)}}"@endif
             name="transaction_sell_line[{{$loop->index + $index}}][quantity]"
