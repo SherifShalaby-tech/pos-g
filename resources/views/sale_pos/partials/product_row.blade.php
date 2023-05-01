@@ -21,7 +21,7 @@
         <p>
              {{$product->sub_sku}}<br>
         </p>
-        
+
         @endif
         <br>
         <small>@if($product->batch_number){{$product->batch_number}}@endif</small>
@@ -69,7 +69,7 @@
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][promotion_discount_amount]"
             class="promotion_discount_amount" value="0">
            @php $loop_index= $loop->index + $index@endphp
-       
+
 
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 14% @else 18% @endif">
@@ -78,13 +78,13 @@
                     <span class="dripicons-minus"></span>
                 </button>
             </span>
-            <input type="number" class="form-control quantity  qty numkey input-number" min="0.01" step="any"
+            <input type="number" class="form-control quantity  qty numkey input-number" step="any"
                 autocomplete="off" style="width: 50px;"
-                @if(!$product->is_service)max="{{$product->qty_available}}"@endif
+                @if(!$product->is_service)max="{{preg_match('/\.\d*[1-9]+/', (string)$product->qty_available) ? $product->qty_available : @num_format($product->qty_available)}}"@endif
             name="transaction_sell_line[{{$loop->index + $index}}][quantity]"
             required
-            value="@if(!empty($edit_quantity)){{$edit_quantity}}@else
-            @if(isset($product->quantity)){{$product->quantity}}@else{{1}}@endif @endif">
+            value="@if(!empty($edit_quantity)){{preg_match('/\.\d*[1-9]+/', (string)$edit_quantity) ? $edit_quantity : @num_format($edit_quantity)}}@else
+            @if(isset($product->quantity)){{preg_match('/\.\d*[1-9]+/', (string)$product->quantity) ? $product->quantity : @num_format($product->quantity)}}@else{{1}}@endif @endif">
             <span class="input-group-btn">
                 <button type="button" class="btn btn-success btn-xs plus">
                     <span class="dripicons-plus"></span>
@@ -135,18 +135,18 @@
                 @endforeach
             </select>
         @endif
-                
+
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 9% @else 15% @endif">
         <span class="sub_total_span" style="font-weight: bold;"></span>
         <input type="hidden" class="form-control sub_total"
             name="transaction_sell_line[{{$loop->index + $index}}][sub_total]" value="">
     </td>
-    
+
     @if(session('system_mode') != 'restaurant')
     <td style="width: @if(session('system_mode')  != 'restaurant') 9% @else 15% @endif">
         @if($product->is_service) {{'-'}} @else
-        @if(isset($product->qty_available)){{@num_format($product->qty_available)}}@else{{0}}@endif @endif
+        @if(isset($product->qty_available)){{preg_match('/\.\d*[1-9]+/', (string)$product->qty_available) ? $product->qty_available : @num_format($product->qty_available)}}@else{{0}}@endif @endif
     </td>
     @endif
     <td style="width: @if(session('system_mode')  != 'restaurant') 9%; @else 17%; @endif padding: 0px;">
