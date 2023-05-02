@@ -444,6 +444,18 @@ $(document).on("change", ".quantity, .purchase_price", function () {
         .text(__currency_trans_from_en(new_qty, false));
     calculate_sub_totals();
 });
+// $(document).on("change", ".batch_quantity, .purchase_price", function () {
+//     let tr = $(this).closest("tr");
+//     // let current_stock = __read_number($(tr).find(".current_stock"));
+//     let qty = __read_number($(tr).find(".batch_quantity"));
+//     // let is_service = parseInt($(tr).find(".is_service").val());
+//     let new_qty = current_stock + qty;
+
+//     $(tr)
+//         .find("span.current_stock_text")
+//         .text(__currency_trans_from_en(new_qty, false));
+//     calculate_sub_totals();
+// });
 $(document).on("click", ".remove_row", function () {
     let index = $(this).data("index");
 
