@@ -1347,5 +1347,5 @@ return [
     'returned_by' => 'Returned By',
     'new_batch'=>'New Batch Number',
 
-
+    'permenant'=>'Permenant',
 ];

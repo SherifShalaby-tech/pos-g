@@ -806,3 +806,9 @@ $(document).on("click", ".add_discount_row", function () {
         },
     });
 });
+$(document).on("change","#is_discount_permenant",function () {
+    $(".discount_start_date").prop('disabled', (i, v) => !v);
+    $(".discount_start_date").val(null);
+    $(".discount_end_date").prop('disabled', (i, v) => !v);
+    $(".discount_end_date").val(null);
+});

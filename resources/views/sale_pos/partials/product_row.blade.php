@@ -24,7 +24,6 @@
         </p>
         
         @endif
-        <br>
         <small>@if($product->batch_number){{$product->batch_number}}@endif</small>
         {{-- {{$product->addStockLines}} --}}
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][is_service]" class="is_service"

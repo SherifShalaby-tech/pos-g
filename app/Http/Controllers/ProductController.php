@@ -655,8 +655,10 @@ class ProductController extends Controller
                 }
             }
         $index_discounts=[];
-        if(count($request->discount_type)>0){
-            $index_discounts=array_keys($request->discount_type);
+        if($request->has('discount_type')){
+            if(count($request->discount_type)>0){
+                $index_discounts=array_keys($request->discount_type);
+            }
         }
         foreach ($index_discounts as $index_discount){
             $discount_customers = $this->getDiscountCustomerFromType($request->get('discount_customer_types_'.$index_discount));
@@ -664,6 +666,7 @@ class ProductController extends Controller
                 'product_id' => $product->id,
                 'discount_type' => $request->discount_type[$index_discount],
                 'discount_category' => $request->discount_category[$index_discount],
+                'is_discount_permenant'=>!empty($request->is_discount_permenant[$index_discount])? 1 : 0,
                 'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                 'discount_customers' => $discount_customers,
                 'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),
@@ -903,6 +906,7 @@ class ProductController extends Controller
                         'product_id' => $product->id,
                         'discount_type' => $request->discount_type[$index_discount],
                         'discount_category' => $request->discount_category[$index_discount],
+                        'is_discount_permenant'=>!empty($request->is_discount_permenant[$index_discount])? 1 : 0,
                         'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                         'discount_customers' => $discount_customers,
                         'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),

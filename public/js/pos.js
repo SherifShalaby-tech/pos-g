@@ -462,9 +462,6 @@ function check_for_sale_promotion() {
                         ) {
                             sum_discount =
                                 ( parseFloat(
-                                        data.actual_sell_price
-                                    ) -
-                                    parseFloat(
                                         data.discount_value
                                     ) ) *  parseFloat(data.count_discount_number);
 
@@ -474,10 +471,7 @@ function check_for_sale_promotion() {
                             "percentage"
                         ) {
                             let discount_value =
-                                (parseFloat(
-                                        data.actual_sell_price
-                                    ) *
-                                    parseFloat(
+                                ( parseFloat(
                                         data.discount_value
                                     )) /
                                 100;
