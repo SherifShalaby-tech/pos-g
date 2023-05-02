@@ -12,6 +12,7 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+
     'salary' => 'Maaş',
     'paid_leave' => 'Ücretli izin',
     'paid_annual_leave' => 'Ücretli yıllık izin',
