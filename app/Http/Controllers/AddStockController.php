@@ -294,7 +294,9 @@ class AddStockController extends Controller
 
         $stores  = Store::getDropdown();
         $users = User::Notview()->pluck('name', 'id');
-
+        $recent_stock = Transaction::
+        orderBy('created_at', 'desc')
+        ->first();
         return view('add_stock.create')->with(compact(
             'is_raw_material',
             'suppliers',
@@ -321,6 +323,7 @@ class AddStockController extends Controller
             'exchange_rate_currencies',
             'discount_customer_types',
             'users',
+            'recent_stock'
         ));
     }
 

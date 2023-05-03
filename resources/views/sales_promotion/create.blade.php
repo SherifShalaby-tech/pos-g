@@ -211,5 +211,20 @@
             $(".end_date").prop('disabled', (i, v) => !v);
             $(".end_date").val(null);
         });
+        $(document).on('change','.qty',function(){
+            let tr = $(this).closest("tr");
+            let qty=parseInt($(this).val());
+            let sell_price = __read_number($(tr).find(".sell_price"));
+            let purchase_price = __read_number($(tr).find(".purchase_price"));
+            let newsellprice=qty*sell_price;
+            let newpurchaseprice=qty*purchase_price;
+            $(tr).find('td:eq(4)').text(newsellprice);
+            $(tr).find('td:eq(3)').text(newpurchaseprice);
+            calculate_total_prices();
+            let footer_sell_price_total=parseInt($('.footer_sell_price_total').text())
+            let discount=parseInt($('#discount_value').val());
+            let newprice=footer_sell_price_total-discount;
+            $('.new_price_span').text(__currency_trans_from_en(newprice, false))
+        });
     </script>
 @endsection

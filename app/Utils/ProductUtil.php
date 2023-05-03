@@ -55,10 +55,15 @@ class ProductUtil extends Util
      */
     public function generateSubSku($sku, $c, $barcode_type = 'C128')
     {
+       
         $sub_sku = $sku . $c;
 
         if (in_array($barcode_type, ['C128', 'C39'])) {
-            $sub_sku = $sku . '-' . $c;
+            if(strlen($sku)==0){
+                $sub_sku =  $c;            
+            }else{
+                $sub_sku = $sku . '-' . $c;
+            }
         }
 
         return $sub_sku;
@@ -163,7 +168,11 @@ class ProductUtil extends Util
                 }
             }
         }
-        $sku = $sku . '-' . $number;
+        if(strlen($sku)==0){
+            $sku = $number;
+        }else{
+            $sku = $sku . '-' . $number;
+        }
         $sku_exist = Product::where('sku', $sku)->exists();
 
         if ($sku_exist) {
@@ -255,9 +264,9 @@ class ProductUtil extends Util
             $variation_data['default_purchase_price'] = $request->purchase_price;
             $variation_data['default_sell_price'] = $request->sell_price;
 
-            $variation = Variation::create($variation_data);
-            $variation_array[] = ['variation' => $variation, 'variant_stores' =>  []];
-            $keey_variations[] = $variation->id;
+            // $variation = Variation::create($variation_data);
+            // $variation_array[] = ['variation' => $variation, 'variant_stores' =>  []];
+            // $keey_variations[] = $variation->id;
             foreach ($variations as $v) {
                 $c = Variation::where('product_id', $product->id)
                     ->count() + 1;
@@ -828,6 +837,7 @@ class ProductUtil extends Util
                 ->whereJsonContains('store_ids', $store_id)
                 ->whereDate('start_date', '<=', date('Y-m-d'))
                 ->whereDate('end_date', '>=', date('Y-m-d'))
+                ->orWhere('is_discount_permenant','1')
                 ->get();
             foreach ($sales_promotions as $sales_promotion) {
                 $v_sales_promotion = $this->getSalePromotionDetailsIfValidForThisSaleArray($sales_promotion, $added_products, $qty_array);
