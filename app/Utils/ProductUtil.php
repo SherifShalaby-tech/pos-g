@@ -59,11 +59,7 @@ class ProductUtil extends Util
         $sub_sku = $sku . $c;
 
         if (in_array($barcode_type, ['C128', 'C39'])) {
-            if(strlen($sku)==0){
-                $sub_sku =  $c;            
-            }else{
-                $sub_sku = $sku . '-' . $c;
-            }
+                $sub_sku = $sku . $c;
         }
 
         return $sub_sku;
@@ -168,11 +164,12 @@ class ProductUtil extends Util
                 }
             }
         }
-        if(strlen($sku)==0){
-            $sku = $number;
-        }else{
-            $sku = $sku . '-' . $number;
-        }
+        // if(strlen($sku)==0){
+        //     $sku = $number;
+        // }else{
+            $sku = $sku . $number;
+            // $sku = $sku . '-' . $number;
+        // }
         $sku_exist = Product::where('sku', $sku)->exists();
 
         if ($sku_exist) {
