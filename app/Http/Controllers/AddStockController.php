@@ -294,7 +294,9 @@ class AddStockController extends Controller
 
         $stores  = Store::getDropdown();
         $users = User::Notview()->pluck('name', 'id');
-
+        $recent_stock = Transaction::
+        orderBy('created_at', 'desc')
+        ->first();
         return view('add_stock.create')->with(compact(
             'is_raw_material',
             'suppliers',
@@ -321,6 +323,7 @@ class AddStockController extends Controller
             'exchange_rate_currencies',
             'discount_customer_types',
             'users',
+            'recent_stock'
         ));
     }
 
@@ -373,7 +376,7 @@ class AddStockController extends Controller
         DB::beginTransaction();
         $transaction = Transaction::create($transaction_data);
         // return AddStockLine::where('transaction_id',422)->get();
-        $this->productUtil->createOrUpdateAddStockLines($request->add_stock_lines, $transaction);
+        $this->productUtil->createOrUpdateAddStockLines($request->add_stock_lines, $transaction,$request->batch_row);
 
         if ($request->files) {
             foreach ($request->file('files', []) as $key => $file) {

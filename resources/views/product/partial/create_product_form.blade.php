@@ -385,6 +385,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                 <th style="width: 20%;">@lang('lang.discount_type')</th>
                 <th style="width: 15%;">@lang('lang.discount')</th>
                 <th style="width: 10%;">@lang('lang.discount_category')</th>
+                <th style="width: 5%;"></th>
                 <th style="width: 20%;">@lang('lang.discount_start_date')</th>
                 <th style="width: 20%;">@lang('lang.discount_end_date')</th>
                 <th style="width: 20%;">@lang('lang.customer_type') <i class="dripicons-question" data-toggle="tooltip"
@@ -394,7 +395,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
             </tr>
             </thead>
             <tbody>
-            @include('product.partial.raw_discount', ['row_id' => 0])
+            {{-- @include('product.partial.raw_discount', ['row_id' => 0]) --}}
             </tbody>
         </table>
         <input type="hidden" name="raw_discount_index" id="raw_discount_index" value="1">

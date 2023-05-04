@@ -217,8 +217,8 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="i-checks">
-                                        <input id="is_service" name="is_service" type="checkbox"
-                                               @if (!empty($product->is_service)) checked @endif value="1"
+                                        <input id="is_service" name="is_service" class="is_service" type="checkbox"
+                                               @if ($product->is_service == 1) checked @endif  value="{{$product->is_service }}"
                                                class="form-control-custom">
                                         <label for="is_service"><strong>
                                                 @if (session('system_mode') == 'restaurant')
@@ -381,7 +381,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                  <div class="col-md-4">
                                         {!! Form::label('multiple_colors', __('lang.color'), []) !!}
                                         <div class="input-group my-group">
                                             {!! Form::select('multiple_colors[]', $colors, $product->multiple_colors, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'disabled' => false, 'style' => 'width: 80%', 'multiple', 'id' => 'multiple_colors']) !!}
@@ -639,6 +639,7 @@
                                             <th style="width: 20%;">@lang('lang.discount_type')</th>
                                             <th style="width: 15%;">@lang('lang.discount')</th>
                                             <th style="width: 7%;">@lang('lang.discount_category')</th>
+                                            <th style="width: 5%;"></th>
                                             <th style="width: 20%;">@lang('lang.discount_start_date')</th>
                                             <th style="width: 20%;">@lang('lang.discount_end_date')</th>
                                             <th style="width: 20%;">@lang('lang.customer_type') <i
@@ -764,8 +765,9 @@
                                                 <th>@lang('lang.unit')</th>
                                                 <th>@lang('lang.number_vs_base_unit')</th>
                                                 {{-- @if(empty($is_service)) hide @endif  --}}
-                                                <th class="supplier_div @if(empty($is_service)) hide @endif ">@lang('lang.purchase_price')</th>
-                                                <th class="supplier_div @if(empty($is_service)) hide @endif ">@lang('lang.sell_price')</th>
+                                                <th class="supplier_div @if(isset($product->is_service) && $product->is_service ==0) hide @endif ">
+                                                    @lang('lang.purchase_price')</th>
+                                                <th class="supplier_div @if(isset($product->is_service) && $product->is_service ==0) hide @endif ">@lang('lang.sell_price')</th>
                                                 <th><button type="button" class="btn btn-success btn-xs add_row mt-2"><i
                                                             class="dripicons-plus"></i></button></th>
                                             </tr>

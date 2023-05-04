@@ -7,7 +7,8 @@
         @php
         $Variation=\App\Models\Variation::where('id',$product->variation_id)->first();
             if($Variation){
-                $stockLines=\App\Models\AddStockLine::where('variation_id',$Variation->id)->where('batch_number',$product->batch_number)->whereColumn('quantity',">",'quantity_sold')->first();
+                // ->where('batch_number',$product->batch_number)
+                $stockLines=\App\Models\AddStockLine::where('variation_id',$Variation->id)->whereColumn('quantity',">",'quantity_sold')->first();
                 $default_sell_price=$stockLines?($stockLines->sell_price == 0? $Variation->default_sell_price : $stockLines->sell_price )  : $Variation->default_sell_price;
                 $default_purchase_price=$stockLines?($stockLines->purchase_price == 0? $Variation->default_purchase_price : $stockLines->purchase_price ) : $Variation->default_purchase_price;
 
@@ -23,7 +24,6 @@
         </p>
 
         @endif
-        <br>
         <small>@if($product->batch_number){{$product->batch_number}}@endif</small>
         {{-- {{$product->addStockLines}} --}}
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][is_service]" class="is_service"
@@ -122,17 +122,21 @@
                 || auth()->user()->can('sp_module.sales_promotion.delete'))
                 <select class="custom-select custom-select-sm discount_category discount_category{{$product->product_id}}" style="height:30% !important">
                     <option selected>select</option>
+                    @if(!empty($product_all_discounts_categories))
                     @foreach($product_all_discounts_categories as $discount)
                             <option value="{{$discount->id}}">{{$discount->discount_category}}</option>
                     @endforeach
+                    @endif
                 </select>
         @else
             <select class="custom-select custom-select-sm discount_category discount_category{{$product->product_id}}" style="height:30% !important"
                  disabled="disabled">
                 <option selected>select</option>
+                @if(!empty($product_all_discounts_categories))
                 @foreach($product_all_discounts_categories as $discount)
                         <option value="{{$discount->id}}">{{$discount->discount_category}}</option>
                 @endforeach
+                @endif
             </select>
         @endif
 
