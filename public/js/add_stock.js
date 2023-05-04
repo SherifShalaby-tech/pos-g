@@ -448,9 +448,12 @@ $(document).on(
     }
 );
 $(document).on('focus','.quantity', function(){
-    asd=$(this).data('val', $(this).val());
+    $(this).data('val', $(this).val());
+})
+$(document).on("change", ".purchase_price", function () {
+    calculate_sub_totals();
 });
-$(document).on("change", ".quantity, .purchase_price", function () {
+$(document).on("change", ".quantity", function () {
     let tr = $(this).closest("tr");
     let current_stock = __read_number($(tr).find(".current_stock"));
     let qty = __read_number($(tr).find(".quantity"));
