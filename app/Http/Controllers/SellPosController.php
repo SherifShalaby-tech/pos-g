@@ -800,7 +800,7 @@ class SellPosController extends Controller
         }
         if (!empty($request->sale_promo_filter)) {
             if ($request->sale_promo_filter == 'items_in_sale_promotion') {
-                $sales_promotions = SalesPromotion::whereDate('start_date', '<=', date('Y-m-d'))->whereDate('end_date', '>=', date('Y-m-d'))->get();
+                $sales_promotions = SalesPromotion::whereDate('start_date', '<=', date('Y-m-d'))->whereDate('end_date', '>=', date('Y-m-d'))->orWhere('is_discount_permenant','1')->get();
                 $sp_product_ids = [];
                 foreach ($sales_promotions as $sales_promotion) {
                     $sp_product_ids = array_merge($sp_product_ids, $sales_promotion->product_ids);
@@ -1027,11 +1027,13 @@ class SellPosController extends Controller
 
                 }
                 $product_discount_details = $this->productUtil->getProductDiscountDetails($product_id, $customer_id);
+                $product_all_discounts_categories = $this->productUtil->getProductAllDiscountCategories($product_id);
+                
                 // $sale_promotion_details = $this->productUtil->getSalesPromotionDetail($product_id, $store_id, $customer_id, $added_products);
                 $sale_promotion_details = null; //changed, now in pos.js check_for_sale_promotion method
                 $product_discounts=Product::find($product_id);
                 $html_content =  view('sale_pos.partials.product_row')
-                    ->with(compact('products','product_discounts', 'index', 'sale_promotion_details', 'product_discount_details', 'edit_quantity', 'is_direct_sale', 'dining_table_id', 'exchange_rate'))->render();
+                    ->with(compact('products','product_discounts', 'index', 'sale_promotion_details','product_all_discounts_categories', 'product_discount_details', 'edit_quantity', 'is_direct_sale', 'dining_table_id', 'exchange_rate'))->render();
 
                 $output['success'] = true;
                 $output['html_content'] = $html_content;

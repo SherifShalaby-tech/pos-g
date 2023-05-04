@@ -207,7 +207,10 @@ class SettingController extends Controller
                 ['key' => 'watsapp_numbers'],
                 ['value' => $request->watsapp_numbers, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
-
+            System::updateOrCreate(
+                ['key' => 'numbers_length_after_dot'],
+                ['value' => $request->numbers_length_after_dot ?? 0, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+            );
             if (!empty($request->language)) {
                 session()->put('language', $request->language);
             }
@@ -288,7 +291,7 @@ class SettingController extends Controller
                 }
             }
 
-
+            Artisan::call("optimize:clear");
             $output = [
                 'success' => true,
                 'msg' => __('lang.success')

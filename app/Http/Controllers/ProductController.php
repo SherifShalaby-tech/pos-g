@@ -240,6 +240,9 @@ class ProductController extends Controller
                 ->editColumn('variation_name', '@if($variation_name != "Default"){{$variation_name}} @else {{$name}}
                 @endif')
                 ->editColumn('sub_sku', '{{$sub_sku}}')
+                ->editColumn('is_service',function ($row) {
+                    return $row->is_service=='1'?'<span class="badge badge-danger">'.Lang::get('lang.is_have_service').'</span>':'';
+                })
                 ->addColumn('product_class', '{{$product_class}}')
                 ->addColumn('category', '{{$category}}')
                 ->addColumn('sub_category', '{{$sub_category}}')
@@ -352,10 +355,10 @@ class ProductController extends Controller
                     return $query->name ?? '';
                 })
                 ->addColumn('selection_checkbox', function ($row) use ($is_add_stock,$process_type) {
-                    if ($row->is_service == 1 || $is_add_stock == 1) {
-                        $html = '<input type="checkbox" name="product_selected" class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
+                    if ($is_add_stock == 1 && $row->is_service == 1) {
+                        $html = '<input type="checkbox" disabled name="product_selected" class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
                     } else {
-                        if ($row->current_stock > 0) {
+                        if ($row->current_stock >= 0) {
                             $html = '<input type="checkbox" name="product_selected" class="product_selected" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
                         } else {
                             // if received_manufacturing_products open all products to add to stock
@@ -652,8 +655,10 @@ class ProductController extends Controller
                 }
             }
         $index_discounts=[];
-        if(count($request->discount_type)>0){
-            $index_discounts=array_keys($request->discount_type);
+        if($request->has('discount_type')){
+            if(count($request->discount_type)>0){
+                $index_discounts=array_keys($request->discount_type);
+            }
         }
         foreach ($index_discounts as $index_discount){
             $discount_customers = $this->getDiscountCustomerFromType($request->get('discount_customer_types_'.$index_discount));
@@ -661,6 +666,7 @@ class ProductController extends Controller
                 'product_id' => $product->id,
                 'discount_type' => $request->discount_type[$index_discount],
                 'discount_category' => $request->discount_category[$index_discount],
+                'is_discount_permenant'=>!empty($request->is_discount_permenant[$index_discount])? 1 : 0,
                 'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                 'discount_customers' => $discount_customers,
                 'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),
@@ -781,7 +787,7 @@ class ProductController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $product = Product::with('variations')->findOrFail($id);
-
+                // dd($product->is_service);
         $product_classes = ProductClass::orderBy('name', 'asc')->pluck('name', 'id');
         $categories = Category::whereNull('parent_id')->orderBy('name', 'asc')->pluck('name', 'id');
         $sub_categories = Category::whereNotNull('parent_id')->orderBy('name', 'asc')->pluck('name', 'id');
@@ -900,6 +906,7 @@ class ProductController extends Controller
                         'product_id' => $product->id,
                         'discount_type' => $request->discount_type[$index_discount],
                         'discount_category' => $request->discount_category[$index_discount],
+                        'is_discount_permenant'=>!empty($request->is_discount_permenant[$index_discount])? 1 : 0,
                         'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                         'discount_customers' => $discount_customers,
                         'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),
@@ -1039,6 +1046,7 @@ class ProductController extends Controller
         $purchase_price = request()->purchase_price;
         $sell_price = request()->sell_price;
         $is_service = request()->is_service;
+        // return $sell_price;
         $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
 
         return view('product.partial.variation_row')->with(compact(

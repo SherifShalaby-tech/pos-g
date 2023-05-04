@@ -20,7 +20,8 @@
     $product_purchase_price = $purchase_price;
     }
     @endphp
-    <td>{!! Form::hidden('name_hidden', $product_name,
+    <td>
+        {!! Form::hidden('name_hidden', $product_name,
         ['class' =>
         'form-control name_hidden'])
         !!}
@@ -29,7 +30,8 @@
         'form-control v_name'])
         !!}</td>
     <td>{!! Form::text('variations['.$row_id.'][sub_sku]', !empty($item) ? $item->sub_sku : null, ['class' =>
-        'form-control v_sub_sku']) !!}</td>
+        'form-control v_sub_sku']) !!}
+    </td>
     <td>{!! Form::select('variations['.$row_id.'][color_id]', $colors, !empty($item) ? $item->color_id: false,
         ['class'
         => 'form-control selectpicker v_color', 'data-live-search'=>"true", 'placeholder' => ''])
@@ -56,16 +58,22 @@
         =>
         'form-control selectpicker v_unit', 'data-live-search'=>"true", 'placeholder' => '','onchange'=>"get_unit($units_js,$row_id)" , 'id'=>'select_unit_id_'.$row_id]) !!}
     </td>
-        {{-- @if(session('system_mode') != 'garments')
+        @if(session('system_mode') != 'garments')
             <td>{!! Form::number('variations['.$row_id.'][number_vs_base_unit]', $number_vs_base_unit , ['class' =>
                 'form-control
-                number_vs_base_unit', 'required','id'=>'number_vs_base_unit_'.$row_id]) !!}</td>
-        @endif --}}
-    <td class="@if(empty($is_service)) hide @endif default_purchase_price_td">{!! Form::text('variations['.$row_id.'][default_purchase_price]', $product_purchase_price , ['class' =>
+                number_vs_base_unit','id'=>'number_vs_base_unit_'.$row_id]) !!}</td>
+        @endif
+        {{-- @if(empty($is_service)) hide @endif --}}
+
+    <td class="supplier_div default_purchase_price_td @if(isset($is_service) && $is_service!=1) hide @endif">{!! Form::text('variations['.$row_id.'][default_purchase_price]', $product_purchase_price , ['class' =>
+
         'form-control
-        default_purchase_price', 'required']) !!}</td>
-    <td class="@if(empty($is_service)) hide @endif default_sell_price_td">{!! Form::text('variations['.$row_id.'][default_sell_price]', $product_sale_price,
-        ['class' => 'form-control default_sell_price', 'required']) !!}</td>
+        default_purchase_price']) !!}</td>
+
+
+    <td class="supplier_div default_sell_price_td @if(isset($is_service) && $is_service!=1) hide @endif ">{!! Form::text('variations['.$row_id.'][default_sell_price]', $product_sale_price,
+
+        ['class' => 'form-control default_sell_price']) !!}</td>
     <td> <button type="button" class="btn btn-danger btn-xs remove_row mt-2"><i class="dripicons-cross"></i></button>
     </td>
 </tr>

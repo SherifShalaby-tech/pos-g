@@ -294,7 +294,9 @@ class AddStockController extends Controller
 
         $stores  = Store::getDropdown();
         $users = User::Notview()->pluck('name', 'id');
-
+        $recent_stock = Transaction::
+        orderBy('created_at', 'desc')
+        ->first();
         return view('add_stock.create')->with(compact(
             'is_raw_material',
             'suppliers',
@@ -321,6 +323,7 @@ class AddStockController extends Controller
             'exchange_rate_currencies',
             'discount_customer_types',
             'users',
+            'recent_stock'
         ));
     }
 
@@ -373,7 +376,7 @@ class AddStockController extends Controller
         DB::beginTransaction();
         $transaction = Transaction::create($transaction_data);
         // return AddStockLine::where('transaction_id',422)->get();
-        $this->productUtil->createOrUpdateAddStockLines($request->add_stock_lines, $transaction);
+        $this->productUtil->createOrUpdateAddStockLines($request->add_stock_lines, $transaction,$request->batch_row);
 
         if ($request->files) {
             foreach ($request->file('files', []) as $key => $file) {
@@ -763,7 +766,42 @@ class AddStockController extends Controller
             }
         }
     }
+    public function addMultipleProductRow(Request $request)
+    {
+        if ($request->ajax()) {
+            $currency_id = $request->currency_id;
+            $currency = Currency::find($currency_id);
+            $exchange_rate = $this->commonUtil->getExchangeRateByCurrency($currency_id, $request->store_id);
 
+            $product_selected = $request->input('product_selected');
+            $store_id = $request->input('store_id');
+            if (!empty($product_selected)) {
+                $index = $request->input('row_count');
+                $products = $this->productUtil->getMultipleDetailsFromProduct($product_selected, $store_id);
+                return view('add_stock.partials.product_row')
+                    ->with(compact('products', 'index', 'currency', 'exchange_rate'));
+            }
+        }
+    }
+    // public function addProductBatchRow(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $currency_id = $request->currency_id;
+    //         $currency = Currency::find($currency_id);
+    //         $exchange_rate = $this->commonUtil->getExchangeRateByCurrency($currency_id, $request->store_id);
+
+    //         $product_id = $request->input('product_id');
+    //         $variation_id = $request->input('variation_id');
+    //         $store_id = $request->input('store_id');
+    //         if (!empty($product_id)) {
+    //             $index = $request->input('row_count');
+    //             $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+
+    //             return view('add_stock.partials.product_batch_row')
+    //                 ->with(compact('products', 'index', 'currency', 'exchange_rate'));
+    //         }
+    //     }
+    // }
     public function addProductBatchRow(Request $request)
     {
         if ($request->ajax()) {
@@ -774,13 +812,14 @@ class AddStockController extends Controller
             $product_id = $request->input('product_id');
             $variation_id = $request->input('variation_id');
             $store_id = $request->input('store_id');
-            if (!empty($product_id)) {
-                $index = $request->input('row_count');
-                $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+            $batch_count = $request->input('batch_count');
 
-                return view('add_stock.partials.product_batch_row')
-                    ->with(compact('products', 'index', 'currency', 'exchange_rate'));
-            }
+            // if (!empty($product_id)) {
+                 $row_count = $request->input('index');
+                $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+                return view('add_stock.partials.batch_row')
+                    ->with(compact('products','row_count','exchange_rate','batch_count'));
+            
         }
     }
     // public function addNewBatchProduct(Request $request)

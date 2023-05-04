@@ -462,9 +462,6 @@ function check_for_sale_promotion() {
                         ) {
                             sum_discount =
                                 ( parseFloat(
-                                        data.actual_sell_price
-                                    ) -
-                                    parseFloat(
                                         data.discount_value
                                     ) ) *  parseFloat(data.count_discount_number);
 
@@ -474,10 +471,7 @@ function check_for_sale_promotion() {
                             "percentage"
                         ) {
                             let discount_value =
-                                (parseFloat(
-                                        data.actual_sell_price
-                                    ) *
-                                    parseFloat(
+                                ( parseFloat(
                                         data.discount_value
                                     )) /
                                 100;
@@ -592,10 +586,11 @@ function calculate_sub_totals() {
     var total_tax_payable = 0;
     var total_coupon_discount = 0;
     var sales_promotion_cost = __read_number($("#sales_promotion-cost"));
-
+    let item_quantity=0;
     var exchange_rate = __read_number($("#exchange_rate"));
     $("#product_table > tbody  > tr").each((ele, tr) => {
         let quantity = __read_number($(tr).find(".quantity"));
+        item_quantity+=quantity;
         let sell_price = __read_number($(tr).find(".sell_price"));
         let price_hidden = __read_number($(tr).find(".price_hidden"));
         let sub_total = 0;
@@ -682,6 +677,7 @@ function calculate_sub_totals() {
     $("#subtotal").text(__currency_trans_from_en(total, false));
     $(".subtotal").text(__currency_trans_from_en(total, false));
     $("#item").text(item_count);
+    $("#item-quantity").text(item_quantity);
     $(".payment_modal_discount_text").text(
         __currency_trans_from_en(product_discount_total, false)
     );
@@ -2953,56 +2949,56 @@ $(document).on("change", "#upload_documents", function (event) {
     }
 });
 //show discount category
-$(document).on("change", "#customer_id", function (e) {
-    customer_id=$(this).val();
-    $("#product_table tbody")
-        .find("tr")
-        .each(function () {
-            var product_id = $(this).find(".p-id").val();
-            var variation_id = $(this).find(".variation_id").val();
-            var add_stock_lines_id = $(this).find(".batch_number_id").val();
-            $.ajax({
-                method: "get",
-                url: "/pos/add-discounts",
-                data:{ 
-                    customer_id: customer_id,
-                    product_id: product_id,
-                    add_stock_lines_id:add_stock_lines_id
-                },
-                success: function (response) {
-                    if(response.result){
-                        $(".discount_category"+product_id).show();
-                        $(".discount_category"+product_id).html('');
-                        $(".discount_type"+product_id).val('');
-                            __write_number($(".discount_value"+product_id), 0);
-                            __write_number($(".discount_amount"+product_id), 0);
-                            response.result.forEach(prod => {
-                                if(prod){
-                                    if(prod.discount_category!=null){
-                                        $(".discount_category"+product_id).prepend('<option value="'+prod.id+'">'+prod.discount_category+'</option>');
-                                    }else{
-                                        $(".discount_category"+product_id).prepend('<option value="'+prod.id+'"></option>');
-                                    }
-                                }
-                            });
-                        $(".discount_category"+product_id).prepend('<option selected>select</option>');
-                        response.result.forEach(prod => {
-                            qty=__read_number($(this).find('.quantity'))
-                            $(".discount_type"+product_id).val(prod.discount_type);
-                            __write_number($(".discount_value"+product_id), prod.discount);
-                            __write_number($(".discount_amount"+product_id), prod.discount*qty);
-                            console.log(prod.discount)
-                            return;
-                        });
-                        check_for_sale_promotion();
-                        calculate_sub_totals();
-                    }
-                }
+// $(document).on("change", "#customer_id", function (e) {
+//     customer_id=$(this).val();
+//     $("#product_table tbody")
+//         .find("tr")
+//         .each(function () {
+//             var product_id = $(this).find(".p-id").val();
+//             var variation_id = $(this).find(".variation_id").val();
+//             var add_stock_lines_id = $(this).find(".batch_number_id").val();
+//             $.ajax({
+//                 method: "get",
+//                 url: "/pos/add-discounts",
+//                 data:{ 
+//                     customer_id: customer_id,
+//                     product_id: product_id,
+//                     add_stock_lines_id:add_stock_lines_id
+//                 },
+//                 success: function (response) {
+//                     if(response.result){
+//                         $(".discount_category"+product_id).show();
+//                         $(".discount_category"+product_id).html('');
+//                         $(".discount_type"+product_id).val('');
+//                             __write_number($(".discount_value"+product_id), 0);
+//                             __write_number($(".discount_amount"+product_id), 0);
+//                             response.result.forEach(prod => {
+//                                 if(prod){
+//                                     if(prod.discount_category!=null){
+//                                         $(".discount_category"+product_id).prepend('<option value="'+prod.id+'">'+prod.discount_category+'</option>');
+//                                     }else{
+//                                         $(".discount_category"+product_id).prepend('<option value="'+prod.id+'"></option>');
+//                                     }
+//                                 }
+//                             });
+//                         $(".discount_category"+product_id).prepend('<option selected>select</option>');
+//                         response.result.forEach(prod => {
+//                             qty=__read_number($(this).find('.quantity'))
+//                             $(".discount_type"+product_id).val(prod.discount_type);
+//                             __write_number($(".discount_value"+product_id), prod.discount);
+//                             __write_number($(".discount_amount"+product_id), prod.discount*qty);
+//                             console.log(prod.discount)
+//                             return;
+//                         });
+//                         check_for_sale_promotion();
+//                         calculate_sub_totals();
+//                     }
+//                 }
 
-        });
+//         });
     
-    });
-});
+//     });
+// });
 $(document).on("change", ".discount_category", function (e) {
     product_discount_id=$(this).val();
     product_id=$(this).parent('td').find('.p-id').val();

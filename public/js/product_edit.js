@@ -23,14 +23,14 @@ $("#different_prices_for_stores").change(function () {
 $(".this_product_have_variant_div").slideUp();
 $("#this_product_have_variant").change(function () {
     if ($(this).prop("checked")) {
-        $(
-            "#multiple_units, #multiple_colors, #multiple_sizes, #multiple_grades"
-        ).selectpicker("val", "");
-        $(
-            "#multiple_units, #multiple_colors, #multiple_sizes, #multiple_grades"
-        )
-            .attr("disabled", true)
-            .selectpicker("refresh");
+        // $(
+        //     "#multiple_units, #multiple_colors, #multiple_sizes, #multiple_grades"
+        // ).selectpicker("val", "");
+        // $(
+        //     "#multiple_units, #multiple_colors, #multiple_sizes, #multiple_grades"
+        // )
+        //     .attr("disabled", true)
+        //     .selectpicker("refresh");
         $(".this_product_have_variant_div").slideDown();
     } else {
         $(
@@ -58,7 +58,13 @@ $(document).on("click", ".remove_row", function () {
 
 $(document).on("click", ".add_row", function () {
     var row_id = parseInt($("#row_id").val());
-    console.log(row_id, "row_id");
+    // console.log($(".is_edit_service").val());
+    var is_service_checked=document.querySelector('#is_service')
+    let is_service=0;
+    if(is_service_checked.checked == true){
+        is_service=1;
+    }
+    console.log(is_service_checked.checked)
     $.ajax({
         method: "get",
         url: "/product/get-variation-row?row_id=" + row_id,
@@ -66,6 +72,7 @@ $(document).on("click", ".add_row", function () {
             name: $("#name").val(),
             purchase_price: $("#purchase_price").val(),
             sell_price: $("#sell_price").val(),
+            is_service: is_service
         },
         contentType: "html",
         success: function (result) {
@@ -361,8 +368,8 @@ $(document).on("click", ".add_discount_row", function () {
         success: function (result) {
             $("#consumption_table_discount > tbody").prepend(result);
             $(".selectpicker").selectpicker("refresh");
-            $(".datepicker").datepicker("refresh");
-
+            // $(".datepicker").datepicker("refresh");
+            $(".datepicker").datepicker({refresh:"refresh",todayHighlight: true});
             // $(".raw_material_unit_id").selectpicker("refresh");
         },
     });
@@ -810,4 +817,10 @@ $(document).on("change", "#sell_price", function () {
         swal(LANG.warning, LANG.sell_price_less_than_purchase_price, "warning");
         return;
     }
+});
+$(document).on("change","#is_discount_permenant",function () {
+    $(".discount_start_date").prop('disabled', (i, v) => !v);
+    $(".discount_start_date").val(null);
+    $(".discount_end_date").prop('disabled', (i, v) => !v);
+    $(".discount_end_date").val(null);
 });

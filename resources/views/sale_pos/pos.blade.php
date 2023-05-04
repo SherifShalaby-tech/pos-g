@@ -2,6 +2,9 @@
 @section('title', __('lang.pos'))
 
 @section('content')
+@php
+$watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
+@endphp
     <section class="forms pos-section no-print">
         <div class="container-fluid">
 
@@ -259,6 +262,9 @@
                                             <div class="col-sm-4">
                                                 <span class="totals-title">{{ __('lang.items') }}</span><span
                                                     id="item">0</span>
+                                                <br>
+                                                <span class="totals-title  text-dark" style="font-weight:1000">{{ __('lang.quantity') }}</span><span
+                                                id="item-quantity">0</span>
                                             </div>
                                             <div class="col-sm-4">
                                                 <span class="totals-title">{{ __('lang.total') }}</span><span
@@ -506,13 +512,16 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a target="_blank"
+                                                <a target="_blank" href="https://api.whatsapp.com/send?phone={{$watsapp_numbers}}" id="contact_us_btn" data-toggle="tooltip" data-title="@lang('lang.contact_us')"
+                                                    style="background-image:  url('{{asset('images/watsapp.jpg')}}');background-size: 40px;" class="btn no-print">
+                                                </a>
+                                                {{-- <a target="_blank"
                                                     href="{{ action('ContactUsController@getUserContactUs') }}"
                                                     id="contact_us_btn" data-toggle="tooltip"
                                                     data-title="@lang('lang.contact_us')"
                                                     style="background-image: url('{{ asset('images/handshake.jpg') }}');"
                                                     class="btn no-print">
-                                                </a>
+                                                </a> --}}
                                             </li>
                                             <li class="nav-item"><button class="btn-danger btn-sm hide"
                                                     id="power_off_btn"><i class="fa fa-power-off"></i></button></li>

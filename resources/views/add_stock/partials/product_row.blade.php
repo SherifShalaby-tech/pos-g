@@ -1,6 +1,10 @@
-@forelse ($products as $product)
 @php
 $i = $index;
+@endphp
+@forelse ($products as $product)
+@php
+$i=$i+1;
+$current_stock = \App\Models\ProductStore::where('product_id', $product->id)->first();
 @endphp
 <tr class="product_row">
     <td class="row_number"></td>
@@ -13,7 +17,8 @@ $i = $index;
         {{$product->product_name}}
         @endif
         <input type="hidden" name="is_batch_product" class="is_batch_product"
-            value="{{$is_batch}}">
+            value="{{isset($is_batch)?$is_batch:null}}">
+        <input type="hidden" name="row_count" class="row_count" value="{{$i}}">
         <input type="hidden" name="add_stock_lines[{{$i}}][is_service]" class="is_service"
             value="{{$product->is_service}}">
         <input type="hidden" name="add_stock_lines[{{$i}}][product_id]" class="product_id"
@@ -28,16 +33,13 @@ $i = $index;
         @else --}}
             {{$product->sub_sku}}
         {{-- @endif --}}
-        
+
     </td>
     <td>
-        @if($qty)
-        <input type="text" class="form-control quantity quantity_{{$i}}" min=1 name="add_stock_lines[{{$i}}][quantity]" required
-        value="{{$qty}}"  index_id="{{$i}}">
-        @else
-        <input type="text" class="form-control quantity quantity_{{$i}}" min=1 name="add_stock_lines[{{$i}}][quantity]" required
-            value="@if(isset($product->quantity)){{@num_format($product->quantity)}}@else{{1}}@endif"  index_id="{{$i}}">
-        @endif
+
+        <input type="text" class="form-control quantity quantity_{{$i}}" data-val="0" name="add_stock_lines[{{$i}}][quantity]" required
+            value="0"  index_id="{{$i}}">
+
     </td>
     <td>
         {{$product->units->pluck('name')[0]??''}}
@@ -59,10 +61,10 @@ $i = $index;
         <input type="hidden" class="form-control sub_total" name="add_stock_lines[{{$i}}][sub_total]" value="">
     </td>
     <td>
-        <input type="hidden" name="current_stock" class="current_stock"
-            value="@if($product->is_service) {{0}} @else @if(isset($product->qty_available)){{$product->qty_available}}@else{{0}}@endif @endif">
+        <input type="hidden" name="current_stock" class="current_stock current_stock{{$product->id}}"
+            value="@if($product->is_service) {{0}} @else @if(isset($current_stock->qty_available)){{$current_stock->qty_available}}@else{{0}}@endif @endif">
         <span
-            class="current_stock_text">@if($product->is_service) {{'-'}} @else @if(isset($product->qty_available)){{@num_format($product->qty_available)}}@else{{0}}@endif @endif</span>
+            class="current_stock_text current_stock_text{{$product->id}}">@if($current_stock->is_service) {{'-'}} @else @if(isset($current_stock->qty_available)){{@num_format($current_stock->qty_available)}}@else{{0}}@endif @endif</span>
     </td>
     <td>
         <div class="i-checks"><input name="stock_pricechange" id="active" type="checkbox" class="stock_pricechange stockId{{$i}}" checked value="1"></div>
@@ -77,7 +79,7 @@ $i = $index;
         Form::text('add_stock_lines['.$i.'][batch_number]', null, ['class' => 'form-control batchNumber']) !!}
        <button type="button" class="btn btn-success add_new_batch mt-2" id="addBatch" data-index="{{$i}}" data-product="{{$product}}" index_id="{{$i}}">
             <i class="fa fa-plus"></i>
-        </button> 
+        </button>
         {{__('lang.add_a_new_batch')}}
         {{-- @include(
             'quotation.partial.new_batch_modal'
@@ -133,43 +135,7 @@ $i = $index;
         {!! Form::text('add_stock_lines['.$i.'][bounce_convert_status_expire]', null, ['class' => 'form-control']) !!}
     </td>
 </tr>
-<tr class="row_batch_details_{{$i}} row_batch_details" id="batch_number_row{{$i}}" style="background-color:rgb(246, 248, 248);display:none;">
-    <td> {!! Form::label('', __('lang.new_batch'), []) !!} <br> {!!
-        Form::text('add_stock_lines['.$i.'][new_batch_number]', null, ['class' => 'form-control batchNumber']) !!}
-    </td>
-    <td colspan="1"><img src="@if(!empty($product->getFirstMediaUrl('product'))){{$product->getFirstMediaUrl('product')}}@else{{asset('/uploads/'.session('logo'))}}@endif"
-        alt="photo" width="50" height="50"></td>
-    <td colspan="1">
-        {!! Form::label('', __('lang.manufacturing_date'), []) !!}<br>
-        {!! Form::text('add_stock_lines['.$i.'][batch_manufacturing_date]', null, ['class' => 'form-control datepicker',
-        'readonly']) !!}
-    </td>
-    <td colspan="1"> 
-        {!! Form::label('', __('lang.expiry_date'), []) !!}<br>
-        {!! Form::text('add_stock_lines['.$i.'][batch_expiry_date]', null, ['class' => 'form-control datepicker expiry_date',
-        'readonly']) !!}
-    </td>
-    <td colspan="2">
-        {!! Form::label('', __('lang.quantity'), []) !!}<br>
-        <input type="text" class="form-control quantity quantity_{{$i}}" min=1 name="add_stock_lines[{{$i}}][batch_quantity]" required
-            value="1"  index_id="{{$i}}">
-         {{-- {!! Form::label('', __('lang.days_before_the_expiry_date'), []) !!}<br>
-        {!! Form::text('add_stock_lines['.$i.'][expiry_warning]', null, ['class' => 'form-control days_before_the_expiry_date']) !!} --}}
-    </td>
-    <td colspan="1">
-        <span class="text-secondary font-weight-bold">*</span>
-        <input type="text" class="form-control purchase_price purchase_price_{{$i}}" name="add_stock_lines[{{$i}}][batch_purchase_price]" required
-            value="@if($product->purchase_price_depends == null) {{@num_format($product->default_purchase_price / $exchange_rate)}} @else {{@num_format($product->purchase_price_depends / $exchange_rate)}} @endif" index_id="{{$i}}">
-            <input class="final_cost" type="hidden" name="add_stock_lines[{{$i}}][batch_final_cost]" value="@if(isset($product->default_purchase_price)){{@num_format($product->default_purchase_price / $exchange_rate)}}@else{{0}}@endif"  >
-    </td>
-    <td colspan="1">
-        <span class="text-secondary font-weight-bold">*</span>
-        <input type="text" class="form-control selling_price selling_price_{{$i}}" name="add_stock_lines[{{$i}}][batch_selling_price]" required index_id="{{$i}}"
-               value="@if($product->selling_price_depends == null) {{@num_format($product->sell_price)}} @else {{@num_format($product->selling_price_depends)}} @endif"  >
-    </td>
-    <td colspan="3"></td>
- 
-</tr>
+
 @empty
 
 @endforelse
