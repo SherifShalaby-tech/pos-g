@@ -248,6 +248,8 @@ class ProductUtil extends Util
     {
         $variations = $request->variations;
         $keey_variations = [];
+        $purchase_price=!empty($request->is_service) ? $this->num_uf($product->purchase_price):0;
+        $sell_price= !empty($request->is_service) ? $this->num_uf($product->sell_price):0;
         if (!empty($variations)) {
             $variation_data['name'] = 'Default';
             $variation_data['product_id'] = $product->id;
@@ -1104,6 +1106,7 @@ class ProductUtil extends Util
         $qty=0;
         // return $add_stocks;
         foreach ($add_stocks as $line) {
+            if(isset($line['product_id'] ) && isset($line['variation_id']) ){
             if (!empty($line['add_stock_line_id'])) {
                 $add_stock = AddStockLine::find($line['add_stock_line_id']);
                 $add_stock->product_id = $line['product_id'];
@@ -1218,6 +1221,7 @@ class ProductUtil extends Util
                         'sell_price' => $line['selling_price'],
                     ]);
             }
+        }
         }
         // return $keep_lines_ids;
         if (!empty($keep_lines_ids)) {
