@@ -58,7 +58,13 @@ $(document).on("click", ".remove_row", function () {
 
 $(document).on("click", ".add_row", function () {
     var row_id = parseInt($("#row_id").val());
-    console.log(row_id, "row_id");
+    // console.log($(".is_edit_service").val());
+    var is_service_checked=document.querySelector('#is_service')
+    let is_service=0;
+    if(is_service_checked.checked == true){
+        is_service=1;
+    }
+    console.log(is_service_checked.checked)
     $.ajax({
         method: "get",
         url: "/product/get-variation-row?row_id=" + row_id,
@@ -66,6 +72,7 @@ $(document).on("click", ".add_row", function () {
             name: $("#name").val(),
             purchase_price: $("#purchase_price").val(),
             sell_price: $("#sell_price").val(),
+            is_service: is_service
         },
         contentType: "html",
         success: function (result) {
@@ -810,4 +817,10 @@ $(document).on("change", "#sell_price", function () {
         swal(LANG.warning, LANG.sell_price_less_than_purchase_price, "warning");
         return;
     }
+});
+$(document).on("change","#is_discount_permenant",function () {
+    $(".discount_start_date").prop('disabled', (i, v) => !v);
+    $(".discount_start_date").val(null);
+    $(".discount_end_date").prop('disabled', (i, v) => !v);
+    $(".discount_end_date").val(null);
 });

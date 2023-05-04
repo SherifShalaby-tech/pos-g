@@ -55,10 +55,11 @@ class ProductUtil extends Util
      */
     public function generateSubSku($sku, $c, $barcode_type = 'C128')
     {
+       
         $sub_sku = $sku . $c;
 
         if (in_array($barcode_type, ['C128', 'C39'])) {
-            $sub_sku = $sku . '-' . $c;
+                $sub_sku = $sku . $c;
         }
 
         return $sub_sku;
@@ -163,7 +164,12 @@ class ProductUtil extends Util
                 }
             }
         }
-        $sku = $sku . '-' . $number;
+        // if(strlen($sku)==0){
+        //     $sku = $number;
+        // }else{
+            $sku = $sku . $number;
+            // $sku = $sku . '-' . $number;
+        // }
         $sku_exist = Product::where('sku', $sku)->exists();
 
         if ($sku_exist) {
@@ -242,6 +248,8 @@ class ProductUtil extends Util
     {
         $variations = $request->variations;
         $keey_variations = [];
+        $purchase_price=!empty($request->is_service) ? $this->num_uf($product->purchase_price):0;
+        $sell_price= !empty($request->is_service) ? $this->num_uf($product->sell_price):0;
         if (!empty($variations)) {
             $variation_data['name'] = 'Default';
             $variation_data['product_id'] = $product->id;
@@ -255,9 +263,9 @@ class ProductUtil extends Util
             $variation_data['default_purchase_price'] = $request->purchase_price;
             $variation_data['default_sell_price'] = $request->sell_price;
 
-            $variation = Variation::create($variation_data);
-            $variation_array[] = ['variation' => $variation, 'variant_stores' =>  []];
-            $keey_variations[] = $variation->id;
+            // $variation = Variation::create($variation_data);
+            // $variation_array[] = ['variation' => $variation, 'variant_stores' =>  []];
+            // $keey_variations[] = $variation->id;
             foreach ($variations as $v) {
                 $c = Variation::where('product_id', $product->id)
                     ->count() + 1;
@@ -719,7 +727,7 @@ class ProductUtil extends Util
             if (!empty($product)) {
                 if (!empty($product->discount_start_date) && !empty($product->discount_end_date)) {
                     //if end date set then check for expiry
-                    if ($product->discount_start_date <= date('Y-m-d') && $product->discount_end_date >= date('Y-m-d')) {
+                    if (($product->discount_start_date <= date('Y-m-d') && $product->discount_end_date >= date('Y-m-d'))||$product->is_discount_permenant=='1') {
                         return $product;
                     } else {
                         return false;
@@ -790,6 +798,7 @@ class ProductUtil extends Util
                 ->whereJsonContains('product_ids', $product_id)
                 ->whereDate('start_date', '<=', date('Y-m-d'))
                 ->whereDate('end_date', '>=', date('Y-m-d'))
+                ->orWhere('is_discount_permenant','1')
                 ->get();
             foreach ($sales_promotions as $sales_promotion) {
                 if ($sales_promotion->type == 'item_discount') {
@@ -827,6 +836,7 @@ class ProductUtil extends Util
                 ->whereJsonContains('store_ids', $store_id)
                 ->whereDate('start_date', '<=', date('Y-m-d'))
                 ->whereDate('end_date', '>=', date('Y-m-d'))
+                ->orWhere('is_discount_permenant','1')
                 ->get();
             foreach ($sales_promotions as $sales_promotion) {
                 $v_sales_promotion = $this->getSalePromotionDetailsIfValidForThisSaleArray($sales_promotion, $added_products, $qty_array);
@@ -1091,12 +1101,12 @@ class ProductUtil extends Util
      */
     public function createOrUpdateAddStockLines($add_stocks, $transaction,$batch_row=null)
     {
-
         $keep_lines_ids = [];
         $batch_numbers=[];
         $qty=0;
         // return $add_stocks;
         foreach ($add_stocks as $line) {
+            if(isset($line['product_id'] ) && isset($line['variation_id']) ){
             if (!empty($line['add_stock_line_id'])) {
                 $add_stock = AddStockLine::find($line['add_stock_line_id']);
                 $add_stock->product_id = $line['product_id'];
@@ -1170,7 +1180,7 @@ class ProductUtil extends Util
                                     'batch_number' => $batch['new_batch_number'],
                                     'manufacturing_date' => !empty($batch['batch_manufacturing_date']) ? $this->uf_date($line['manufacturing_date']) : null,
                                     'expiry_date' => !empty($batch['batch_expiry_date']) ? $this->uf_date($line['batch_expiry_date']) : null,
-                                    'expiry_warning' => $line['expiry_warning'],
+                                    'expiry_warning' => $batch['batch_expiry_warning'],
                                     'convert_status_expire' => $line['convert_status_expire'],
                                     'sell_price' => $batch['batch_selling_price'],
                                     'bounce_qty' => $line['bounce_qty'],
@@ -1211,6 +1221,7 @@ class ProductUtil extends Util
                         'sell_price' => $line['selling_price'],
                     ]);
             }
+        }
         }
         // return $keep_lines_ids;
         if (!empty($keep_lines_ids)) {

@@ -462,9 +462,6 @@ function check_for_sale_promotion() {
                         ) {
                             sum_discount =
                                 ( parseFloat(
-                                        data.actual_sell_price
-                                    ) -
-                                    parseFloat(
                                         data.discount_value
                                     ) ) *  parseFloat(data.count_discount_number);
 
@@ -474,10 +471,7 @@ function check_for_sale_promotion() {
                             "percentage"
                         ) {
                             let discount_value =
-                                (parseFloat(
-                                        data.actual_sell_price
-                                    ) *
-                                    parseFloat(
+                                ( parseFloat(
                                         data.discount_value
                                     )) /
                                 100;
@@ -592,10 +586,11 @@ function calculate_sub_totals() {
     var total_tax_payable = 0;
     var total_coupon_discount = 0;
     var sales_promotion_cost = __read_number($("#sales_promotion-cost"));
-
+    let item_quantity=0;
     var exchange_rate = __read_number($("#exchange_rate"));
     $("#product_table > tbody  > tr").each((ele, tr) => {
         let quantity = __read_number($(tr).find(".quantity"));
+        item_quantity+=quantity;
         let sell_price = __read_number($(tr).find(".sell_price"));
         let price_hidden = __read_number($(tr).find(".price_hidden"));
         let sub_total = 0;
@@ -682,6 +677,7 @@ function calculate_sub_totals() {
     $("#subtotal").text(__currency_trans_from_en(total, false));
     $(".subtotal").text(__currency_trans_from_en(total, false));
     $("#item").text(item_count);
+    $("#item-quantity").text(item_quantity);
     $(".payment_modal_discount_text").text(
         __currency_trans_from_en(product_discount_total, false)
     );
