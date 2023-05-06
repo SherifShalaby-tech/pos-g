@@ -83,16 +83,10 @@
                                                     </td>
                                                     <input type="hidden" id="product_stock_{{$material->product->id}}" value="{{ $material->product->product_stores->first()->qty_available }} ">
                                                     <td>
-                                                        <input type="hidden"
-                                                               class="form-control quantity product_{{$material->product->id}}"
-                                                               id="input_product_status_{{$material->product->id}}"
-                                                               name="product_material_under_manufactured[{{$material->product->id}}][status]"
-                                                               required
-                                                               value="{{ $material->status }}">
                                                         <input type="text"
                                                                class="form-control quantity product_{{$material->product->id}}"
                                                                id="input_product_{{$material->product->id}}"
-                                                               name="product_material_under_manufactured[{{$material->product->id}}][quantity]"
+                                                               name="product_material_under_manufactured[{{$material->product->id}}][{{ $material->variation_id }}][quantity]"
                                                                required
                                                                value="{{ $material->quantity }}">
                                                     </td>
@@ -124,16 +118,10 @@
                                                     </td>
                                                     <input type="hidden" id="product_stock_{{$material->product->id}}" value="{{ $material->product->product_stores->first()->qty_available }} ">
                                                     <td>
-                                                        <input type="hidden"
-                                                               class="form-control quantity product_{{$material->product->id}}"
-                                                               id="input_product_status_{{$material->product->id}}"
-                                                               name="product_material_recived[{{$material->product->id}}][status]"
-                                                               required
-                                                               value="{{ $material->status }}">
                                                         <input type="text"
                                                                class="form-control quantity product_{{$material->product->id}}"
                                                                id="input_product_{{$material->product->id}}"
-                                                               name="product_material_recived[{{$material->product->id}}][quantity]"
+                                                               name="product_material_recived[{{$material->product->id}}][{{ $material->variation_id }}][quantity]"
                                                                required
                                                                value="{{ $material->quantity }}">
                                                     </td>
@@ -453,8 +441,8 @@
                             if (response.success) {
                                 swal("Success", response.msg, "success")
                                 setTimeout(t => {
-                                    window.location.href = "{{ action('ManufacturingController@index')}}";
-                                }, 2000)
+                                    location.reload();
+                                }, 500)
 
                             }
                             if (!response.success) {
