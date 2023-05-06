@@ -147,6 +147,8 @@ class ManufacturingController extends Controller
 //        dd($request->product_quentity);
         foreach ($request->product_quentity as $product_id => $variation_quentities) {
             foreach ($variation_quentities as $variation_id=>$variation_quentity){
+                $this->productUtil->decreaseProductQuantity($product_id,$variation_id,$request->store_id,$variation_quentity["quantity"]);
+
 //                dd($product_id,$variation_id,$variation_quentity["quantity"]);
                 $qty = $this->num_uf($variation_quentity["quantity"]);
                 $stock = ProductStore::where("product_id",$product_id)
@@ -162,7 +164,6 @@ class ManufacturingController extends Controller
                         "variation_id" => $variation_id,
                         "quantity" => $variation_quentity["quantity"],
                     ]);
-                    $this->productUtil->decreaseProductQuantity($product_id,$variation_id,$request->store_id,$variation_quentity["quantity"]);
                 }else{
                     $output = [
                         'success' => false,
