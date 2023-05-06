@@ -24,6 +24,7 @@ use App\Models\Tax;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\Variation;
 use App\Utils\ProductUtil;
 use App\Utils\Util;
 use Carbon\Carbon;
@@ -51,13 +52,8 @@ class ManufacturingController extends Controller
 
     public function index()
     {
-        $type = explode("?",\request()->getRequestUri())[1];
-        if ($type == "process"){
-            $manufacturings = Manufacturing::query()->whereHas("material_recived")->latest()->get();
-        }else{
-            $manufacturing_ids = Manufacturing::query()->whereHas("material_recived")->pluck("id")->toArray();
-            $manufacturings = Manufacturing::query()->whereNotIn("id",$manufacturing_ids)->latest()->get();
-        }
+        $type = explode("?",\request()->getRequestUri())[1] ?? "pending";
+        $manufacturings = Manufacturing::query()->where("status",$type)->latest()->get();
         return view('manufacturings.index')->with(compact(
             'manufacturings',
                     'type'
@@ -148,17 +144,34 @@ class ManufacturingController extends Controller
             "is_raw_material" => "1",
             "created_by" => auth()->id(),
         ]);
-        foreach ($request->product_quentity as $key => $product_quentity) {
-            $qty = $this->num_uf($product_quentity["quantity"]);
-            $product = Product::find($key);
-            $variation = $product->variations->first();
-            $product->product_stores->first()->decrement("qty_available", $product_quentity["quantity"]);
-            $manufacturingProducts = manufacturingProduct::create([
-                "manufacturing_id" => $manufacturing->id,
-                "product_id" => $key,
-                "quantity" => $product_quentity["quantity"],
-            ]);
-            $this->productUtil->decreaseProductQuantity($product->id, $variation->id, $transaction->store_id, $qty, 0);
+//        dd($request->product_quentity);
+        foreach ($request->product_quentity as $product_id => $variation_quentities) {
+            foreach ($variation_quentities as $variation_id=>$variation_quentity){
+                $this->productUtil->decreaseProductQuantity($product_id,$variation_id,$request->store_id,$variation_quentity["quantity"]);
+
+//                dd($product_id,$variation_id,$variation_quentity["quantity"]);
+                $qty = $this->num_uf($variation_quentity["quantity"]);
+                $stock = ProductStore::where("product_id",$product_id)
+                    ->where("variation_id",$variation_id)
+                    ->where("qty_available",">",$variation_quentity["quantity"])
+                    ->first();
+                if (!is_null($stock)){
+                    $variation = $variation_id;
+                    $stock->decrement("qty_available", $variation_quentity["quantity"]);
+                    $manufacturingProducts = manufacturingProduct::create([
+                        "manufacturing_id" => $manufacturing->id,
+                        "product_id" => $product_id,
+                        "variation_id" => $variation_id,
+                        "quantity" => $variation_quentity["quantity"],
+                    ]);
+                }else{
+                    $output = [
+                        'success' => false,
+                        'msg' => __('lang.something_went_wrong')
+                    ];
+                    return $output;
+                }
+            }
         }
         DB::commit();
         $output = [
@@ -257,8 +270,9 @@ class ManufacturingController extends Controller
 
     public function postReceivedProductsPage(Request $request)
     {
+
         $data = $request->product_quentity;
-        try {
+//        try {
             $manufacturing = Manufacturing::find($request->manufacturing_id);
             DB::beginTransaction();
             $transaction_data=[
@@ -293,6 +307,21 @@ class ManufacturingController extends Controller
                     $transaction->addMedia($file)->toMediaCollection('add_stock');
                 }
             }
+            // add stock new products
+            foreach ($request->product_quentity as $product_id => $variation_quentities) {
+                foreach ($variation_quentities as $variation_id=>$variation_quentity){
+                    $this->productUtil->increaseProductQuantity($product_id,$variation_id,$transaction->store_id,$variation_quentity["quantity"]);
+                    $manufacturingProducts = manufacturingProduct::create([
+                        "manufacturing_id" => $manufacturing->id,
+                        "product_id" => $product_id,
+                        "variation_id" => $variation_id,
+                        "quantity" => $variation_quentity["quantity"],
+                        "status" => "1",
+                    ]);
+                }
+            }
+            $manufacturing->update(["status"=>"completed","edited_by"=>auth()->id()]);
+
 
             //calc price of one
             $product_cost_purchase=0;
@@ -303,54 +332,30 @@ class ManufacturingController extends Controller
             }
             $product_cost_purchase+=($request->amount ??0);
             $product_cost_sell+=($request->amount ??0);
-            foreach ($request->product_quentity as $key => $product_quentity) {
-                $qty = $this->num_uf($product_quentity["quantity"]);
-                $product_cost_purchase/=$qty;
-                $product_cost_sell/=$qty;
+            foreach ($request->product_quentity as $product_id => $variation_quentities) {
+                foreach ($variation_quentities as $variation_id=>$variation_quentity){
+                    $qty = $this->num_uf($variation_quentity["quantity"]);
+                    $product_cost_purchase/=$qty;
+                    $product_cost_sell/=$qty;
+                }
             }
+
             $manufacturing->manufacture_cost_unit_purchase=$product_cost_purchase;
             $manufacturing->manufacture_cost_unit_sell=$product_cost_sell;
             $manufacturing->save();
-            /// end calc purchase and selling price for manufacturer///
-
-
-
-
-            foreach ($data as $productId => $quantity) {
-                $product = Product::find($productId);
-                $variation = $product->variations->first();
-                $manufacturingProducts = manufacturingProduct::create([
-                    "status" => "1",
-                    "manufacturing_id" => $manufacturing->id,
-                    "product_id" => $productId,
-                    "quantity" => $quantity["quantity"],
-                ]);
-                $add_stock_data = [
-                    'transaction_id' => $transaction->id,
-                    'product_id' => $product->id,
-                    'variation_id' => $variation->id,
-                    'quantity' => $quantity["quantity"],
-                ];
-
-
-
-                $add_stock = AddStockLine::create($add_stock_data);
-                $this->productUtil->updateProductQuantityStore($product->id, $variation->id, $transaction->store_id, $quantity["quantity"], 0);
-            }
-
             DB::commit();
             $output = [
                 'success' => true,
                 'msg' => __('lang.success')
             ];
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-            $output = [
-                'success' => false,
-                'msg' => __('lang.something_went_wrong')
-            ];
-        }
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+//            $output = [
+//                'success' => false,
+//                'msg' => __('lang.something_went_wrong')
+//            ];
+//        }
         return $output;
 
     }
@@ -361,76 +366,76 @@ class ManufacturingController extends Controller
         $underManufacturings = manufacturingProduct::query()->where('manufacturing_id', $id)->where("status", "0")->get();
         $manufactureds = manufacturingProduct::query()->where("manufacturing_id", $id)->where("status", "1")->get();
         $product_ids = manufacturingProduct::query()->where("manufacturing_id", $id)->pluck("quantity", "product_id")->toArray();
-
         return view('manufacturings.edit', compact('manufacturing', 'underManufacturings', 'manufactureds', 'product_ids'));
     }
 
     public function updates(Request $request)
     {
         $manufacturing = Manufacturing::find($request->manufacturing_id);
-        try {
+//        try {
             // stock
             DB::beginTransaction();
             if (isset($request->product_material_recived) && is_array($request->product_material_recived) && count($request->product_material_recived) > 0) {
-                $deleted_product_material_recived = array_values(array_diff($manufacturing->material_recived->pluck("product_id")->toArray(), array_keys($request->product_material_recived)));
-                if (isset($deleted_product_material_recived) && is_array($deleted_product_material_recived) && count($deleted_product_material_recived) > 0) {
-                    foreach ($deleted_product_material_recived as $deleted_product_id) {
-                        $manufacturingDeletedProduct = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("product_id", $deleted_product_id)->where("status", "1")->first();
-                        $product = Product::find($deleted_product_id);
-                        $product->product_stores->first()->increment("qty_available", $manufacturingDeletedProduct->quantity);
-                        $manufacturingDeletedProduct->delete();
+                $old_variations = $manufacturing->material_recived->pluck("variation_id")->toArray();
+                foreach ($request->product_material_recived as $product_id=>$variation){
+                    foreach ($variation as $variationId=>$quantity){
+                        $new_variations[$variationId] = $product_id ;
                     }
                 }
+                $deleted_product_material_recived = array_diff($old_variations, array_keys($new_variations));
+                foreach ($old_variations as $variation_id){
+                    $manufacturingDeletedProduct = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("variation_id",$variation_id)->where("status", "1")->first();
+                    $variation = Variation::find($variation_id);
+//                    $this->productUtil->increaseProductQuantity($variation->product_id,$variation_id,$manufacturing->store_id,$manufacturingDeletedProduct->quantity);
+                    $manufacturingDeletedProduct->delete();
+                }
                 foreach ($request->product_material_recived as $product_id => $material_recived) {
-                    $manufacturingProduct = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("product_id", $product_id)->where("status", $material_recived["status"])->first();
-                    $product = Product::find($product_id);
-                    $manufacturingProductOldQuantity = $manufacturingProduct->quantity;
-                    $manufacturingProductNewQuantity = (double)$material_recived["quantity"];
-                    $manufacturingProduct->update(["quantity" => $manufacturingProductNewQuantity]);
-                    if ($manufacturingProductOldQuantity < $manufacturingProductNewQuantity) {
-                        $increased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
+                    foreach ($material_recived as $variation_id => $material){
+                        $manufacturingProduct = manufacturingProduct::ManufacturingValue($manufacturing->id)->Product($product_id)->Variation($variation_id)->Status(1)->first();
+                        $manufacturingProductOldQuantity = $manufacturingProduct->quantity;
+                        $manufacturingProductNewQuantity = $material["quantity"];
                         $manufacturingProduct->update(["quantity" => $manufacturingProductNewQuantity]);
-                        $product->product_stores->first()->increment("qty_available", $increased);
-                    } else {
-                        $decreased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
-                        $manufacturingProduct->update(["quantity" => $manufacturingProductNewQuantity]);
-                        $product->product_stores->first()->decrement("qty_available", $decreased);
+                        if ($manufacturingProductOldQuantity < $manufacturingProductNewQuantity) {
+                            $increased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
+                            $this->productUtil->increaseProductQuantity($product_id, $variation_id, $manufacturing->store_id, $increased);
+                        } else {
+                            $decreased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
+                            $this->productUtil->decreaseProductQuantity($product_id, $variation_id, $manufacturing->store_id, $decreased);
+                        }
                     }
                 }
             }
             if (isset($request->product_material_under_manufactured) && is_array($request->product_material_under_manufactured) && count($request->product_material_under_manufactured) > 0) {
-                $deleted_product_material_under_manufactured = array_values(array_diff($manufacturing->materials->pluck("product_id")->toArray(), array_keys($request->product_material_under_manufactured)));
-                if (isset($deleted_product_material_under_manufactured) && is_array($deleted_product_material_under_manufactured) && count($deleted_product_material_under_manufactured) > 0) {
-                    foreach ($deleted_product_material_under_manufactured as $deleted_product_id) {
-                        $manufacturingDeletedProduct = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("product_id", $deleted_product_id)->where("status", "1")->first();
-                        $product = Product::find($deleted_product_id);
-                        $product->product_stores->first()->increment("qty_available", $manufacturingDeletedProduct->quantity);
-                        $manufacturingDeletedProduct->delete();
+                $old_variations = $manufacturing->materials->pluck("variation_id")->toArray();
+                foreach ($request->product_material_under_manufactured as $product_id=>$variation){
+                    foreach ($variation as $variationId=>$quantity){
+                        $new_variations[$variationId] = $product_id ;
                     }
                 }
+                $deleted_product_material_recived = array_diff($old_variations, array_keys($new_variations));
+                foreach ($old_variations as $variation_id){
+                    $manufacturingDeletedProduct = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("variation_id",$variation_id)->where("status", "0")->first();
+                    $variation = Variation::find($variation_id);
+//                    $this->productUtil->increaseProductQuantity($variation->product_id,$variation_id,$manufacturing->store_id,$manufacturingDeletedProduct->quantity);
+                    $manufacturingDeletedProduct->delete();
+                }
                 foreach ($request->product_material_under_manufactured as $p_id => $material_under_manufactured) {
-                    $manufacturingProduct = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("product_id", $p_id)->where("status", $material_under_manufactured["status"])->first();
-                    $product = Product::find($p_id);
-                    $manufacturingProductOldQuantity = $manufacturingProduct->quantity;
-                    $manufacturingProductNewQuantity = $material_under_manufactured["quantity"];
-                    $manufacturingProduct->update(["quantity" => $manufacturingProductNewQuantity]);
-                    $ProductStock = $product->product_stores->pluck("qty_available")->first();
-                    if ($manufacturingProductNewQuantity < ($ProductStock + $manufacturingProductNewQuantity)) {
-                        if ($manufacturingProductNewQuantity < $manufacturingProductOldQuantity) {
-                            $increased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
-                            $product->product_stores->first()->increment("qty_available", $increased);
-                        } else if ($manufacturingProductNewQuantity > $manufacturingProductOldQuantity && $manufacturingProductNewQuantity < ($ProductStock + $manufacturingProductOldQuantity)) {
-                            $decreased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
-                            $product->product_stores->first()->decrement("qty_available", $decreased);
+                    foreach ($material_under_manufactured as $variation_id => $material){
+//                      dd($variation_id,$material["quantity"],$product_id,$manufacturing->id);
+                        $manufacturingProduct = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("variation_id",$variation_id)->where("product_id", $product_id)->where("status", "0")->first();
+                        $manufacturingProductOldQuantity = $manufacturingProduct->quantity;
+                        $manufacturingProductNewQuantity = $material["quantity"];
+                        $manufacturingProduct->update(["quantity" => $manufacturingProductNewQuantity]);
+                        if ($manufacturingProductOldQuantity < $manufacturingProductNewQuantity) {
+                            $increased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
+                            $this->productUtil->increaseProductQuantity($product_id, $variation_id, $manufacturing->store_id, $increased);
                         } else {
-                            // error new value out of stock
+                            $decreased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
+                            $this->productUtil->decreaseProductQuantity($product_id, $variation_id, $manufacturing->store_id, $decreased);
                         }
-                    } else {
-                        // error new value out of stock
                     }
                 }
             }
-
             $transaction = Transaction::query()->create([
                 "store_id" => $request->store_id,
                 "type" => "material_manufactured",
@@ -443,13 +448,13 @@ class ManufacturingController extends Controller
                 'success' => true,
                 'msg' => __('lang.success')
             ];
-        } catch (\Exception $e) {
-            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-            $output = [
-                'success' => false,
-                'msg' => __('lang.something_went_wrong')
-            ];
-        }
+//        } catch (\Exception $e) {
+//            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+//            $output = [
+//                'success' => false,
+//                'msg' => __('lang.something_went_wrong')
+//            ];
+//        }
         return $output;
     }
 
@@ -466,6 +471,7 @@ class ManufacturingController extends Controller
             if (!empty($product_id)) {
                 $index = $request->input('row_count');
                 $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
+//                dd($products);
                 return view('manufacturings.partials.product_row')
                     ->with(compact('products', 'index', 'currency', 'exchange_rate'));
             }
