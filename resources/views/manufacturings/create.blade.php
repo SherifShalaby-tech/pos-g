@@ -395,7 +395,7 @@
                             if (response.success) {
                                 swal("Success", response.msg, "success")
                                 setTimeout(t=>{
-                                    window.history.back()
+                                    location.reload();
                                 },2000)
                             }
                             if (!response.success) {
