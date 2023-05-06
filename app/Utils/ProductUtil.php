@@ -1518,6 +1518,7 @@ class ProductUtil extends Util
 
         return true;
     }
+
     public function increaseProductQuantity($product_id, $variation_id, $store_id, $new_quantity)
     {
 
