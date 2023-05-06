@@ -148,29 +148,6 @@ class ManufacturingController extends Controller
         foreach ($request->product_quentity as $product_id => $variation_quentities) {
             foreach ($variation_quentities as $variation_id=>$variation_quentity){
                 $this->productUtil->decreaseProductQuantity($product_id,$variation_id,$request->store_id,$variation_quentity["quantity"]);
-
-//                dd($product_id,$variation_id,$variation_quentity["quantity"]);
-                $qty = $this->num_uf($variation_quentity["quantity"]);
-                $stock = ProductStore::where("product_id",$product_id)
-                    ->where("variation_id",$variation_id)
-                    ->where("qty_available",">",$variation_quentity["quantity"])
-                    ->first();
-                if (!is_null($stock)){
-                    $variation = $variation_id;
-                    $stock->decrement("qty_available", $variation_quentity["quantity"]);
-                    $manufacturingProducts = manufacturingProduct::create([
-                        "manufacturing_id" => $manufacturing->id,
-                        "product_id" => $product_id,
-                        "variation_id" => $variation_id,
-                        "quantity" => $variation_quentity["quantity"],
-                    ]);
-                }else{
-                    $output = [
-                        'success' => false,
-                        'msg' => __('lang.something_went_wrong')
-                    ];
-                    return $output;
-                }
             }
         }
         DB::commit();
