@@ -162,6 +162,7 @@ class ManufacturingController extends Controller
                         "variation_id" => $variation_id,
                         "quantity" => $variation_quentity["quantity"],
                     ]);
+                    $this->productUtil->decreaseProductQuantity($product_id,$variation_id,$request->store_id,$variation_quentity["quantity"]);
                 }else{
                     $output = [
                         'success' => false,
