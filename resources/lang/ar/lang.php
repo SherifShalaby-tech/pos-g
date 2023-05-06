@@ -1351,4 +1351,15 @@ return [
 
 
     'permenant'=>'دائم',
+    'actual_stock' => 'المخزون الفعلي',
+    'shortage' => 'النقص',
+    'value_of_shortage' => 'قيمة النقص',
+    'total_shortage_value' => 'اجمالي قيمة النقص',
+
+    'adjustment_save' =>'سيؤدي هذا إلى تغيير مخزون المنتج ، يرجى إدخال كلمة مرور المسؤول للتأكيد',
+    'old_stock' => 'المخون القديم',
+    'new_stock' => 'المخزون الجديد',
+    'view_product_in_adjustment' => 'عرض تسوية المنتج',
+    'add_product_in_adjustment' => 'إضافة تسوية المنتج',
+    'product_in_adjustment' => 'تسوية المنتج',
 ];
