@@ -22,6 +22,9 @@ class manufacturingProduct extends Model
     public function product(){
         return $this->belongsTo(Product::class,"product_id","id");
     }
+    public function variation(){
+        return $this->belongsTo(Variation::class,"variation_id","id");
+    }
     public function manufacturing(){
         return $this->belongsTo(Manufacturing::class,"manufacturing_id","id");
     }

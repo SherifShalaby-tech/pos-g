@@ -43,10 +43,9 @@
                             @foreach($manufacturings as $manufacturing)
                             <tr>
                                 <td>
+
                                     @foreach($manufacturing->materials as $material)
-                                        @if($material->status == "0")
-                                            {{$material->product->name ??""}}  <br>
-                                        @endif
+                                        {{$material->variation->name == "Default" ? $material->product->name :$material->variation->name }}  <br>
                                     @endforeach
                                 </td>
                                 <td>
@@ -71,16 +70,13 @@
                                 @if($type == "completed")
                                     <td>
                                         @foreach($manufacturing->material_recived as $material)
-                                            @if($material->status == "1")
-                                                {{$material->product->name ??""}}  <br>
-                                            @endif
+                                            {{$material->variation->name == "Default" ? $material->product->name :$material->variation->name }}  <br>
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($manufacturing->material_recived as $material)
                                             {{$material->quantity ??""}}  <br>
                                         @endforeach
-
                                     </td>
                                     <td>
                                         @foreach($manufacturing->material_recived as $material)

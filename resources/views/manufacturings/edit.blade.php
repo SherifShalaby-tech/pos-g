@@ -76,7 +76,7 @@
                                                             alt="photo" width="50" height="50"></td>
                                                     </td>
                                                     <td>
-                                                        {{$material->product->name}}
+                                                        {{$material->variation->name == "Default" ? $material->product->name :$material->variation->name }}
                                                     </td>
                                                     <td>
                                                         {{$material->status == "1" ?  __('lang.manufactured') : __('lang.underManufacturing') }}
@@ -86,7 +86,7 @@
                                                         <input type="text"
                                                                class="form-control quantity product_{{$material->product->id}}"
                                                                id="input_product_{{$material->product->id}}"
-                                                               name="product_material_under_manufactured[{{$material->product->id}}][{{ $material->variation_id }}][quantity]"
+                                                               name="product_material_under_manufactured[{{$material->id}}][quantity]"
                                                                required
                                                                value="{{ $material->quantity }}">
                                                     </td>
@@ -121,7 +121,7 @@
                                                         <input type="text"
                                                                class="form-control quantity product_{{$material->product->id}}"
                                                                id="input_product_{{$material->product->id}}"
-                                                               name="product_material_recived[{{$material->product->id}}][{{ $material->variation_id }}][quantity]"
+                                                               name="product_material_recived[{{$material->id}}][quantity]"
                                                                required
                                                                value="{{ $material->quantity }}">
                                                     </td>
@@ -456,7 +456,56 @@
                         },
                     });
                 } else {
-                    swal("Error", "Sorry You Should Select Returned Materials", "error");
+                    Swal.fire({
+                        title: '😁 بتعمل ايه يا نجم ',
+                        text: "أنت هتصنع من الهوا؛ فين المنتجات اللي داخلة في التصنيع 🤔 ، خل بالك كدا المواد المصنعة هتختفي من المخزون",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: $("#product-edit-form").attr("action"),
+                                data: $("#product-edit-form").serialize(),
+                                success: function (response) {
+                                    if (response.success) {
+                                        swal("Success", response.msg, "success")
+                                        setTimeout(t => {
+                                            location.href = "/manufacturing-s?pending";
+                                        }, 500)
+
+                                    }
+                                    if (!response.success) {
+                                        swal("Error", response.msg, "error");
+                                    }
+                                },
+                                error: function (response) {
+                                    if (!response.success) {
+                                        swal("Error", response.msg, "error");
+                                    }
+                                },
+                            });
+                        }else{
+                            location.reload();
+                        }
+                    })
+
+                    // swal({
+                    //         title: "😁 بتعمل ايه يا نجم ",
+                    //         text: "أنت هتصنع من الهوا؛ فين المنتجات اللي داخلة في التصنيع 🤔 ، خل بالك كدا المواد المصنعة هتختفي من المخزون",
+                    //         type: "warning",
+                    //         showCancelButton: true,
+                    //         confirmButtonClass: "btn-danger",
+                    //         confirmButtonText: "Yes, delete it!",
+                    //         closeOnConfirm: false
+                    //     },
+                    //     function(){
+                    //         swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    //     });
+                    // swal("بتعمل ايه يا نجم 😁", "أنت هتصنع من الهوا؛ فين المنتجات اللي داخلة في التصنيع 🤔، خل بالك كدا المواد المصنعة هتختفي من المخزون", "error");
                 }
 
             });
