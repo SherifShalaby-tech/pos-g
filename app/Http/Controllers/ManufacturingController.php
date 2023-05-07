@@ -425,13 +425,14 @@ class ManufacturingController extends Controller
 
             $type = "delete_manufacture_operation";
         }
-//        $transaction = Transaction::query()->create([
-//            "store_id" => $request->store_id,
-//            "type" => $type,
-//            "status" => "received",
-//            "transaction_date" => Carbon::now()->toDateTimeString(),
-//            "is_raw_material" => "1",
-//        ]);
+        $transaction = Transaction::query()->create([
+            "store_id" => $request->store_id,
+            "type" => $type,
+            "status" => "received",
+            "transaction_date" => Carbon::now()->toDateTimeString(),
+            "is_raw_material" => "1",
+            "created_by" => \auth()->id(),
+        ]);
         DB::commit();
         $output = [
             'success' => true,
