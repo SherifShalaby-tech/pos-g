@@ -431,6 +431,7 @@ class ManufacturingController extends Controller
             "status" => "received",
             "transaction_date" => Carbon::now()->toDateTimeString(),
             "is_raw_material" => "1",
+            "created_by" => \auth()->id(),
         ]);
         DB::commit();
         $output = [
