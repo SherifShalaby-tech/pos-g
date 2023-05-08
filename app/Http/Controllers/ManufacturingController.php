@@ -252,7 +252,6 @@ class ManufacturingController extends Controller
 
     public function postReceivedProductsPage(Request $request)
     {
-
         $data = $request->product_quentity;
 //        try {
         $manufacturing = Manufacturing::find($request->manufacturing_id);
@@ -299,32 +298,32 @@ class ManufacturingController extends Controller
                     "variation_id" => $variation_id,
                     "quantity" => $variation_quentity["quantity"],
                     "status" => "1",
+                    "manufacture_cost_unit_sell" => $variation_quentity["sell_unit"],
+                    "manufacture_cost_unit_purchase" => $variation_quentity["purchase_unit"],
                 ]);
             }
         }
         $manufacturing->update(["status" => "completed", "edited_by" => auth()->id()]);
-
-
         //calc price of one
-        $product_cost_purchase = 0;
-        $product_cost_sell = 0;
-        foreach ($manufacturing->manufacturing_products as $product) {
-            $product_cost_purchase += ($product->product->purchase_price * $product->quantity);
-            $product_cost_sell += ($product->product->sell_price * $product->quantity);
-        }
-        $product_cost_purchase += ($request->amount ?? 0);
-        $product_cost_sell += ($request->amount ?? 0);
-        foreach ($request->product_quentity as $product_id => $variation_quentities) {
-            foreach ($variation_quentities as $variation_id => $variation_quentity) {
-                $qty = $this->num_uf($variation_quentity["quantity"]);
-                $product_cost_purchase /= $qty;
-                $product_cost_sell /= $qty;
-            }
-        }
-
-        $manufacturing->manufacture_cost_unit_purchase = $product_cost_purchase;
-        $manufacturing->manufacture_cost_unit_sell = $product_cost_sell;
-        $manufacturing->save();
+//        $product_cost_purchase = 0;
+//        $product_cost_sell = 0;
+//        foreach ($manufacturing->manufacturing_products as $product) {
+//            $product_cost_purchase += ($product->product->purchase_price * $product->quantity);
+//            $product_cost_sell += ($product->product->sell_price * $product->quantity);
+//        }
+//        $product_cost_purchase += ($request->amount ?? 0);
+//        $product_cost_sell += ($request->amount ?? 0);
+//        foreach ($request->product_quentity as $product_id => $variation_quentities) {
+//            foreach ($variation_quentities as $variation_id => $variation_quentity) {
+//                $qty = $this->num_uf($variation_quentity["quantity"]);
+//                $product_cost_purchase /= $qty;
+//                $product_cost_sell /= $qty;
+//            }
+//        }
+//
+//        $manufacturing->manufacture_cost_unit_purchase = $product_cost_purchase;
+//        $manufacturing->manufacture_cost_unit_sell = $product_cost_sell;
+//        $manufacturing->save();
         DB::commit();
         $output = [
             'success' => true,

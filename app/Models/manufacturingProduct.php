@@ -14,6 +14,8 @@ class manufacturingProduct extends Model
         "manufacturing_id",
         "product_id",
         "variation_id",
+        "manufacture_cost_unit_sell",
+        "manufacture_cost_unit_purchase",
         "quantity",
     ];
     protected $casts = [
