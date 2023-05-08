@@ -23,7 +23,10 @@ return [
     'annual_incentive' => 'حوافز سنوية',
     'recognition' => 'مكافأة تقديرية',
     'other_reward' => 'مكافآت أخرى',
-
+    'products_uner_manufacture' => 'المنتجات تحت التصنيع',
+    'purchase_unit' => 'تكلفه تصنيع القطعه',
+    'sell_unit' => 'تكلفه بيع القطعه',
+    'total_manufacturing_cost' => 'اجمالي تكلفه التصنيع',
     'numbers_length_after_dot' => 'الكسور',
     'manufacturers' => 'المصنعين',
     'add_manufacturer' => 'اضافة مصنع جديد',

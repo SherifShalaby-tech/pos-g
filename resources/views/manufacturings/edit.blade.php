@@ -177,13 +177,12 @@
                       let quentity =  Number(product_ids[key]);
                       let stock = Number($("#product_stock_"+product_id).val())
                       let status = $("#input_product_"+product_id).val()
-                      $("#input_product_" + product_id).on('keyup', function (e) {
-                          setTimeout(g=>{
-                              if(Number($("#input_product_"+product_id).val()) == 0){
-                                  $("#input_product_"+product_id).val(1)
-                                  swal("Error", "Sorry You Should enter quentity more than 0", "error");
-                              }
-                          },5000)
+                      $("#input_product_" + product_id).on('blur', function (e) {
+
+                          if(Number($("#input_product_"+product_id).val()) == 0){
+                              $("#input_product_"+product_id).val(1)
+                              swal("Error", "Sorry You Should enter quentity more than 0", "error");
+                          }
                           if( Number($("#input_product_" + product_id).val()) > (quentity+stock)){
                               $("#input_product_" + product_id).val(1)
                               swal("Error", "Sorry Out Of Stock", "error");

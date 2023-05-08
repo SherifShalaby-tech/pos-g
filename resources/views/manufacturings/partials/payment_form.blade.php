@@ -6,7 +6,7 @@
         <div class="col-md-3 payment_fields hide">
             <div class="form-group">
                 {!! Form::label('amount', __('lang.amount'). ':*', []) !!} <br>
-                {!! Form::text('amount', !empty($payment) ? $payment->amount : null, ['class' => 'form-control',
+                {!! Form::text('amount_manufacture', !empty($payment) ? $payment->amount : @num_format(0), [ 'id' => 'amount_manufacture','class' => 'form-control',
                 'placeholder'
                 => __('lang.amount')]) !!}
             </div>
