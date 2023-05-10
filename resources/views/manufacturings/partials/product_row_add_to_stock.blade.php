@@ -21,18 +21,20 @@ $i = $index;
         <td>
             {{$product->units->pluck('name')[0]??''}}
         </td>
-
+        <td>
+            <input type="number" class="purchase_unit" name="product_quentity[{{$product->id}}][{{ $product->variation_id }}][purchase_unit]" value="">
+        </td>
+        <td>
+            <input type="number" class="sell_unit" name="product_quentity[{{$product->id}}][{{ $product->variation_id }}][sell_unit]" value="{{ @num_format(0) }}">
+        </td>
+{{--        <td>--}}
+{{--            <span type="number" class="total_manufacturing_cost" ></span>--}}
+{{--        </td>--}}
         <td>
             <button style="margin-top: 33px;" type="button" class="btn btn-danger btn-sx remove_product_row" data-index="{{$i}}"><i
                     class="fa fa-times"></i></button>
         </td>
     </tr>
-
-
-
-
-
-
 @empty
 
 @endforelse

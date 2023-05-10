@@ -198,3 +198,4 @@ $("#select_products_modal").on("shown.bs.modal", function () {
     product_selected = [];
     product_table.ajax.reload();
 });
+

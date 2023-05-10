@@ -2,7 +2,12 @@
 @section('title', __('lang.raw_materials'))
 
 @section('content')
-
+    @isset($manufacturing->materials)
+        @php $total = 0 ;@endphp
+        @foreach($manufacturing->materials as $material)
+            @php  $total += ($material->variation->avg_purchase_price * $material->quantity) @endphp
+        @endforeach
+    @endisset
     <section class="forms">
         <div class="container-fluid">
             <div class="row">
@@ -12,78 +17,53 @@
                             <h4>@lang('lang.add_new_production')</h4>
                         </div>
                         <div class="card-body">
+                            <h3 class="bold"><small>@lang('lang.products_uner_manufacture')</small></h3>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 20%" class="col-sm-8">@lang( 'lang.name' )</th>
+                                    <th style="width: 20%" class="col-sm-8">@lang( 'lang.sku' )</th>
+                                    <th style="width: 20%" class="col-sm-8">@lang( 'lang.purchase_price' )</th>
+                                    <th style="width: 20%" class="col-sm-4">@lang( 'lang.quantity' )</th>
+                                    <th style="width: 20%" class="col-sm-4">@lang( 'lang.total' )</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($manufacturing->materials)
+                                        @foreach($manufacturing->materials as $material)
+                                            <tr>
+                                                <td>
+                                                    @if ($material->variation->name != "Default")
+                                                        {{$material->variation->name}}
+                                                    @else
+                                                        {{$material->product->name}}
+                                                    @endif
+                                                </td>
+                                                <td>{{$material->variation->sub_sku}}</td>
+                                                <td>{{ @num_format($material->variation->avg_purchase_price) }}</td>
+                                                <td>{{ $material->quantity }}</td>
+                                                <td> {{ @num_format($material->variation->avg_purchase_price *$material->quantity ) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endisset
+                                </tbody>
+                                <tfoot>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>@lang("lang.total")</td>
+                                <td>
+                                    {{ @num_format($total) }}
+                                </td>
+                                </tfoot>
+                            </table>
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
+
                             {!! Form::open(['url' =>action('ManufacturingController@postReceivedProductsPage'), 'id' =>'product-edit-form', 'method'=>'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
+                            <input type="hidden" id="material_total_cost" name="material_total_cost" value="{{$total}}">
                             <input type="hidden" name="store_id" value="{{ $store->id }}">
                             <input type="hidden" name="manufacturer_id" value="{{ $manufacturer->id }}">
                             <input type="hidden" name="manufacturing_id" value="{{ $manufacturing->id }}">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    {!! Form::label('store_id', __('lang.store'), []) !!}
-                                    <div class="input-group my-group">
-                                        <select required name="store_id" id="store_id"
-                                                class='select_product_ids selectpicker  form-control'
-                                                data-live-search='true' style='width: 30%;'
-                                                placeholder="{{__('lang.please_select')}}">
-
-                                            <option selected disabled  value="{{ $store->id }}">
-                                                {{ $store->name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    {!! Form::label('manufacturer_id', __('lang.manufacturer'), []) !!}
-                                    <div class="input-group my-group">
-                                        <select required name="manufacturer_id" id="manufacturer_id"
-                                                class='select_product_ids selectpicker  form-control'
-                                                data-live-search='true' style='width: 30%;'
-                                                placeholder="{{__('lang.please_select')}}">
-                                            <option selected disabled  value="{{ $manufacturer->id }}">
-                                                {{ $manufacturer->name }}
-                                            </option>
-                                        </select>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    {!! Form::label('product_ids', __('lang.manufacturing_material'), []) !!}
-                                    <div class="input-group my-group">
-                                        @include(
-                                            'quotation.partial.product_selection'
-                                        )
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <table class="table table-bordered table-striped table-condensed" id="product_table">
-                                        <thead>
-                                        <tr>
-
-                                            <th style="width: 7%" class="col-sm-8">@lang( 'lang.image' )</th>
-                                            <th style="width: 10%" class="col-sm-8">@lang( 'lang.products' )</th>
-                                            <th style="width: 5%" class="col-sm-4">@lang( 'lang.quantity' )</th>
-                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.unit' )</th>
-                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.action' )</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="col-md-12 text-center">
-                                <h4>@lang('lang.items_count'): <span class="items_quantity_count"style="margin-right: 15px;">0</span> </h4>
-                                <h4>@lang('lang.items_quantity'): <span class="items_product_count" style="margin-right: 15px;">0</span> </h4>
-                            </div>
-
-
-                            <br>
-                            <br>
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -100,19 +80,19 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::label('other_expenses', __('lang.other_expenses'), []) !!} <br>
-                                        {!! Form::text('other_expenses', null, ['class' => 'form-control', 'placeholder' => __('lang.other_expenses'), 'id' => 'other_expenses']) !!}
+                                        {!! Form::text('other_expenses',  @num_format(0), ['class' => 'form-control', 'placeholder' => __('lang.other_expenses'), 'id' => 'other_expenses']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::label('discount_amount', __('lang.discount'), []) !!} <br>
-                                        {!! Form::text('discount_amount', null, ['class' => 'form-control', 'placeholder' => __('lang.discount'), 'id' => 'discount_amount']) !!}
+                                        {!! Form::text('discount_amount', @num_format(0), ['class' => 'form-control', 'placeholder' => __('lang.discount'), 'id' => 'discount_amount']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::label('other_payments', __('lang.other_payments'), []) !!} <br>
-                                        {!! Form::text('other_payments', null, ['class' => 'form-control', 'placeholder' => __('lang.other_payments'), 'id' => 'other_payments']) !!}
+                                        {!! Form::text('other_payments',  @num_format(0) , ['class' => 'form-control', 'placeholder' => __('lang.other_payments'), 'id' => 'other_payments']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -135,7 +115,7 @@
                                     </div>
                                 </div>
 
-                                @include('add_stock.partials.payment_form')
+                                @include('manufacturings.partials.payment_form')
 
                                 <div class="col-md-3 due_amount_div hide">
                                     <label for="due_amount" style="margin-top: 25px;">@lang('lang.due'): <span
@@ -165,6 +145,78 @@
                                 </div>
 
                             </div>
+                            <br>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {!! Form::label('store_id', __('lang.store'), []) !!}
+                                    <div class="input-group my-group">
+                                        <select required name="store_id" id="store_id"
+                                                class='select_product_ids selectpicker  form-control'
+                                                data-live-search='true' style='width: 30%;'
+                                                placeholder="{{__('lang.please_select')}}">
+
+                                            <option selected disabled  value="{{ $store->id }}">
+                                                {{ $store->name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    {!! Form::label('manufacturer_id', __('lang.manufacturer'), []) !!}
+                                    <div class="input-group my-group">
+                                        <select required name="manufacturer_id" id="manufacturer_id"
+                                                class='select_product_ids selectpicker  form-control'
+                                                data-live-search='true' style='width: 30%;'
+                                                placeholder="{{__('lang.please_select')}}">
+                                            <option selected disabled  value="{{ $manufacturer->id }}">
+                                                {{ $manufacturer->name }}
+                                            </option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    {!! Form::label('product_ids', __('lang.manufacturing_material'), []) !!}
+                                    <div class="input-group my-group">
+                                        @include(
+                                            'manufacturings.partials.product_selection'
+                                        )
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-striped table-condensed" id="product_table">
+                                        <thead>
+                                        <tr>
+
+                                            <th style="width: 7%" class="col-sm-8">@lang( 'lang.image' )</th>
+                                            <th style="width: 10%" class="col-sm-8">@lang( 'lang.products' )</th>
+                                            <th style="width: 5%" class="col-sm-4">@lang( 'lang.quantity' )</th>
+                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.unit' )</th>
+                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.purchase_unit' )</th>
+                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.sell_unit' )</th>
+{{--                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.total_manufacturing_cost' )</th>--}}
+                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.action' )</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <h4>@lang('lang.total_manufacturing_cost'): <span id="total_manufacturing_cost"style="margin-right: 15px;">0 </span> <strong style="font-size: 12px" id="low_high_icon"></strong> </h4>
+                                <h4>@lang('lang.items_count'): <span class="items_quantity_count"style="margin-right: 15px;">0</span> </h4>
+                                <h4>@lang('lang.items_quantity'): <span class="items_product_count" style="margin-right: 15px;">0</span> </h4>
+                            </div>
+
 
 
                             <input type="hidden" name="active" value="1">
@@ -193,29 +245,122 @@
     <script src="{{ asset('js/add_stock.js') }}"></script>
     <script src="{{ asset('js/product_selection_manufacturing.js') }}"></script>
     <script type="text/javascript">
+        function getTotalRecievedQuantity(){
+            var quantity =0;
+            $("#product_table tbody")
+                .find("tr")
+                .each(function () {
+                    if (!isNaN(parseFloat($(this).find(".quantity").val()))) {
+                        quantity += parseFloat($(this).find(".quantity").val());
+                    }
+                });
+            return quantity;
+        }
+        function getTotalRecievedPurchased(){
+            var purchase_unit =0;
+            $("#product_table tbody")
+                .find("tr")
+                .each(function () {
+                    if (!isNaN(parseFloat($(this).find(".purchase_unit").val()))) {
+                        purchase_unit += parseFloat($(this).find(".purchase_unit").val());
+                    }
+                });
+            return purchase_unit;
+        }
+        $("#select_products_btn").on("click",function (){
+            if(Number($("#amount_manufacture").val()) < 1){
+                $("#amount_manufacture").addClass("is-invalid")
+            }else{
+                $("#amount_manufacture").removeClass("is-invalid")
+                $("#select_products_btn").attr("data-target","#select_products_modal");
+            }
+
+        });
+        function calculatePurchaseCostUnit(){
+            $("#product_table tbody")
+                .find("tr")
+                .each(function () {
+                    var costUnit = calculateManuFactureCost() / getTotalRecievedQuantity();
+                    $(this).find(".purchase_unit").val(costUnit.toFixed(2))
+                    $("#total_manufacturing_cost").text(calculateManuFactureCost())
+                    // $(this).find(".sell_unit").val(costUnit.toFixed(2))
+
+                });
+        }
+        function calculateManuFactureCost(){
+            let other_expenses = Number($("#other_expenses").val());
+            let other_payments = Number($("#other_payments").val());
+            let amount = Number($("#amount_manufacture").val());
+            let discount_amount = Number($("#discount_amount").val());
+            let materialCost = Number($("#material_total_cost").val());
+            return ((materialCost + other_expenses + other_payments + amount) - discount_amount).toFixed(2);
+        }
+        function calculateManuFactureCostWithoutMaterialCost(){
+            let other_expenses = Number($("#other_expenses").val());
+            let other_payments = Number($("#other_payments").val());
+            let amount = Number($("#amount_manufacture").val());
+            let discount_amount = Number($("#discount_amount").val());
+
+            return ((other_expenses + other_payments + amount) - discount_amount).toFixed(2);
+        }
+        $("#other_expenses").on("change",function (){
+            calculatePurchaseCostUnit();
+        });
+        $("#other_payments").on("change",function (){
+            calculatePurchaseCostUnit();
+        });
+        $("#amount_manufacture").on("change",function (){
+            calculatePurchaseCostUnit();
+        });
+        $("#discount_amount").on("change",function (){
+            calculatePurchaseCostUnit();
+        });
+        $("#product_table").on("input", ".purchase_unit", function() {
+            var total_manufacturing_cost = 0;
+            $("#product_table tbody")
+                .find("tr")
+                .each(function () {
+                    var quantity =  $(this).find(".quantity").val();
+                    var purchase_unit = $(this).find(".purchase_unit").val();
+                    if (!isNaN(quantity) && !isNaN(purchase_unit)) {
+                        total_manufacturing_cost += (quantity * purchase_unit);
+                    }
+                });
+                if(total_manufacturing_cost > calculateManuFactureCost()){
+                    let high =total_manufacturing_cost - calculateManuFactureCost();
+                    $("#low_high_icon").text("+ " + high)
+                    $("#low_high_icon").removeClass("text-danger")
+                    $("#low_high_icon").addClass("text-success")
+                }else{
+                    let low = calculateManuFactureCost() - total_manufacturing_cost;
+                    $("#low_high_icon").text("- " + low)
+                    $("#low_high_icon").removeClass("text-success")
+                    $("#low_high_icon").addClass("text-danger")
+                }
+                $("#total_manufacturing_cost").text(total_manufacturing_cost)
+
+        });
+        $("#product_table").on("input", ".quantity", function() {
+            $("#product_table tbody")
+                .find("tr")
+                .each(function () {
+                    var quantity = getTotalRecievedQuantity();
+                    var manuFactureCost = calculateManuFactureCost();
+                    var costUnit = calculateManuFactureCost() / quantity;
+                    if (!isNaN(quantity)) {
+                        $(this).find(".purchase_unit").val(costUnit.toFixed(2))
+                        $("#total_manufacturing_cost").text(calculateManuFactureCost())
+                        // $(this).find(".sell_unit").val(costUnit.toFixed(2))
+                    }
+                });
+        });
         function get_label_product_row(product_id, variation_id) {
             var add_via_ajax = true;
             var store_id = $("#store_id").val();
             var is_added = false;
             let q = 0;
             //Search for variation id in each row of pos table
-            $("#product_table tbody")
-                .find("tr")
-                .each(function () {
-                    var row_v_id = $(this).find(".variation_id").val();
-                    if (row_v_id == variation_id && !is_added) {
-                        add_via_ajax = false;
-                        is_added = true;
-                        //Increment product quantity
-                        qty_element = $(this).find(".quantity");
-                        var qty = __read_number(qty_element);
-                        __write_number(qty_element, qty + 1);
-                        qty_element.change;
-                        calculate_sub_totals();
-                        $("input#search_product").val("");
-                        $("input#search_product").focus();
-                    }
-                });
+
 
             if (add_via_ajax) {
                 var row_count = parseInt($("#row_count").val());
@@ -234,12 +379,14 @@
                         currency_id: currency_id,
                     },
                     success: function (result) {
+
+
                         $('.items_quantity_count').text(0);
                         $("table#product_table tbody").prepend(result);
 
                         let product_id = $("#product_id").val();
 
-                        $("#input_product_"+product_id).on('keyup',function (e){
+                        $("#input_product_"+product_id).on('blur',function (e){
                             setTimeout(g=>{
                                 if(Number($("#input_product_"+product_id).val()) == 0){
                                     $("#input_product_"+product_id).val(1)
@@ -254,17 +401,12 @@
                         })
                         let items_quantity_count = $('#product_table tbody tr').length;
                         $('.items_quantity_count').text(items_quantity_count);
-
-
                        setTimeout(t=>{
                            for(i=0;i < $('#product_table tbody tr').length;i++){
                                q+= Number($($(".product_row")[i].children[2].children[1]).val())
                            }
                            $('.items_product_count').text(q);
                        },100)
-
-
-
                         $("input#search_product").val("");
                         $("input#search_product").focus();
                         calculate_sub_totals();
@@ -272,6 +414,18 @@
                     },
                 });
             }
+            $("#product_table tbody")
+                .find("tr")
+                .each(function () {
+                    var quantity = getTotalRecievedQuantity();
+                    var manuFactureCost = calculateManuFactureCost();
+                    var costUnit = calculateManuFactureCost() / quantity;
+                    if (!isNaN(quantity)) {
+                        $(this).find(".purchase_unit").val(costUnit.toFixed(2))
+                        $("#total_manufacturing_cost").text(calculateManuFactureCost())
+                        // $(this).find(".sell_unit").val(costUnit.toFixed(2))
+                    }
+                });
         }
         $(document).on("click", ".remove_product_row", function () {
             let index = $(this).data("index");
@@ -407,7 +561,6 @@
                 $('.not_cash').attr('required', true);
             }
         });
-
         $(document).ready(function() {
             $('#payment_status').change();
             $('#source_type').change();
@@ -425,16 +578,14 @@
                 });
             }
         });
-
         $(document).on('change', '.expiry_date', function() {
             if ($(this).val() != '') {
                 let tr = $(this).parents('tr');
                 tr.find('.days_before_the_expiry_date').val(15);
             }
         })
-
-
         $(document).ready(function () {
+
             $("#submit-btns").on("click", function (e) {
                 e.preventDefault();
                 if($('#product_table tbody tr').length > 0){
@@ -466,10 +617,6 @@
 
             });
         });
-
-
-
-
     </script>
 
 
