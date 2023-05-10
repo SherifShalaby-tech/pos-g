@@ -376,6 +376,7 @@ $(document).on("change", "#category_id", function () {
         data: {},
         contentType: "html",
         success: function (result) {
+            // console.log(result)
             $("#sub_category_id").empty().append(result).change();
             $("#sub_category_id").selectpicker("refresh");
 

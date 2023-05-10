@@ -310,6 +310,7 @@
                                     <div class="col-md-4">
                                         {!! Form::label('sub_category_id', __('lang.sub_category') . ' *', []) !!}
                                         <div class="input-group my-group">
+                                            <input type="hidden" data-sub_category_id="{{$product->sub_category_id}}" id="sub_category_id_data"/>
                                             {!! Form::select('sub_category_id', $sub_categories, $product->sub_category_id, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
                                             <span class="input-group-btn">
                                                 @can('product_module.sub_category.create_and_edit')
