@@ -1365,4 +1365,6 @@ return [
     'view_product_in_adjustment' => 'عرض تسوية المنتج',
     'add_product_in_adjustment' => 'إضافة تسوية المنتج',
     'product_in_adjustment' => 'تسوية المنتج',
+    'avg_purchase_price' => 'متوسط سعر الشراء',
+
 ];
