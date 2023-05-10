@@ -201,7 +201,7 @@
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.unit' )</th>
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.purchase_unit' )</th>
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.sell_unit' )</th>
-{{--                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.total_manufacturing_cost' )</th>--}}
+                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.change_current_stock' )</th>
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.action' )</th>
                                         </tr>
                                         </thead>

@@ -252,8 +252,10 @@ class ManufacturingController extends Controller
 
     public function postReceivedProductsPage(Request $request)
     {
+
         $data = $request->product_quentity;
-//        try {
+
+        try {
         $manufacturing = Manufacturing::find($request->manufacturing_id);
         DB::beginTransaction();
         $transaction_data = [
@@ -291,6 +293,17 @@ class ManufacturingController extends Controller
         // add stock new products
         foreach ($request->product_quentity as $product_id => $variation_quentities) {
             foreach ($variation_quentities as $variation_id => $variation_quentity) {
+                $variation = Variation::find($variation_id);
+                $variations = Variation::where("name", $variation->name)->where("sub_sku", $variation->sub_sku)->get();
+                $price = AddStockLine::where('variation_id', $variation_id)
+                    ->whereColumn('quantity', ">", 'quantity_sold')->first();
+                $price->update(["purchase_price" =>$variation_quentity["purchase_unit"] ]) ;
+
+                if (isset($variation_quentity["change_current_stock"]) && $variation_quentity["change_current_stock"] == "on") {
+                    $price = AddStockLine::where('variation_id', $variation_id)
+                        ->whereColumn('quantity', ">", 'quantity_sold')->first();
+                    $price->update(["sell_price" =>$variation_quentity["sell_unit"] ]) ;
+                }
                 $this->productUtil->increaseProductQuantity($product_id, $variation_id, $transaction->store_id, $variation_quentity["quantity"]);
                 $manufacturingProducts = manufacturingProduct::create([
                     "manufacturing_id" => $manufacturing->id,
@@ -329,14 +342,14 @@ class ManufacturingController extends Controller
             'success' => true,
             'msg' => __('lang.success')
         ];
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-//            $output = [
-//                'success' => false,
-//                'msg' => __('lang.something_went_wrong')
-//            ];
-//        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => $e->getMessage()
+            ];
+        }
         return $output;
 
     }
@@ -355,93 +368,93 @@ class ManufacturingController extends Controller
 
         $manufacturing = Manufacturing::find($request->manufacturing_id);
         try {
-        // stock
-        DB::beginTransaction();
-        if (isset($request->product_material_recived) && is_array($request->product_material_recived) && count($request->product_material_recived) > 0) {
-            $type = "update_manufacture_operation";
-            $manufacturingProductIds = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "1")->pluck("id")->toArray();
-            $newManufactureProductIds = array_keys($request->product_material_recived);
-            $deleted_product_material_recived = array_diff($manufacturingProductIds, $newManufactureProductIds);
-            foreach ($deleted_product_material_recived as $manufacturingProductDeletedId) {
-                $deleteProductManufactId = manufacturingProduct::find($manufacturingProductDeletedId);
-                $this->productUtil->decreaseProductQuantity($deleteProductManufactId->product_id, $deleteProductManufactId->variation_id, $manufacturing->store_id, $deleteProductManufactId->quantity);
-                $deleteProductManufactId->delete();
-            }
-            foreach ($request->product_material_recived as $manufactured_product_id => $quantatyObject) {
-                $manufactoduct = manufacturingProduct::find($manufactured_product_id);
-                $manufacturingProductOldQuantity = $manufactoduct->quantity; // 100
-                $manufacturingProductNewQuantity = $quantatyObject["quantity"];
-                $manufactoduct->update(["quantity" => $manufacturingProductNewQuantity]);
-                if ($manufacturingProductOldQuantity < $manufacturingProductNewQuantity) {
-                    $increased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
-                    $this->productUtil->increaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $increased);
-                } else if ($manufacturingProductOldQuantity > $manufacturingProductNewQuantity) {
-                    $decreased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
-                    $this->productUtil->decreaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $decreased);
+            // stock
+            DB::beginTransaction();
+            if (isset($request->product_material_recived) && is_array($request->product_material_recived) && count($request->product_material_recived) > 0) {
+                $type = "update_manufacture_operation";
+                $manufacturingProductIds = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "1")->pluck("id")->toArray();
+                $newManufactureProductIds = array_keys($request->product_material_recived);
+                $deleted_product_material_recived = array_diff($manufacturingProductIds, $newManufactureProductIds);
+                foreach ($deleted_product_material_recived as $manufacturingProductDeletedId) {
+                    $deleteProductManufactId = manufacturingProduct::find($manufacturingProductDeletedId);
+                    $this->productUtil->decreaseProductQuantity($deleteProductManufactId->product_id, $deleteProductManufactId->variation_id, $manufacturing->store_id, $deleteProductManufactId->quantity);
+                    $deleteProductManufactId->delete();
                 }
-            }
-        } else {
-            $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "1")->get();
-            foreach ($manufacturingUnderProducts as $manufacturingProduct) {
-                $this->productUtil->decreaseProductQuantity($manufacturingProduct->product_id, $manufacturingProduct->variation_id, $manufacturing->store_id, $manufacturingProduct->quantity);
-            }
-            $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "1")->delete();
-            $manufacturing->update(["status" => "pending"]);
-            $type = "delete_manufacture_recieved_products_operation";
-        }
-
-
-        if (isset($request->product_material_under_manufactured) && is_array($request->product_material_under_manufactured) && count($request->product_material_under_manufactured) > 0) {
-            $type = "update_manufacture_operation";
-            $manufacturingUnderProductIds = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "0")->pluck("id")->toArray();
-            $newUnderManufactureProductIds = array_keys($request->product_material_under_manufactured);
-            $deleted_product_material_recived = array_diff($manufacturingUnderProductIds, $newUnderManufactureProductIds);
-            foreach ($deleted_product_material_recived as $manufacturingProductDeletedId) {
-                $deleteProductManufactId = manufacturingProduct::find($manufacturingProductDeletedId);
-                $this->productUtil->increaseProductQuantity($deleteProductManufactId->product_id, $deleteProductManufactId->variation_id, $manufacturing->store_id, $deleteProductManufactId->quantity);
-                $deleteProductManufactId->delete();
-            }
-            foreach ($request->product_material_under_manufactured as $prouduct_manufactured_id => $quantatyObject) {
-                $manufactoduct = manufacturingProduct::find($prouduct_manufactured_id);
-                $manufacturingProductOldQuantity = $manufactoduct->quantity; // 100
-                $manufacturingProductNewQuantity = $quantatyObject["quantity"];
-                $manufactoduct->update(["quantity" => $manufacturingProductNewQuantity]);
-                if ($manufacturingProductOldQuantity < $manufacturingProductNewQuantity) {
-                    $increased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
-                    $this->productUtil->decreaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $increased);
-                } else if ($manufacturingProductOldQuantity > $manufacturingProductNewQuantity) {
-                    $decreased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
-                    $this->productUtil->increaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $decreased);
+                foreach ($request->product_material_recived as $manufactured_product_id => $quantatyObject) {
+                    $manufactoduct = manufacturingProduct::find($manufactured_product_id);
+                    $manufacturingProductOldQuantity = $manufactoduct->quantity; // 100
+                    $manufacturingProductNewQuantity = $quantatyObject["quantity"];
+                    $manufactoduct->update(["quantity" => $manufacturingProductNewQuantity]);
+                    if ($manufacturingProductOldQuantity < $manufacturingProductNewQuantity) {
+                        $increased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
+                        $this->productUtil->increaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $increased);
+                    } else if ($manufacturingProductOldQuantity > $manufacturingProductNewQuantity) {
+                        $decreased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
+                        $this->productUtil->decreaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $decreased);
+                    }
                 }
+            } else {
+                $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "1")->get();
+                foreach ($manufacturingUnderProducts as $manufacturingProduct) {
+                    $this->productUtil->decreaseProductQuantity($manufacturingProduct->product_id, $manufacturingProduct->variation_id, $manufacturing->store_id, $manufacturingProduct->quantity);
+                }
+                $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "1")->delete();
+                $manufacturing->update(["status" => "pending"]);
+                $type = "delete_manufacture_recieved_products_operation";
             }
-        } else {
-            $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "0")->get();
-            foreach ($manufacturingUnderProducts as $manufacturingUnderProduct) {
-                $this->productUtil->increaseProductQuantity($manufacturingUnderProduct->product_id, $manufacturingUnderProduct->variation_id, $manufacturing->store_id, $manufacturingUnderProduct->quantity);
-            }
-            $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "0")->delete();
-            $manufacturing->delete();
 
-            $type = "delete_manufacture_operation";
-        }
-        $transaction = Transaction::query()->create([
-            "store_id" => $request->store_id,
-            "type" => $type,
-            "status" => "received",
-            "transaction_date" => Carbon::now()->toDateTimeString(),
-            "is_raw_material" => "1",
-            "created_by" => \auth()->id(),
-        ]);
-        DB::commit();
-        $output = [
-            'success' => true,
-            'msg' => __('lang.success')
-        ];
+
+            if (isset($request->product_material_under_manufactured) && is_array($request->product_material_under_manufactured) && count($request->product_material_under_manufactured) > 0) {
+                $type = "update_manufacture_operation";
+                $manufacturingUnderProductIds = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "0")->pluck("id")->toArray();
+                $newUnderManufactureProductIds = array_keys($request->product_material_under_manufactured);
+                $deleted_product_material_recived = array_diff($manufacturingUnderProductIds, $newUnderManufactureProductIds);
+                foreach ($deleted_product_material_recived as $manufacturingProductDeletedId) {
+                    $deleteProductManufactId = manufacturingProduct::find($manufacturingProductDeletedId);
+                    $this->productUtil->increaseProductQuantity($deleteProductManufactId->product_id, $deleteProductManufactId->variation_id, $manufacturing->store_id, $deleteProductManufactId->quantity);
+                    $deleteProductManufactId->delete();
+                }
+                foreach ($request->product_material_under_manufactured as $prouduct_manufactured_id => $quantatyObject) {
+                    $manufactoduct = manufacturingProduct::find($prouduct_manufactured_id);
+                    $manufacturingProductOldQuantity = $manufactoduct->quantity; // 100
+                    $manufacturingProductNewQuantity = $quantatyObject["quantity"];
+                    $manufactoduct->update(["quantity" => $manufacturingProductNewQuantity]);
+                    if ($manufacturingProductOldQuantity < $manufacturingProductNewQuantity) {
+                        $increased = $manufacturingProductNewQuantity - $manufacturingProductOldQuantity;
+                        $this->productUtil->decreaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $increased);
+                    } else if ($manufacturingProductOldQuantity > $manufacturingProductNewQuantity) {
+                        $decreased = $manufacturingProductOldQuantity - $manufacturingProductNewQuantity;
+                        $this->productUtil->increaseProductQuantity($manufactoduct->product_id, $manufactoduct->variation_id, $manufacturing->store_id, $decreased);
+                    }
+                }
+            } else {
+                $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "0")->get();
+                foreach ($manufacturingUnderProducts as $manufacturingUnderProduct) {
+                    $this->productUtil->increaseProductQuantity($manufacturingUnderProduct->product_id, $manufacturingUnderProduct->variation_id, $manufacturing->store_id, $manufacturingUnderProduct->quantity);
+                }
+                $manufacturingUnderProducts = manufacturingProduct::query()->where("manufacturing_id", $manufacturing->id)->where("status", "0")->delete();
+                $manufacturing->delete();
+
+                $type = "delete_manufacture_operation";
+            }
+            $transaction = Transaction::query()->create([
+                "store_id" => $request->store_id,
+                "type" => $type,
+                "status" => "received",
+                "transaction_date" => Carbon::now()->toDateTimeString(),
+                "is_raw_material" => "1",
+                "created_by" => \auth()->id(),
+            ]);
+            DB::commit();
+            $output = [
+                'success' => true,
+                'msg' => __('lang.success')
+            ];
         } catch (\Exception $e) {
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
             $output = [
                 'success' => false,
-                'msg' =>$e->getMessage()
+                'msg' => $e->getMessage()
             ];
         }
         return $output;
