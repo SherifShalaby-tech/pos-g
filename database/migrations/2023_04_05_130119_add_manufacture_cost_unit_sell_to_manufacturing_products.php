@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddManufactureCostUnitPurchaseToManufacturings extends Migration
+class AddManufactureCostUnitSellToManufacturingProducts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddManufactureCostUnitPurchaseToManufacturings extends Migration
      */
     public function up()
     {
-        Schema::table('manufacturings', function (Blueprint $table) {
-            $table->decimal('manufacture_cost_unit_purchase', 15, 4)->default(0);
+        Schema::table('manufacturing_products', function (Blueprint $table) {
+            $table->decimal('manufacture_cost_unit_sell', 15, 4)->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AddManufactureCostUnitPurchaseToManufacturings extends Migration
      */
     public function down()
     {
-        Schema::table('manufacturings', function (Blueprint $table) {
-            $table->dropColumn('manufacture_cost_unit_purchase');
+        Schema::table('manufacturing_products', function (Blueprint $table) {
+            $table->dropColumn('manufacture_cost_unit_sell');
         });
     }
 }

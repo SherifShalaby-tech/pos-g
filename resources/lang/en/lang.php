@@ -12,6 +12,21 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+    'salary' => 'Salary',
+    'paid_leave' => 'Paid Leave',
+    'paid_annual_leave' => 'Paid Annual Leave',
+    'payment_type' => 'Payment Type',
+    'wages_and_compensations' => 'Wages & Compensations',
+    'products_uner_manufacture' => 'Products Under Manufacture',
+    'commission' => 'Commission',
+    'annual_bonus' => 'Annual Bonus',
+    'annual_incentive' => 'Annual Incentive',
+    'recognition' => 'Recognition',
+    'other_reward' => 'Other Reward',
+    'purchase_unit' => 'Purchase Cost Unit',
+    'sell_unit' => 'Selling Price',
+    'total_manufacturing_cost' => 'Total Manufacturing Cost',
+    'numbers_length_after_dot' => 'Number Of Digits',
     'manufacturers' => 'Manufacturers',
     'add_manufacturer' => 'Add New Manufacturer',
     'edit_manufacturer' => 'Edit Manufacturer',

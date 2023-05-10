@@ -27,7 +27,7 @@
                                 <th>@lang('lang.manufactured_unit_cost_purchase')</th>
                                 <th>@lang('lang.manufactured_unit_cost_sell')</th>
                                 <th>@lang('lang.manufactured_cost')</th>
-                                @if($type == "process")
+                                @if($type == "completed")
                                     <th>@lang('lang.product_received')</th>
                                     <th>@lang('lang.product_received_quantity')</th>
                                     <th>@lang('lang.product_received_date')</th>
@@ -43,10 +43,9 @@
                             @foreach($manufacturings as $manufacturing)
                             <tr>
                                 <td>
+
                                     @foreach($manufacturing->materials as $material)
-                                        @if($material->status == "0")
-                                            {{$material->product->name ??""}}  <br>
-                                        @endif
+                                        {{$material->variation->name == "Default" ? $material->product->name :$material->variation->name }}  <br>
                                     @endforeach
                                 </td>
                                 <td>
@@ -61,26 +60,23 @@
                                 <td>{{number_format($manufacturing->manufacture_cost_unit_purchase, 2, '.', ',')}}</td>
                                 <td>{{number_format($manufacturing->manufacture_cost_unit_sell, 2, '.', ',')}}</td>
                                 <td>
-                                    @foreach($manufacturing->transactions as $transaction) 
+                                    @foreach($manufacturing->transactions as $transaction)
                                         @foreach($transaction->transaction_payments as $payment)
                                             {{number_format($payment->amount, 2, '.', ',')}}
                                         @endforeach
                                     <br>
                                     @endforeach
                                 </td>
-                                @if($type == "process")
+                                @if($type == "completed")
                                     <td>
                                         @foreach($manufacturing->material_recived as $material)
-                                            @if($material->status == "1")
-                                                {{$material->product->name ??""}}  <br>
-                                            @endif
+                                            {{$material->variation->name == "Default" ? $material->product->name :$material->variation->name }}  <br>
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($manufacturing->material_recived as $material)
                                             {{$material->quantity ??""}}  <br>
                                         @endforeach
-
                                     </td>
                                     <td>
                                         @foreach($manufacturing->material_recived as $material)

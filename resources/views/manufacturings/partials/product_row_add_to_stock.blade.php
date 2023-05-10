@@ -15,24 +15,26 @@ $i = $index;
         </td>
         <td>
             <input type="hidden" id="product_id" name="product_id[]" value="{{ $product->id }}">
-            <input type="text" class="form-control quantity product_{{$product->id}}" id="input_product_{{$product->id}}" name="product_quentity[{{$product->id}}][quantity]" required
-                   value="@if(isset($product->quantity)){{@num_format($product->quantity)}}@else{{1}}@endif"  index_id="{{$i}}">
+            <input type="text" class="form-control quantity product_{{$product->id}}" id="input_product_{{$product->id}}" name="product_quentity[{{$product->id}}][{{ $product->variation_id }}][quantity]" required
+                   value="@if(isset($product->quantity)){{preg_match('/\.\d*[1-9]+/', (string)$product->quantity) ? $product->quantity : @num_format($product->quantity)}}@else{{1}}@endif"  index_id="{{$i}}">
         </td>
         <td>
             {{$product->units->pluck('name')[0]??''}}
         </td>
-
+        <td>
+            <input type="number" class="purchase_unit" name="product_quentity[{{$product->id}}][{{ $product->variation_id }}][purchase_unit]" value="">
+        </td>
+        <td>
+            <input type="number" class="sell_unit" name="product_quentity[{{$product->id}}][{{ $product->variation_id }}][sell_unit]" value="{{ @num_format(0) }}">
+        </td>
+{{--        <td>--}}
+{{--            <span type="number" class="total_manufacturing_cost" ></span>--}}
+{{--        </td>--}}
         <td>
             <button style="margin-top: 33px;" type="button" class="btn btn-danger btn-sx remove_product_row" data-index="{{$i}}"><i
                     class="fa fa-times"></i></button>
         </td>
     </tr>
-
-
-
-
-
-
 @empty
 
 @endforelse

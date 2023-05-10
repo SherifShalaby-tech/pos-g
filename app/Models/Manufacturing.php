@@ -11,6 +11,9 @@ class Manufacturing extends Model
     protected $fillable = [
       "store_id",
       "manufacturer_id",
+      "status",
+      "manufacture_cost_unit_purchase",
+      "manufacture_cost_unit_sell",
       "created_by",
       "edited_by",
     ];

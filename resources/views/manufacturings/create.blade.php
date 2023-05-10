@@ -186,7 +186,7 @@
 
                         let product_id = $("#product_id").val();
 
-                        $("#input_product_"+product_id).on('keyup',function (e){
+                        $("#input_product_"+product_id).on('blur',function (e){
                             if(Number($("#input_product_"+product_id).val()) == 0){
                                 $("#input_product_"+product_id).val(1)
                                 swal("Error", "Sorry You Should enter quentity more than 0", "error");
@@ -395,7 +395,7 @@
                             if (response.success) {
                                 swal("Success", response.msg, "success")
                                 setTimeout(t=>{
-                                    window.history.back()
+                                    location.reload();
                                 },2000)
                             }
                             if (!response.success) {

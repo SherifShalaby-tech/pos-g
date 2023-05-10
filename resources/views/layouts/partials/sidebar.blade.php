@@ -205,14 +205,14 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                             <a href="{{action('ManufacturerController@index')}}">{{__('lang.manufacturers')}}</a>
                         </li>
                         <li
-                                class="@if(request()->segment(1) == 'manufacturers' && empty(request()->segment(2))) active @endif">
+                            class="@if(request()->segment(1) == 'manufacturers' && empty(request()->segment(2))) active @endif">
                             <a href="{{action('ManufacturingController@create')}}">{{__('lang.add_new_manufacturing')}}</a>
                         </li>
                         <li class="@if(request()->segment(1) == 'email' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('ManufacturingController@index',['manufacture'])}}">{{__('lang.under_processing')}}</a>
+                            <a href="{{action('ManufacturingController@index',"pending")}}">{{__('lang.under_processing')}}</a>
                         </li>
                         <li class="@if(request()->segment(1) == 'email' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('ManufacturingController@index',["process"])}}">{{__('lang.processed')}}</a>
+                            <a href="{{action('ManufacturingController@index',"completed")}}">{{__('lang.processed')}}</a>
                         </li>
                     </ul>
                 </li>

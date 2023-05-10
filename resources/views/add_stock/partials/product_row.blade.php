@@ -28,17 +28,17 @@ $current_stock = \App\Models\ProductStore::where('product_id', $product->id)->fi
     </td>
     <td>
             {{$product->sub_sku}}
+<<<<<<< HEAD
+=======
+        {{-- @endif --}}
+
+>>>>>>> dd573132fbce72af424e4f84623e3af088d7895c
     </td>
     <td>
-        {{-- @if($product->qty || $qty)
-        <input type="text" class="form-control quantity quantity_{{$i}}" min=1 name="add_stock_lines[{{$i}}][quantity]" required
-        value="{{$product->qty ?? $qty}}"  index_id="{{$i}}">
-        @else
-        <input type="text" class="form-control quantity quantity_{{$i}}" min=1 name="add_stock_lines[{{$i}}][quantity]" required
-            value="@if(isset($product->quantity)){{@num_format($product->quantity)}}@else{{1}}@endif"  index_id="{{$i}}">
-        @endif --}}
-        <input type="text" class="form-control quantity quantity_{{$i}}" data-val="0" min=1 name="add_stock_lines[{{$i}}][quantity]" required
+
+        <input type="text" class="form-control quantity quantity_{{$i}}" data-val="0" name="add_stock_lines[{{$i}}][quantity]" required
             value="0"  index_id="{{$i}}">
+
     </td>
     <td>
         {{$product->units->pluck('name')[0]??''}}
@@ -78,7 +78,7 @@ $current_stock = \App\Models\ProductStore::where('product_id', $product->id)->fi
         Form::text('add_stock_lines['.$i.'][batch_number]', null, ['class' => 'form-control batchNumber']) !!}
        <button type="button" class="btn btn-success add_new_batch mt-2" id="addBatch" data-index="{{$i}}" data-product="{{$product}}" index_id="{{$i}}">
             <i class="fa fa-plus"></i>
-        </button> 
+        </button>
         {{__('lang.add_a_new_batch')}}
         {{-- @include(
             'quotation.partial.new_batch_modal'
@@ -134,6 +134,7 @@ $current_stock = \App\Models\ProductStore::where('product_id', $product->id)->fi
         {!! Form::text('add_stock_lines['.$i.'][bounce_convert_status_expire]', null, ['class' => 'form-control']) !!}
     </td>
 </tr>
+
 @empty
 
 @endforelse

@@ -55,7 +55,7 @@ class ProductUtil extends Util
      */
     public function generateSubSku($sku, $c, $barcode_type = 'C128')
     {
-       
+
         $sub_sku = $sku . $c;
 
         if (in_array($barcode_type, ['C128', 'C39'])) {
@@ -588,7 +588,7 @@ class ProductUtil extends Util
             // $product = $product->addSelect();
             $products[]=$product;
         }
-        
+
 
         return $products;
     }
@@ -642,7 +642,7 @@ class ProductUtil extends Util
      * @return Obj
      */
     public function getDetailsFromProductByStore($product_id, $variation_id = null, $store_id = null,$batch_number_id=null)
-    {  
+    {
         $product = Product::
         leftjoin('variations as v', 'products.id', '=', 'v.product_id')
         ->leftjoin('taxes', 'products.tax_id', '=', 'taxes.id')
@@ -1159,7 +1159,7 @@ class ProductUtil extends Util
                     'bounce_manufacturing_date' => $line['bounce_manufacturing_date'],
                     'bounce_batch_number' => $line['bounce_batch_number'],
                 ];
-              
+
                 $add_stock = AddStockLine::create($add_stock_data);
                 // $qty =  $this->num_uf($line['quantity']);
                 $batch_qty=0;
@@ -1196,12 +1196,12 @@ class ProductUtil extends Util
                                 $add_stock_batch = AddStockLine::create($add_stock_batch_data);
                                 $batch_numbers[]=$add_stock_batch->batch_number;
                                 $batch_qty+= $this->num_uf($batch['batch_quantity']);
-                                
+
                                 // return $add_stock_batch;
                         }
 
                         }
-                        
+
                     }
                     $this->updateProductQuantityStore($line['product_id'], $line['variation_id'], $transaction->store_id,  $batch_qty, 0);
                     $batch_qty=0;
@@ -1494,6 +1494,7 @@ class ProductUtil extends Util
     {
         $qty_difference = $new_quantity - $old_quantity;
         $product = Product::find($product_id);
+//        dd($new_quantity,$qty_difference);
 
         //Check if stock is enabled or not.
         if ($product->is_service != 1) {
@@ -1514,6 +1515,34 @@ class ProductUtil extends Util
             }
 
             $details->decrement('qty_available', $qty_difference);
+        }
+
+        return true;
+    }
+
+    public function increaseProductQuantity($product_id, $variation_id, $store_id, $new_quantity)
+    {
+
+        $product = Product::find($product_id);
+
+        if ($product->is_service != 1) {
+            //Decrement Quantity in variations store table
+            $details = ProductStore::where('variation_id', $variation_id)
+                ->where('product_id', $product_id)
+                ->where('store_id', $store_id)
+                ->first();
+
+            //If store details not exists create new one
+            if (empty($details)) {
+                $details = ProductStore::create([
+                    'product_id' => $product_id,
+                    'store_id' => $store_id,
+                    'variation_id' => $variation_id,
+                    'qty_available' => 0
+                ]);
+            }
+
+            $details->increment('qty_available', $new_quantity);
         }
 
         return true;

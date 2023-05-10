@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddManufactureCostUnitSellToManufacturings extends Migration
+class AddStatusToManufacturingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddManufactureCostUnitSellToManufacturings extends Migration
     public function up()
     {
         Schema::table('manufacturings', function (Blueprint $table) {
-            $table->decimal('manufacture_cost_unit_sell', 15, 4)->default(0);
+            $table->enum('status',["pending","completed","not completed"])->default("pending");
         });
     }
 
@@ -26,7 +26,7 @@ class AddManufactureCostUnitSellToManufacturings extends Migration
     public function down()
     {
         Schema::table('manufacturings', function (Blueprint $table) {
-            $table->dropColumn('manufacture_cost_unit_sell');
+            //
         });
     }
 }

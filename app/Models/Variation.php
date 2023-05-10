@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Variation extends Model
 {
@@ -16,6 +17,9 @@ class Variation extends Model
      * @var array
      */
     protected $guarded = ['id'];
+    protected $appends = [
+        "avg_purchase_price"
+    ];
     // protected $casts=['multiple_thread_colors' => 'array'];
     public function product()
     {
@@ -29,7 +33,10 @@ class Variation extends Model
     {
         return $this->belongsTo(Color::class)->withDefault(['name' => '']);
     }
-
+    public function thread_color()
+    {
+        return $this->belongsTo(Color::class,"multiple_thread_colors","id")->withDefault(['name' => '']);
+    }
     public function size()
     {
         return $this->belongsTo(Size::class)->withDefault(['name' => '']);
@@ -54,6 +61,9 @@ class Variation extends Model
     {
         return $this->hasMany(ConsumptionProduct::class);
     }
-
+    public function getAvgPurchasePriceAttribute($query)
+    {
+       return  AddStockLine::query()->where("variation_id",$this->id)->average("purchase_price");
+    }
 
 }
