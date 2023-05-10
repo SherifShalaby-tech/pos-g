@@ -1348,4 +1348,5 @@ return [
     'new_batch'=>'New Batch Number',
 
     'permenant'=>'Permenant',
+    'add_sub_category' =>'Add Sub Category',
 ];

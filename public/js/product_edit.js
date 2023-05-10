@@ -320,43 +320,72 @@ $(document).on("submit", "form#quick_add_category_form", function (e) {
     });
 });
 //
-// $(document).on("change", "#product_class_id", function () {
-//     $.ajax({
-//         method: "get",
-//         url:
-//             "/category/get-dropdown?product_class_id=" +
-//             $("#product_class_id").val(),
-//         data: {},
-//         contentType: "html",
-//         success: function (result) {
-//             $("#category_id").empty().append(result).change();
-//             $("#category_id").selectpicker("refresh");
-//
-//             if (category_id) {
-//                 $("#category_id").selectpicker("val", category_id);
-//             }
-//         },
-//     });
-// });
-//
-// $(document).on("change", "#category_id", function () {
-//     $.ajax({
-//         method: "get",
-//         url:
-//             "/category/get-sub-category-dropdown?category_id=" +
-//             $("#category_id").val(),
-//         data: {},
-//         contentType: "html",
-//         success: function (result) {
-//             $("#sub_category_id").empty().append(result).change();
-//             $("#sub_category_id").selectpicker("refresh");
-//
-//             if (sub_category_id) {
-//                 $("#sub_category_id").selectpicker("val", sub_category_id);
-//             }
-//         },
-//     });
-// });
+$(document).ready(function() {
+    var product_class_id =$('#product_class_id').val();
+    var category_id=$('#category_value_id').attr('data-category_id');
+    var sub_category_id=$('#sub_category_id_data').attr('data-sub_category_id')
+    console.log(category_id)
+    $.ajax({
+        method: "get",
+        url:
+            "/category/get-dropdown?product_class_id=" +product_class_id+"&type=category",
+        data: {},
+        contentType: "html",
+        success: function (result) {
+
+            console.log(result)
+            $("#sub_category_id").selectpicker("val", sub_category_id).change();
+            $("#sub_category_id").selectpicker("refresh");
+
+            $("#category_id").empty().append(result).change();
+            $("#category_id").selectpicker("refresh");
+            // $("#category_id").val(category_id);
+
+            if (category_id) {
+                $("select#category_id").selectpicker("val", category_id).change();
+            }
+        },
+    });
+})
+$(document).on("change", "#product_class_id", function () {
+    $.ajax({
+        method: "get",
+        url:
+            "/category/get-dropdown?product_class_id=" +
+            $("#product_class_id").val()+"&type=category",
+        data: {},
+        contentType: "html",
+        success: function (result) {
+            $("#category_id").empty().append(result).change();
+            $("#category_id").selectpicker("refresh");
+
+            if (category_id) {
+                $("#category_id").selectpicker("val", category_id);
+            }
+        },
+    });
+});
+
+$(document).on("change", "#category_id", function () {
+    var sub_category_id=$('#sub_category_id_data').attr('data-sub_category_id')
+    $.ajax({
+        method: "get",
+        url:
+            "/category/get-sub-category-dropdown?category_id=" +
+            $("#category_id").val(),
+        data: {},
+        contentType: "html",
+        success: function (result) {
+            $("#sub_category_id").empty().append(result).change();
+            $("#sub_category_id").selectpicker("refresh");
+
+            if (sub_category_id) {
+
+                $("#sub_category_id").selectpicker("val", sub_category_id);
+            }
+        },
+    });
+});
 $(document).on("click", ".add_discount_row", function () {
     let row_id = parseInt($("#raw_discount_index").val());
     $("#raw_discount_index").val(row_id + 1);

@@ -1338,4 +1338,6 @@ return [
 
 
     'permenant'=>'دائم',
+
+    'add_sub_category' => 'اضافة قسم فرعى',
 ];

@@ -567,7 +567,7 @@ class ProductUtil extends Util
             if (!is_null($p_selected['variation_id']) && $p_selected['variation_id'] !== '0') {
                 $query->where('v.id', $p_selected['variation_id']);
             }
-            if (is_null($store_id) && $store_id == '0') {
+            if (!is_null($store_id) && $store_id !== '0') {
                 $query->where('product_stores.store_id', $store_id);
             }
             $query->where('products.id', $p_selected['product_id'])->groupBy('v.id');
@@ -1219,6 +1219,7 @@ class ProductUtil extends Util
                 AddStockLine::where('variation_id',$line['variation_id'])
                     ->whereColumn('quantity',">",'quantity_sold')->update([
                         'sell_price' => $line['selling_price'],
+                        'purchase_price'=>$line['bounce_qty'] > 0 ? $line['bounce_purchase_price']:$this->num_uf($line['purchase_price'])
                     ]);
             }
         }
