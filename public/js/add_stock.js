@@ -208,8 +208,7 @@ function get_label_multipe_product_row(product_selected) {
             });
         });
         row_count=Math.max(...all_row_count)
-        console.log(row_count)
-        // var row_count = parseInt($("#row_count").val());
+        $("#row_count").val(row_count + product_selected.length);
         let currency_id = $('#paying_currency_id').val()
         // $("#row_count").val(row_count + 1);
         $.ajax({
@@ -248,6 +247,7 @@ function get_label_product_row(product_id, variation_id,is_batch=false) {
                     is_added = true;
                     //Increment product quantity
                     //get product qty
+                    var index=$(this).find(".row_count").val()
                     qty_element = $(this).find(".quantity");
                     qty = __read_number(qty_element);
                     qty+=1;
@@ -255,9 +255,9 @@ function get_label_product_row(product_id, variation_id,is_batch=false) {
                     $("input#search_product").val("");
                     $("input#search_product").focus();
                     //remove if exist
-                    $(this).closest("tr").next().remove();
-                    $(this).closest("tr").next().next().remove();
                     $(this).closest("tr").remove();
+                    $('.row_details_'+index).remove();
+                    $('.bounce_details_td_'+index).remove();
                 }
             });
     // }

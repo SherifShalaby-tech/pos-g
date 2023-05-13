@@ -1354,6 +1354,8 @@ return [
 
 
     'permenant'=>'دائم',
+
+    'add_sub_category' => 'اضافة قسم فرعى',
     'actual_stock' => 'المخزون الفعلي',
     'shortage' => 'النقص',
     'value_of_shortage' => 'قيمة النقص',
