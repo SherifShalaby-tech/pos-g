@@ -1157,7 +1157,7 @@ return [
     'setting' => 'جلسة',
     'store_pos' => 'تخزين نقاط البيع',
     'add_consumption_for_others' => 'أضف تعويضات للآخرين',
-    'other_expenses' => 'مصروفات أخرى',
+    'other_expenses' => 'مصروفات',
     'tutorials' => 'فيديوهات تعليمية',
 
     'tutorial' => 'فيديوهات تعليمي',
@@ -1367,4 +1367,5 @@ return [
     'product_in_adjustment' => 'تسوية المنتج',
     'avg_purchase_price' => 'متوسط سعر الشراء',
 
+    'net_profit' => 'صافي الربح',
 ];
