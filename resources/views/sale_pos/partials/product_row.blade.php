@@ -11,7 +11,7 @@
                 $stockLines=\App\Models\AddStockLine::where('variation_id',$Variation->id)->whereColumn('quantity',">",'quantity_sold')->first();
                 $default_sell_price=$stockLines?($stockLines->sell_price == 0? $Variation->default_sell_price : $stockLines->sell_price )  : $Variation->default_sell_price;
                 $default_purchase_price=$stockLines?($stockLines->purchase_price == 0? $Variation->default_purchase_price : $stockLines->purchase_price ) : $Variation->default_purchase_price;
-
+                $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
             }
 
         @endphp
@@ -40,6 +40,8 @@
             value="@if(isset($default_sell_price)){{@num_format(($default_sell_price) / $exchange_rate)}}@else{{0}}@endif">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][purchase_price]" class="purchase_price"
             value="@if(isset($default_purchase_price)){{@num_format($default_purchase_price / $exchange_rate)}}@else{{0}}@endif">
+        <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][cost_ratio_per_one]" class="cost_ratio_per_one"
+        value="@if(isset($cost_ratio_per_one)){{@num_format($cost_ratio_per_one / $exchange_rate)}}@else{{0}}@endif">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][tax_id]" class="tax_id"
             value="{{$product->tax_id}}">
         <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][tax_method]" class="tax_method"
