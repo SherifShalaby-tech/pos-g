@@ -34,10 +34,10 @@ class SupplierCategoryController extends Controller
      */
     public function index()
     {
-        $supplier_categorie = SupplierCategory::all();
+        $supplier_categories = SupplierCategory::all();
 
         return view('supplier_category.index')->with(compact(
-            'supplier_categorie'
+            'supplier_categories'
         ));
     }
 

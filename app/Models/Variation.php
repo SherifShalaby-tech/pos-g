@@ -65,5 +65,9 @@ class Variation extends Model
     {
        return  AddStockLine::query()->where("variation_id",$this->id)->average("purchase_price");
     }
+    public function manufacturing_products()
+    {
+        return $this->hasMany(manufacturingProduct::class);
+    }
 
 }

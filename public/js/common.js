@@ -244,10 +244,17 @@ if (language == "en") {
 } else {
     dt_lang_url = base_path + "/js/datatables_lang/en.json";
 }
+var print_title="";
+if($('.print-title').length){
+    print_title=$('.print-title').text();
+    }else{
+        print_title=$('title').text();
+    }
 var buttons = [
     {
         extend: "print",
         footer: true,
+        title: print_title,
         exportOptions: {
             columns: ":visible:not(.notexport)",
         },
