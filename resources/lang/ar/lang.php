@@ -1157,7 +1157,7 @@ return [
     'setting' => 'جلسة',
     'store_pos' => 'تخزين نقاط البيع',
     'add_consumption_for_others' => 'أضف تعويضات للآخرين',
-    'other_expenses' => 'مصروفات أخرى',
+    'other_expenses' => 'مصروفات',
     'tutorials' => 'فيديوهات تعليمية',
 
     'tutorial' => 'فيديوهات تعليمي',
@@ -1389,4 +1389,6 @@ return [
     'taxes'=>'الضرائب',
     'coupons'=>'قسائم',
     'product_taxes'=>'ضريبة المنتج',
+
+    'net_profit' => 'صافي الربح',
 ];
