@@ -319,7 +319,12 @@ class ProductController extends Controller
                     return $size;
                 })
                 ->editColumn('grade', '{{$grade}}')
-                ->editColumn('current_stock', '@if($is_service){{@num_format(0)}} @else{{@num_format($current_stock)}}@endif')
+//                ->editColumn('current_stock', '@if($is_service){{@num_format(0)}} @else{{@num_format($current_stock)}}@endif')
+                ->editColumn('current_stock', function ($row) {
+                    if(!$row->is_service)
+                        return $this->productUtil->num_f($row->current_stock ,false,null,true);
+                    return 0;
+                })
                 ->addColumn('current_stock_value', function ($row) {
                     $price= AddStockLine::where('variation_id',$row->variation_id)
                         ->whereColumn('quantity',">",'quantity_sold')->first();

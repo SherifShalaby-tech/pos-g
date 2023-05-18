@@ -351,7 +351,7 @@ class CustomerController extends Controller
                 ->addColumn('products', function ($row) {
                     $string = '';
                     foreach ($row->transaction_sell_lines as $line) {
-                        $string .= '(' . $this->commonUtil->num_f($line->quantity) . ')';
+                        $string .= '(' . $this->commonUtil->num_f($line->quantity,false,null,true) . ')';
                         if (!empty($line->product)) {
                         }
                         $string .= $line->product->name;
