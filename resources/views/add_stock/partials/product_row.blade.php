@@ -28,11 +28,9 @@ $current_stock = \App\Models\ProductStore::where('product_id', $product->id)->fi
     </td>
     <td>
             {{$product->sub_sku}}
-<<<<<<< HEAD
-=======
+
         {{-- @endif --}}
 
->>>>>>> dd573132fbce72af424e4f84623e3af088d7895c
     </td>
     <td>
 

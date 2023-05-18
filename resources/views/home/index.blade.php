@@ -181,7 +181,7 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
         })
 
         function getDashboardData(store_id, start_date, end_date, start_time, end_time) {
-            console.log(store_id, 'store_id');
+
             $.ajax({
                 method: 'get',
                 url: '/get-dashboard-data/' + start_date + '/' + end_date,

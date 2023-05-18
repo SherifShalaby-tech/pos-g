@@ -75,6 +75,7 @@ class ProductClassController extends Controller
                 ));
             }
         }
+//        dd($request->all());
         try {
             $data = $request->except('_token', 'quick_add');
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
@@ -163,7 +164,7 @@ class ProductClassController extends Controller
             $request,
             ['name' => ['required', 'max:255']],
         );
-
+//        dd($request->all());
         try {
             $data = $request->only('name', 'description', 'sort', 'translations', 'status');
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
@@ -171,21 +172,18 @@ class ProductClassController extends Controller
             $class = ProductClass::where('id', $id)->first();
             $class->update($data);
 
-//            if ($request->has('uploaded_image_name')) {
-//                if (!empty($request->input('uploaded_image_name'))) {
-//                    $class->clearMediaCollection('product_class');
-//                    $class->addMediaFromDisk($request->input('uploaded_image_name'), 'temp')->toMediaCollection('product_class');
-//                }
-//            }
             if ($request->has("cropImages") && count($request->cropImages) > 0) {
-                foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
-                    $class->clearMediaCollection('product_class');
-                    $extention = explode(";", explode("/", $imageData)[1])[0];
-                    $image = rand(1, 1500) . "_image." . $extention;
-                    $filePath = public_path('uploads/' . $image);
-                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
-                    $class->addMedia($filePath)->toMediaCollection('product_class');
+                if (preg_match('/^data:image/', $request->cropImages[0])){
+                    foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
+                            $class->clearMediaCollection('product_class');
+                            $extention = explode(";", explode("/", $imageData)[1])[0];
+                            $image = rand(1, 1500) . "_image." . $extention;
+                            $filePath = public_path('uploads/' . $image);
+                            $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                            $class->addMedia($filePath)->toMediaCollection('product_class');
+                    }
                 }
+
             }
             $output = [
                 'success' => true,
