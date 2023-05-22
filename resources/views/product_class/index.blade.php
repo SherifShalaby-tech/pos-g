@@ -5,6 +5,9 @@
     <div class="container-fluid">
 
         <div class="col-md-12  no-print">
+            <div class="card-header d-flex align-items-center">
+                <h4 class="print-title">@lang('lang.product_classes')</h4>
+            </div>
             <div class="card">
                 <div class="card-header d-flex align-items-center">
                     @can('product_module.product_class.create_and_edit')

@@ -7,8 +7,11 @@
     <div class="col-md-12  no-print">
         <div class="card">
             <div class="card-header d-flex align-items-center">
+                <h4 class="print-title">@lang('lang.product_categories')</h4>
+            </div>
+            <div class="card-header d-flex align-items-center">
                 @can('product_module.product_class.create_and_edit')
-                <a style="color: white" data-href="{{action('CategoryController@create')}}"
+                <a style="color: white" data-href="{{action('CategoryController@create',['type'=>'category'])}}"
                     data-container=".view_modal" class="btn btn-modal btn-info"><i class="dripicons-plus"></i>
                     @lang('lang.add_category')</a>
                 @endcan
@@ -48,7 +51,7 @@
                                             @can('product_module.category.create_and_edit')
                                             <li>
 
-                                                <a data-href="{{action('CategoryController@edit', $category->id)}}"
+                                                <a data-href="{{action('CategoryController@edit', $category->id)}}?type=category"
                                                     data-container=".view_modal" class="btn btn-modal"><i
                                                         class="dripicons-document-edit"></i> @lang('lang.edit')</a>
                                             </li>

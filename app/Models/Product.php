@@ -113,7 +113,10 @@ class Product extends Model implements HasMedia
     {
         return $this->hasMany(ConsumptionProduct::class, 'raw_material_id', 'id');
     }
-
+    public function add_stock_lines()
+    {
+        return $this->hasMany(AddStockLine::class, 'product_id', 'id');
+    }
     public static function getProductVariationDropDown($is_raw_material = false)
     {
         $variations = Variation::join('products', 'products.id', 'variations.product_id')->select('variations.*')->groupBY('variations.id')->get();

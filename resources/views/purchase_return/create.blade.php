@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center">
-                    <h4>@lang('lang.purchase_return')</h4>
+                    <h4 class="print-title">@lang('lang.purchase_return')</h4>
                 </div>
                 <div class="card-body">
                     {!! Form::open(['url' => action('PurchaseReturnController@store'), 'method' => 'post', 'files' =>

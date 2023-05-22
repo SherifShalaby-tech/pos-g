@@ -1363,6 +1363,7 @@ return [
     'new_batch'=>'New Batch Number',
 
     'permenant'=>'Permenant',
+    'add_sub_category' =>'Add Sub Category',
     'actual_stock' => 'Actual Stock',
     'shortage' => 'Shortage',
     'value_of_shortage' => 'Value of Shortage',
@@ -1379,5 +1380,26 @@ return [
 
     'net_profit' => 'Net Profit',
     'cancel_add_stock_payment' => 'Cancel Stock Payment',
+    'productions'=>'Productions',
+    'product_lists'=>'Products list',
+    'products_under_manufacturing'=>'Products under manufacturing list',
+    'products_manufactured'=>'Manufactured Products List',
+    'manufacturers_list'=>'Manufacturers list',
+    'raw_materials_list'=>'Raw materials list',
+    'view_all_remove_stock_list'=>' List of stocks removed',
+    'all_return_purchase' =>'List Of Returned Purchases',
+    'add_stock_list'=>'All Added Stocks',
+    'all_customers'=>'All Customers',
+    'product_classes'=>'Product Classes',
+    'product_categories'=>'Categories',
+    'sub_categories'=>'Sub Categories',
+    'brands'=>'Brands',
+    'colors'=>'Colors',
+    'grades'=>'Grades',
+    'units'=>'Units',
+    'taxes'=>' Public Taxes',
+    'coupons'=>'Coupons',
+    'product_taxes'=>'Product Taxes',
+
 
 ];
