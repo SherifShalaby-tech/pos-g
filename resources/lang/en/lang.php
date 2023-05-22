@@ -1378,6 +1378,8 @@ return [
     'add_product_in_adjustment' => 'Add Product In Adjustment',
     'avg_purchase_price' => 'Avg Purchase Price',
 
+    'net_profit' => 'Net Profit',
+    'cancel_add_stock_payment' => 'Cancel Stock Payment',
     'productions'=>'Productions',
     'product_lists'=>'Products list',
     'products_under_manufacturing'=>'Products under manufacturing list',
@@ -1399,6 +1401,5 @@ return [
     'coupons'=>'Coupons',
     'product_taxes'=>'Product Taxes',
 
-    'net_profit' => 'Net Profit'
 
 ];
