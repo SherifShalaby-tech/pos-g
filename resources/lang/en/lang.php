@@ -1377,6 +1377,7 @@ return [
     'add_product_in_adjustment' => 'Add Product In Adjustment',
     'avg_purchase_price' => 'Avg Purchase Price',
 
-    'net_profit' => 'Net Profit'
+    'net_profit' => 'Net Profit',
+    'cancel_add_stock_payment' => 'Cancel Stock Payment',
 
 ];
