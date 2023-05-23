@@ -332,7 +332,6 @@ function get_label_product_row(
         .each(function () {
             var row_v_id = $(this).find(".variation_id").val();
             var row_batch_number = $(this).find(".batch_number_id").val();
-            console.log(add_stock_lines_id)
             if(add_stock_lines_id!=null){
                 if (row_v_id == variation_id && row_batch_number ==add_stock_lines_id && !is_added) {
                     add_via_ajax = false;
@@ -449,10 +448,12 @@ function check_for_sale_promotion() {
             added_qty: JSON.stringify(added_qty),
         },
         success: function (result) {
+            console.log(result)
             if (result.valid) {
                 let  discount = 0;
                 let  sum_item_discount = 0;
                 result.sale_promotion_details.forEach((data, index) => {
+                    
                     let sum_discount = 0;
                     if (
                         data.type === "package_promotion"
@@ -522,14 +523,17 @@ function check_for_sale_promotion() {
                             $("#product_table tbody")
                                 .find("tr")
                                 .each(function () {
+                                    
                                     var row_product_id = $(this)
-                                        .find(".product_id")
+                                        .find(".variation_id")
                                         .val()
                                         .trim();
                                     var qty = $(this)
                                         .find(".qty")
                                         .val()
                                         .trim();
+                                        console.log(row_product_id)
+                                        console.log(product_id)
                                     if (row_product_id == product_id) {
                                         if (discount_type == "fixed") {
                                             $(this)
@@ -540,6 +544,7 @@ function check_for_sale_promotion() {
                                                 .find(".promotion_discount_type")
                                                 .val("percentage");
                                         }
+                                        
                                         $(this)
                                             .find(".promotion_discount_value")
                                             .val(discount_value*qty);
