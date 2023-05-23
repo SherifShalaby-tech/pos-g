@@ -119,7 +119,7 @@ class ConsumptionController extends Controller
 
             return DataTables::of($consumptions)
                 ->editColumn('product_current_stock', function ($row) {
-                    return $this->productUtil->num_f($row->product_current_stock);
+                    return $this->productUtil->num_f($row->product_current_stock ,false,null,true);
                 })
                 ->addColumn('value_of_current_stock', function ($row) {
                     return $this->productUtil->num_f($row->product_current_stock * $row->default_purchase_price);
@@ -134,7 +134,7 @@ class ConsumptionController extends Controller
                             if ($variation_name != 'Default') {
                                 $html .= $variation_name;
                             }
-                            $html .= '(' . $this->commonUtil->num_f($detail->quantity) . ')<br>';
+                            $html .= '(' . $this->commonUtil->num_f($detail->quantity ,false,null,true) . ')<br>';
                         }
                     }
                     return $html;

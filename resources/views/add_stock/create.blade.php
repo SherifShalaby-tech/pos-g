@@ -34,7 +34,7 @@
                             <div class="col-md-3">
                                 <div class="i-checks">
                                     <input id="clear_all_input_form" name="clear_all_input_form"
-                                        type="checkbox" @if (isset($clear_all_input_stock_form) || $clear_all_input_stock_form == '1') checked @endif 
+                                        type="checkbox" @if (isset($clear_all_input_stock_form) || $clear_all_input_stock_form == '1') checked @endif
                                         class="form-control-custom">
                                     <label for="clear_all_input_form">
                                         <strong>
@@ -54,7 +54,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::label('store_id', __('lang.store') . ':*', []) !!}
-                                        {!! Form::select('store_id', $stores, !empty($recent_stock)&&!empty($recent_stock->store_id)?$recent_stock->store_id:"Please Select", ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'required', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}                                        
+                                        {!! Form::select('store_id', $stores, !empty($recent_stock)&&!empty($recent_stock->store_id)?$recent_stock->store_id:"Please Select", ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'required', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -74,7 +74,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::label('status', __('lang.status') . ':*', []) !!}
-                                        {!! Form::select('status', ['received' => 'Received', 'partially_received' => 'Partially Received', 'pending' => 'Pending'],!empty($recent_stock)&&!empty($recent_stock->status)?$recent_stock->status: 'Please Select', ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'required', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
+                                        {!! Form::select('status', ['received' =>  __('lang.received'), 'partially_received' => __('lang.partially_received')], !empty($recent_stock)&&!empty($recent_stock->status)?$recent_stock->status: 'Please Select', ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'required', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -386,7 +386,7 @@
                     data: {},
                     success: function(result) {
                         $("#source_id").empty().append(result);
-                        $('#source_id').val({{$recent_stock->source_id}});
+                        $('#source_id').val({{$recent_stock->source_id??null}});
                         $("#source_id").selectpicker("refresh");
                     },
                 });

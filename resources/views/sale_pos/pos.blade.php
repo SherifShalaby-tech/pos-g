@@ -21,7 +21,7 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
                     <source src="{{ asset('audio/beep-long.mp3') }}">
                     </source>
                 </audio>
-                <div class="@if (session('system_mode') == 'pos') col-md-7 @else col-md-6 @endif">
+                <div class="col-md-7">
                     {!! Form::open(['url' => action('SellPosController@store'), 'method' => 'post', 'files' => true, 'class' => 'pos-form', 'id' => 'add_pos_form']) !!}
                     <div class="card">
                         <div class="card-body" style="padding: 0px 10px; !important">
@@ -501,7 +501,7 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
                 </div>
 
                 <!-- product list -->
-                <div class="@if (session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket') col-md-5 @else col-md-6 @endif">
+                <div class=" col-md-5">
                     <!-- navbar-->
                     <header class="header">
                         <nav class="navbar">
