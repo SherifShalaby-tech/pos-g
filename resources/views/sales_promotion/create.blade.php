@@ -595,7 +595,7 @@
             });
 
             function handleResponse(response) {
-                $("#sale_promotion_table_condition tbody").html(response);
+                $("#sale_promotion_table_condition tbody").append(response);
             }
 
             function handleError(error) {
@@ -646,6 +646,9 @@
                 this.checked = false;
             });
             calculate_total_prices();
+        });
+        $(document).on("click", ".remove_row_cp", function () {
+            $(this).closest("td").remove();
         });
 
     </script>
