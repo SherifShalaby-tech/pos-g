@@ -392,7 +392,7 @@ class SellReturnController extends Controller
             ->first();
 
         $stores = Store::getDropdown();
-
+//        dd($sell_return);
         return view('sell_return.create')->with(compact(
             'sell_return',
             'sale',
@@ -425,6 +425,7 @@ class SellReturnController extends Controller
                     ->first();
 
 
+//                dd($request->delivery_cost);
                 $transaction_data = [
                     'store_id' => $request->store_id,
                     'customer_id' => $request->customer_id,
@@ -438,6 +439,7 @@ class SellReturnController extends Controller
                     'discount_value' => $this->commonUtil->num_uf($request->discount_value),
                     'total_tax' => $this->commonUtil->num_uf($request->total_tax),
                     'gift_card_id' => $request->gift_card_id,
+                    'delivery_cost' => $request->delivery_cost,
                     'gift_card_amount' => $request->gift_card_amount,
                     'discount_amount' => $this->commonUtil->num_uf($request->discount_amount),
                     'transaction_date' => Carbon::now(),
@@ -454,6 +456,7 @@ class SellReturnController extends Controller
                 if (empty($sell_return)) {
                     $sell_return = Transaction::create($transaction_data);
                 } else {
+                    $sell_return->delivery_cost = $this->commonUtil->num_uf($request->delivery_cost);
                     $sell_return->final_total = $this->commonUtil->num_uf($request->final_total);
                     $sell_return->grand_total = $this->commonUtil->num_uf($request->grand_total);
                     $sell_return->status = 'final';

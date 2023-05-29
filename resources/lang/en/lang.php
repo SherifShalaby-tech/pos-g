@@ -1372,7 +1372,7 @@ return [
     'new_stock' => 'New Stock',
     'adjustment_save' =>'This will change the product stock , please enter admin password to confirm',
 
-    
+
     'product_in_adjustment' => 'Product In Adjustment',
     'view_product_in_adjustment' => 'View Product In Adjustment',
     'add_product_in_adjustment' => 'Add Product In Adjustment',
@@ -1401,5 +1401,6 @@ return [
     'coupons'=>'Coupons',
     'product_taxes'=>'Product Taxes',
 
-
+    'Discount_from_the_cost_of_delivery' => 'Amount deducted from the cost of delivery',
+    'The_actual_delivery_cost' => 'The value found for the delivery cost',
 ];
