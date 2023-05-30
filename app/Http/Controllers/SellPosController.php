@@ -888,7 +888,7 @@ class SellPosController extends Controller
             ];
             $products=$query->leftjoin('add_stock_lines', 'variations.id','=','add_stock_lines.variation_id')
             ->select($selectRaws)->groupBy('variation_id','add_stock_lines.batch_number')->get();
-        
+
             $products_array = [];
             foreach ($products as $product) {
                 $products_array[$product->product_id]['name'] = $product->name;
@@ -933,7 +933,7 @@ class SellPosController extends Controller
                             'add_stock_lines_id'=>$variation['add_stock_lines.id'],
                             'qty_available' => $variation['qty'],
                             'is_service' => $value['is_service']
-                        ];    
+                        ];
                     }
                     $i++;
                 }
@@ -992,7 +992,7 @@ class SellPosController extends Controller
             $exchange_rate = $this->commonUtil->getExchangeRateByCurrency($currency_id, $request->store_id);
             $store_pos = StorePos::where('user_id', auth()->id())->first();
             if($store_pos && $store_pos_id == null ){
-               $store_pos_id = $store_pos->id; 
+               $store_pos_id = $store_pos->id;
             }
             //Check for weighing scale barcode
             $weighing_barcode = request()->get('weighing_scale_barcode');
@@ -1031,7 +1031,7 @@ class SellPosController extends Controller
                 }
                 $product_discount_details = $this->productUtil->getProductDiscountDetails($product_id, $customer_id);
                 $product_all_discounts_categories = $this->productUtil->getProductAllDiscountCategories($product_id);
-                
+
                 // $sale_promotion_details = $this->productUtil->getSalesPromotionDetail($product_id, $store_id, $customer_id, $added_products);
                 $sale_promotion_details = null; //changed, now in pos.js check_for_sale_promotion method
                 $product_discounts=Product::find($product_id);
@@ -1406,10 +1406,16 @@ class SellPosController extends Controller
                         }
                         if (auth()->user()->can('sale.pay.create_and_edit')) {
                             if ($row->status != 'draft' && $row->payment_status != 'paid' && $row->status != 'canceled') {
-                                $html .=
-                                    '<a data-href="' . action('TransactionPaymentController@addPayment', ['id' => $row->id]) . '"
-                                title="' . __('lang.pay_now') . '" data-toggle="tooltip" data-container=".view_modal"
-                                class="btn btn-modal btn-success" style="color: white"><i class="fa fa-money"></i></a>';
+                                $final_total = $row->final_total;
+                                if (!empty($row->return_parent)) {
+                                    $final_total = $this->commonUtil->num_f($row->final_total - $row->return_parent->final_total);
+                                }
+                                if ($final_total > 0) {
+                                    $html .=
+                                            '<a data-href="' . action('TransactionPaymentController@addPayment', ['id' => $row->id]) . '"
+                                    title="' . __('lang.pay_now') . '" data-toggle="tooltip" data-container=".view_modal"
+                                    class="btn btn-modal btn-success" style="color: white"><i class="fa fa-money"></i></a>';
+                                }
                             }
                         }
                         $html .= '</div>';
