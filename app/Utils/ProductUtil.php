@@ -327,7 +327,7 @@ class ProductUtil extends Util
             $variation_data['name'] = $enable_tekstil ? $request->name : 'Default';
             $variation_data['product_id'] = $product->id;
             $variation_data['sub_sku'] = $product->sku;
-            $variation_data['multiple_thread_colors'] = !empty($request->multiple_thread_colors) ?$product->multiple_thread_colors[0]: null;
+            $variation_data['multiple_thread_colors'] = !empty($request->multiple_thread_colors) ?$request->multiple_thread_colors[0]: null;
             $variation_data['color_id'] = !empty($request->multiple_colors) ? $request->multiple_colors[0] : null;
             $variation_data['size_id'] = !empty($request->multiple_sizes) ? $request->multiple_sizes[0] : null;
             $variation_data['grade_id'] = !empty($request->multiple_grades) ? $request->multiple_grades[0] : null;
@@ -1109,7 +1109,7 @@ class ProductUtil extends Util
         foreach ($add_stocks as $line) {
             if( $transaction->discount_amount || $transaction->other_payments || $transaction->other_expenses){
                 $all_cost_percentage = ((($line['quantity'] * $line['purchase_price'])*100) / $transaction->grand_total); //percentage
-                
+
                 $discount_amount_per_line =  !empty($transaction->discount_amount) ? ($transaction->discount_amount * $all_cost_percentage /100 ): 0;
                 $other_payments_per_line = !empty($transaction->other_payments) ? ($transaction->other_payments * $all_cost_percentage /100) : 0;
                 $other_expenses_per_line = !empty($transaction->other_expenses) ? ($transaction->other_expenses * $all_cost_percentage /100) : 0;
