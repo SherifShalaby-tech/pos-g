@@ -1394,4 +1394,7 @@ return [
     'cancel_add_stock_payment' => 'الغاء دفع المخزون',
     'Discount_from_the_cost_of_delivery'=>'المبلغ المخصوم من تكلفة الدليفري',
     'The_actual_delivery_cost'=>'القيمة الفعلية لتكلفة الدليفري',
+    'add_to_customer_balance' => 'اضافة الى حساب العميل',
+    'select_class_value' =>'.من فضلك اختار فئة',
+    'products_count' => 'عدد المنتجات',
 ];
