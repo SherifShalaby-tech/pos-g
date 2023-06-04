@@ -1406,4 +1406,5 @@ return [
     'add_to_customer_balance' => 'Add to customer balance',
     'select_class_value' =>'Please select a value for the class field.',
     'products_count' => 'Products Count',
+    'add_to_customer_balance' => 'Add to customer balance',
 ];
