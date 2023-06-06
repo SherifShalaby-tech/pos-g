@@ -24,6 +24,7 @@
                                 <th>@lang('lang.image')</th>
                                 <th>@lang('lang.name')</th>
                                 <th>@lang('lang.path')</th>
+                                <th>@lang('lang.products_count')</th>
                                 <th>@lang('lang.description')</th>
                                 <th class="notexport">@lang('lang.action')</th>
                             </tr>
@@ -37,6 +38,7 @@
                                 </td>
                                 <td>{{$category->name}}</td>
                                 <td><a href='/product-class'>{{$category->productClass->name ?? null}} </a>  / {{$category->name}}</td>
+                                <td>{{$category->products_count}}</td>
                                 <td>{{$category->description}}</td>
                                 <td>
                                     <div class="btn-group">
