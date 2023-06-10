@@ -854,3 +854,14 @@ $(document).on("change","#is_discount_permenant",function () {
     $(".discount_end_date").prop('disabled', (i, v) => !v);
     $(".discount_end_date").val(null);
 });
+
+// $(document).on("change", "#name", function () {
+//     let name=$(this).val();
+//     $("#variation_table > tbody > tr").each(function () {
+//         alert($(this).find('.v_sub_sku').val())
+//         if($(this).find('.v_sub_sku').val()==$('#sku').val()){
+            
+//             $(this).find('.v_name').val(name);
+//         }
+//     });
+// });
