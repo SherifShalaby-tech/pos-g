@@ -1398,5 +1398,6 @@ return [
     'select_class_value' =>'.من فضلك اختار فئة',
     'products_count' => 'عدد المنتجات',
     'add_to_customer_balance' => 'اضافة الى حساب العميل',
+    'categories_count' => 'عدد الاقسام',
 
 ];
