@@ -98,7 +98,7 @@ class AddStockController extends Controller
             })
             ->where('status', '!=', 'draft');
 
-            
+
 
             if (!empty($store_id)) {
                 $query->where('transactions.store_id', $store_id);
@@ -148,17 +148,17 @@ class AddStockController extends Controller
                 ->editColumn('final_total', function ($row) use ($default_currency_id) {
                     $final_total =  $row->final_total;
                     $paying_currency_id = $row->paying_currency_id ?? $default_currency_id;
-                    return '<span data-currency_id="' . $paying_currency_id . '">' . $this->commonUtil->num_f($final_total) . '</span>';
+                    return '<span data-currency_id="' . $paying_currency_id . '">' . number_format($final_total,2) . '</span>';
                 })
                 ->addColumn('paid_amount', function ($row) use ($default_currency_id) {
                     $amount_paid =  $row->transaction_payments->sum('amount');
                     $paying_currency_id = $row->paying_currency_id ?? $default_currency_id;
-                    return '<span data-currency_id="' . $paying_currency_id . '">' . $this->commonUtil->num_f($amount_paid) . '</span>';
+                    return '<span data-currency_id="' . $paying_currency_id . '">' . number_format($amount_paid,2) . '</span>';
                 })
                 ->addColumn('due', function ($row) use ($default_currency_id) {
                     $due =  $row->final_total - $row->transaction_payments->sum('amount');
                     $paying_currency_id = $row->paying_currency_id ?? $default_currency_id;
-                    return '<span data-currency_id="' . $paying_currency_id . '">' . $this->commonUtil->num_f($due) . '</span>';
+                    return '<span data-currency_id="' . $paying_currency_id . '">' . number_format($due,2) . '</span>';
                 })
                 ->editColumn('paying_currency_symbol', function ($row) use ($default_currency_id) {
                     $default_currency = Currency::find($default_currency_id);
@@ -334,7 +334,7 @@ class AddStockController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
+
  public function store(Request $request)
     {
         // return $request->add_stock_lines;
@@ -683,10 +683,10 @@ class AddStockController extends Controller
                  }
                  $TransactionPayment->delete();
              }
-             
-            
-           
-             
+
+
+
+
          }else{
              $this->transactionUtil->updateTransactionPaymentStatus($transaction->id);
          }
@@ -849,7 +849,7 @@ class AddStockController extends Controller
                 $products = $this->productUtil->getDetailsFromProduct($product_id, $variation_id, $store_id);
                 return view('add_stock.partials.batch_row')
                     ->with(compact('products','row_count','exchange_rate','batch_count'));
-            
+
         }
     }
     // public function addNewBatchProduct(Request $request)
@@ -861,7 +861,7 @@ class AddStockController extends Controller
     //         $variation->sub_sku=$request->productSkuBatch;
     //         $variation->id=($latestid->id)+1;
     //         $variation->save();
-    //         return  response()->json(['productId'=>$variation->product_id,'variationId'=>$variation->id]); 
+    //         return  response()->json(['productId'=>$variation->product_id,'variationId'=>$variation->id]);
 
     //     }
     // }
@@ -960,7 +960,7 @@ class AddStockController extends Controller
                 $payment_data = [
                     'transaction_id' => $transaction->id,
                     'amount' => $this->commonUtil->num_uf($request->amount),
-                    'method' => $request->method,
+                    'method' => $request->Nmethod,
                     'paid_on' => $this->commonUtil->uf_date($data['paid_on']),
                     'ref_number' => $request->ref_number,
                     'source_type' => $request->source_type,
