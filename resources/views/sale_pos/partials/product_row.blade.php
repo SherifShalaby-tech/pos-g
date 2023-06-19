@@ -13,6 +13,13 @@
                 $default_purchase_price=$stockLines?($stockLines->purchase_price == 0? $Variation->default_purchase_price : $stockLines->purchase_price ) : $Variation->default_purchase_price;
                 $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
             }
+            $product_unit = \App\Models\Product::where('id',$product->product_id)->first();
+            if($product_unit){
+                foreach ($product_unit->multiple_units as $unit) {
+                    
+                    $check_unit = \App\Models\Unit::where('id',$unit)->first();
+                }
+            }
 
         @endphp
         @if($product->variation_name != "Default")
@@ -83,7 +90,7 @@
                 </button>
             </span>
             <input type="number" class="form-control quantity  qty numkey input-number" step="any"
-                autocomplete="off" style="width: 50px;"
+                autocomplete="off" style="width: 50px;" @if($check_unit->name == "قطعه" || $check_unit->name == "Piece") oninput="this.value = Math.round(this.value);" @endif
                 @if(!$product->is_service)max="{{preg_match('/\.\d*[1-9]+/', (string)$product->qty_available) ? $product->qty_available : @num_format($product->qty_available)}}"@endif
             name="transaction_sell_line[{{$loop->index + $index}}][quantity]"
             required
