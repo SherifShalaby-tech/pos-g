@@ -146,11 +146,10 @@
 
                                                 </td>
                                                 <td>
-                                                    <span
-                                                            class="sub_total_span">{{ @num_format($product->sub_total) }}</span>
+                                                    <span class="sub_total_span">{{ number_format($product->sub_total,2) }}</span>
                                                         <input type="hidden" class="form-control sub_total"
                                                             name="add_stock_lines[{{ $loop->index }}][sub_total]"
-                                                            value="{{ $product->sub_total }}">
+                                                            value="{{ number_format($product->sub_total,2) }}">
 
                                                 </td>
                                                  @php
@@ -160,10 +159,11 @@
                                                     @endphp
                                                     <td>
                                                         <input type="hidden" name="current_stock" class="current_stock"
-                                                            value="@if (isset($current_stock)) {{ preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock : @num_format($current_stock) }}@else{{ 0 }} @endif">
+{{--                                                            value="@if (isset($current_stock)) {{ preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock : @num_format($current_stock) }}@else{{ 0 }} @endif">--}}
+                                                            value="@if (isset($current_stock)) {{ number_format($current_stock,App\Models\System::getProperty('numbers_length_after_dot')) }} @else{{ 0 }} @endif">
                                                         <span class="current_stock_text">
                                                             @if (isset($current_stock))
-                                                                {{ preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock : @num_format($current_stock) }}@else{{ 0 }}
+                                                                {{ number_format($current_stock,App\Models\System::getProperty('numbers_length_after_dot')) }}@else{{ 0 }}
                                                             @endif
                                                         </span>
                                                     </td>
@@ -498,7 +498,7 @@
                 $('#method').attr('required', true);
                 $('#paid_on').attr('required', true);
                 $('.payment_fields').removeClass('hide');
-                
+
             } else {
                 $('.payment_fields').addClass('hide');
             }
