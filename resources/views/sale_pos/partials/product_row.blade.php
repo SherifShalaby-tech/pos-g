@@ -14,7 +14,7 @@
                 $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
             }
             $product_unit = \App\Models\Product::where('id',$product->product_id)->first();
-            if($product_unit){
+            if($product_unit && isset($product_unit->multiple_units)){
                 foreach ($product_unit->multiple_units as $unit) {
                     
                     $check_unit = \App\Models\Unit::where('id',$unit)->first();
