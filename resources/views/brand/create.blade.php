@@ -197,6 +197,7 @@
         }
     }
 </style>
+
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
@@ -220,7 +221,7 @@
             <input type="hidden" name="quick_add" value="{{$quick_add }}">
 {{--            @include('layouts.partials.image_crop')--}}
             <div class="form-group">
-                <label for="file-input-brand"> {{ __('categories.image') }}</label>
+                <label for="projectinput2"> {{ __('categories.image') }}</label>
                 <div class="container mt-3">
                     <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
                         <div class="col-12">
@@ -228,7 +229,7 @@
                                 <div class="row">
                                     <div class="col-10 offset-1">
                                         <div class="variants">
-                                            <div class='file file-upload w-100'>
+                                            <div class='file file--upload w-100'>
                                                 <label for='file-input-brand' class="w-100">
                                                     <i class="fas fa-cloud-upload-alt"></i>Upload
                                                 </label>
@@ -248,10 +249,9 @@
         </div>
         <div id="cropped_brand_images"></div>
         <div class="modal-footer">
-            <button  id="submit-create-brand-btn" class="btn btn-primary">@lang( 'lang.save' )</button>
+            <button id="submit-create-brand-btn" class="btn btn-primary">@lang( 'lang.save' )</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">@lang( 'lang.close' )</button>
         </div>
-
         {!! Form::close() !!}
         <div class="modal fade" id="brandModal" tabindex="-1" role="dialog" aria-labelledby="brandModalLabel"
              aria-hidden="true">
@@ -278,6 +278,8 @@
         </div>
     </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
+
+
 <script>
     $('#brand_category_id').selectpicker('render');
 
@@ -291,23 +293,23 @@
         }
     })
 </script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
 <script>
-    $("#submit-create-brand-btn").on("click",function (e){
-        e.preventDefault();
-        setTimeout(()=>{
-            getBrandImages();
-            $("#brand_add_form").submit();
-        },1000)
+    $(document).on('click',"#submit-create-brand-btn",function (e){
+        if($(element).closest("form[id]").attr('id')!='quick_add_brand_form'){
+            e.preventDefault();
+            setTimeout(()=>{
+                getBrandImages();
+                $("#brand_add_form").submit();
+            },500)
+        }
     });
-
-    const fileBrandInput = document.querySelector('#file-input-brand');
-    const previewBrandContainer = document.querySelector('.preview-brand-container');
-    const croppieBrandModal = document.querySelector('#croppie-brand-modal');
-    const croppieBrandContainer = document.querySelector('#croppie-brand-container');
-    const croppieBrandCancelBtn = document.querySelector('#croppie-brand-cancel-btn');
-    const croppieBrandSubmitBtn = document.querySelector('#croppie-brand-submit-btn');
+    var fileBrandInput = document.querySelector('#file-input-brand');
+    var previewBrandContainer = document.querySelector('.preview-brand-container');
+    var croppieBrandModal = document.querySelector('#croppie-brand-modal');
+    var croppieBrandContainer = document.querySelector('#croppie-brand-container');
+    var croppieBrandCancelBtn = document.querySelector('#croppie-brand-cancel-btn');
+    var croppieBrandSubmitBtn = document.querySelector('#croppie-brand-submit-btn');
     // let currentFiles = [];
     fileBrandInput.addEventListener('change', () => {
         previewBrandContainer.innerHTML = '';
@@ -438,3 +440,4 @@
     }
 
 </script>
+
