@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::get('product/check-name', 'ProductController@checkName');
     Route::get('product-stocks', 'ProductController@getProductStocks');
     Route::get('product/delete-product-image/{id}', 'ProductController@deleteProductImage');
+    Route::get('product/toggle-appearance-pos/{id}', 'ProductController@toggleAppearancePos');
     Route::resource('product', ProductController::class);
 
     Route::get('raw-material/add-stock/create', 'AddStockController@create');

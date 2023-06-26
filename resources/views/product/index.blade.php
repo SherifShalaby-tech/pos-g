@@ -279,6 +279,7 @@
         <table id="product_table" class="table" style="width: auto">
             <thead>
                 <tr>
+                    <th>@lang('lang.show_at_the_main_pos_page')</th>
                     <th>@lang('lang.image')</th>
                     <th style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@lang('lang.name')&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     <th>@lang('lang.product_code')</th>
@@ -330,6 +331,7 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -433,7 +435,12 @@
                     "orderable": false,
                     "searchable": false
                 }],
-                columns: [{
+                columns: [
+                    {
+                        data: 'show_at_the_main_pos_page',
+                        name: 'show_at_the_main_pos_page'
+                    },
+                    {
                         data: 'image',
                         name: 'image'
                     },
@@ -771,6 +778,18 @@
                             });
                         }
                     });
+                }
+            });
+        });
+        $(document).on('change', '.show_at_the_main_pos_page', function(e) {
+            $.ajax({
+                type: "GET",
+                url: "/product/toggle-appearance-pos/"+$(this).data('id'),
+                // dataType: "dataType",
+                success: function (response) {
+                    if(response){
+                        swal(response.success,response.msg,response.status);
+                    }
                 }
             });
         });
