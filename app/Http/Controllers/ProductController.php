@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 use Lang;
-
+use Illuminate\Support\Facades\Cache;
 class ProductController extends Controller
 {
     /**
@@ -1368,5 +1368,11 @@ class ProductController extends Controller
             }
         }
         return $dataNewImages;
+    }
+    public function updateColumnVisibility(Request $request)
+    {
+        $columnVisibility = $request->input('columnVisibility');
+        Cache::forever('key_' . auth()->id(), $columnVisibility);
+        return response()->json(['success' => true]);
     }
 }
