@@ -1413,4 +1413,6 @@ return [
     'added_to_pos_window'=>'Show At The Main Pos Page',
     'Cant_Add_More_Than_40_Products'=>"Can't Add More Than 40 Products",
     'hide_from_pos_window'=>'Hide From Pos Window',
+    'select_to_delete'=>'Select To Delete',
+    'all_transactions_related_to_this_product_will_be_deleted' => 'All Transactions related to this product will be deleted; stocks, sales, purchases, etc.',
 ];

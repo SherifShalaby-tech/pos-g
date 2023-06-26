@@ -11,6 +11,7 @@ use App\Models\Color;
 use App\Models\Customer;
 use App\Models\CustomerType;
 use App\Models\Grade;
+use App\Models\manufacturingProduct;
 use App\Models\Product;
 use App\Models\ProductClass;
 use App\Models\ProductDiscount;
@@ -32,6 +33,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -234,7 +236,7 @@ class ProductController extends Controller
                 ->groupBy('variations.id');
             return DataTables::of($products)
             ->addColumn('show_at_the_main_pos_page', function ($row) {
-                $checked='ff';
+                $checked='';
                 if (!empty($row->show_at_the_main_pos_page)&& $row->show_at_the_main_pos_page=="yes"){
                     $checked='checked';
                 }else{
@@ -402,7 +404,7 @@ class ProductController extends Controller
 
                     return $html;
                 })
-                ->addColumn('selection_checkbox_delete', function ($row) {
+                ->addColumn('selection_checkbox_delete', function ($row)  {
                     $html = '<input type="checkbox" name="product_selected_delete" class="product_selected_delete" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
 
                     return $html;
@@ -1410,5 +1412,57 @@ class ProductController extends Controller
                 'status'=>'error'
             ];
         }
+    }
+    public function multiDeleteRow(Request $request){
+        if (!auth()->user()->can('product_module.product.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // try {
+            DB::beginTransaction();
+            foreach ($request->ids as $id){
+                $variation = Variation::where('product_id', $id)->first();
+                $variation_count = Variation::where('product_id', $variation->product_id)->count();
+                if ($variation_count > 1) {
+                    $variation->delete();
+                    ProductStore::where('variation_id', $id)->delete();
+                    manufacturingProduct::where('variation_id', $id)->delete();
+                    $output = [
+                        'success' => true,
+                        'msg' => __('lang.deleted')
+                    ];
+                } else {
+                    ProductStore::where('product_id', $variation->product_id)->delete();
+                    $product = Product::where('id', $variation->product_id)->first();
+                    manufacturingProduct::where('variation_id', $id)->delete();
+                    $product->clearMediaCollection('product');
+                    $product->delete();
+                    $variation->delete();
+                }
+                $ENABLE_POS_Branch = env('ENABLE_POS_Branch', false);
+                $POS_SYSTEM_URL = env('Branch_SYSTEM_URL', null);
+                $POS_ACCESS_TOKEN = env('Branch_ACCESS_TOKEN', null);
+                if($ENABLE_POS_Branch && $POS_SYSTEM_URL &&$POS_ACCESS_TOKEN ){
+                    $response = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $POS_ACCESS_TOKEN,
+                    ])->post($POS_SYSTEM_URL . '/api/delete_product/'.$id, [])->json();
+
+                }
+            }
+            $output = [
+                'success' => true,
+                'msg' => __('lang.success')
+            ];
+
+            DB::commit();
+        // } catch (\Exception $e) {
+        //     Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+        //     $output = [
+        //         'success' => false,
+        //         'msg' => __('lang.something_went_wrong')
+        //     ];
+        // }
+
+        return $output;
     }
 }
