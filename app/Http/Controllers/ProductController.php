@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Cache;
 use Lang;
 
 class ProductController extends Controller
@@ -1032,7 +1033,8 @@ class ProductController extends Controller
             $variation = Variation::find($id);
             $variation_count = Variation::where('product_id', $variation->product_id)->count();
             if ($variation_count > 1) {
-
+                $variation->deleted_by= request()->user()->id;
+                $variation->save();
                 $variation->delete();
                 ProductStore::where('variation_id', $id)->delete();
                 $output = [
@@ -1043,7 +1045,11 @@ class ProductController extends Controller
                 ProductStore::where('product_id', $variation->product_id)->delete();
                 $product = Product::where('id', $variation->product_id)->first();
                 $product->clearMediaCollection('product');
+                $product->deleted_by= request()->user()->id;
+                $product->save();
                 $product->delete();
+                $variation->deleted_by= request()->user()->id;
+                $variation->save();
                 $variation->delete();
             }
             $output = [
@@ -1418,7 +1424,7 @@ class ProductController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        // try {
+        try {
             DB::beginTransaction();
             foreach ($request->ids as $id){
                 $variation = Variation::where('product_id', $id)->first();
@@ -1455,14 +1461,20 @@ class ProductController extends Controller
             ];
 
             DB::commit();
-        // } catch (\Exception $e) {
-        //     Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
-        //     $output = [
-        //         'success' => false,
-        //         'msg' => __('lang.something_went_wrong')
-        //     ];
-        // }
+        } catch (\Exception $e) {
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('lang.something_went_wrong')
+            ];
+        }
 
         return $output;
+    }
+    public function updateColumnVisibility(Request $request)
+    {
+        $columnVisibility = $request->input('columnVisibility');
+        Cache::forever('key_' . auth()->id(), $columnVisibility);
+        return response()->json(['success' => true]);
     }
 }

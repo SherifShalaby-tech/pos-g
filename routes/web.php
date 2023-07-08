@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::post('general/upload-image-temp', 'GeneralController@uploadImageTemp');
     Route::post('general/upload-file-temp', 'GeneralController@uploadFileTemp');
     Route::get('general/view-uploaded-files/{model_name}/{model_id}', 'GeneralController@viewUploadedFiles');
-
+    Route::post('/update-column-visibility', 'ProductController@updateColumnVisibility');
     Route::get('product/get-raw-material-details/{raw_material_id}', 'ProductController@getRawMaterialDetail');
     Route::get('product/get-raw-material-row', 'ProductController@getRawMaterialRow');
     Route::get('product/get-raw-discount', 'ProductController@getRawDiscount');
