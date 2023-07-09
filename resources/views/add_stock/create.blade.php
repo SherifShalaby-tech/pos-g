@@ -11,7 +11,9 @@
         $recent_stock=[];
     }else{
         $recent_stock = \App\Models\Transaction::where('type','add_stock')->orderBy('created_at', 'desc')->first();
+        if(!empty($recent_stock)){
         $transaction_payment = $recent_stock->transaction_payments->first();
+        }
     }
 @endphp
 @section('content')

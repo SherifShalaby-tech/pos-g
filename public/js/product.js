@@ -24,6 +24,29 @@ $(document).ready(function () {
         branding: false,
     });
 });
+var brand_id = null;
+$(document).on("submit", "#quick_add_brand_form", function (e) {
+    e.preventDefault();
+    var data = new FormData(this);
+    $.ajax({
+        method: "post",
+        url: $(this).attr("action"),
+        dataType: "json",
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            if (result.success) {
+                swal("Success", result.msg, "success");
+                $(".view_modal").modal("hide");
+                brand_id = result.brand_id;
+                get_brand_dropdown();
+            } else {
+                swal("Error", result.msg, "error");
+            }
+        },
+    });
+});
 $(".different_prices_for_stores_div").slideUp();
 $("#different_prices_for_stores").change(function () {
     if ($(this).prop("checked")) {
@@ -349,29 +372,7 @@ $( document ).ready(function() {
     });
 });
 
-var brand_id = null;
-$(document).on("submit", "form#quick_add_brand_form", function (e) {
-    e.preventDefault();
-    var data = new FormData(this);
-    $.ajax({
-        method: "post",
-        url: $(this).attr("action"),
-        dataType: "json",
-        data: data,
-        processData: false,
-        contentType: false,
-        success: function (result) {
-            if (result.success) {
-                swal("Success", result.msg, "success");
-                $(".view_modal").modal("hide");
-                brand_id = result.brand_id;
-                get_brand_dropdown();
-            } else {
-                swal("Error", result.msg, "error");
-            }
-        },
-    });
-});
+
 
 function get_brand_dropdown() {
     let category_id = $("#category_id").val();
