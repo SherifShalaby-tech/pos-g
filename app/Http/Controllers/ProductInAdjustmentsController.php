@@ -479,8 +479,8 @@ class ProductInAdjustmentsController extends Controller
         // }
         $user_id =Auth::user()->id;
         $store_pos = StorePos::where('user_id', $user_id)->first();
-       
-        
+
+
             if($request->total_shortage_value){
                 $ProductInAdjustment = ProductInAdjustment::create([
                     'total_shortage_value'=>$request->total_shortage_value,
@@ -517,7 +517,7 @@ class ProductInAdjustmentsController extends Controller
                     'source_type' => 'store',
                     'created_by' => $user_id,
                 ]);
-    
+
             }
                 foreach ($request->selected_data as $data){
                     if($request->total_shortage_value){
@@ -532,12 +532,12 @@ class ProductInAdjustmentsController extends Controller
                                 'variation_id'=>$data['variation_id'],
                                 'product_adjustments_id'=>$ProductInAdjustment->id,
                                 'old_stock'=>$data['current_stock'],
-                                'new_stock'=>$data['actual_stock'],
+                                'new_stock'=>$this->productUtil->num_f($data['actual_stock']),
                                 'shortage'=>$data['shortage'],
                                 'shortage_value'=>$data['shortage_value'],
                             ]);
                         }
-                    }      
+                    }
                     if(isset($data['default_purchase_price']) || isset($data['default_sell_price'])){
                         $stocks = AddStockLine::where('product_id', $data['id'])->where('variation_id',$data['variation_id'])->get();
                          foreach($stocks as $stock){
@@ -574,6 +574,8 @@ class ProductInAdjustmentsController extends Controller
     {
         try {
            $product_adjust = ProductInAdjustment::find($id);
+           $product_adjust->deleted_by= request()->user()->id;
+           $product_adjust->save();
             $products = ProductInAdjustmentDetails::where('product_adjustments_id',$id)->get();
             foreach($products as $product){
                 ProductStore::where('product_id', $product->product_id)->where('variation_id',$product->variation_id)

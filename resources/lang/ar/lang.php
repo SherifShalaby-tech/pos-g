@@ -1400,5 +1400,9 @@ return [
     'products_count' => 'عدد المنتجات',
     'add_to_customer_balance' => 'اضافة الى حساب العميل',
     'categories_count' => 'عدد الاقسام',
-
+    'added_to_pos_window'=>'اظهار فى شاشة البيع الرئيسية',
+    'show_at_the_main_pos_page'=>'اظهار فى شاشة البيع الرئيسية',
+    'Cant_Add_More_Than_40_Products'=>'لا يمكن اضافة اكثر من 40 منتج الى شاشة البيع الرئيسية',
+    'hide_from_pos_window'=>'تم الاخفاء من شاشة البيع الرئيسية',
+    'select_to_delete'=>'حدد للحذف',
 ];

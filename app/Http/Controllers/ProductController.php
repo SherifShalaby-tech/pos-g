@@ -11,6 +11,7 @@ use App\Models\Color;
 use App\Models\Customer;
 use App\Models\CustomerType;
 use App\Models\Grade;
+use App\Models\manufacturingProduct;
 use App\Models\Product;
 use App\Models\ProductClass;
 use App\Models\ProductDiscount;
@@ -32,9 +33,11 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Cache;
 use Lang;
 use Illuminate\Support\Facades\Cache;
 class ProductController extends Controller
@@ -233,6 +236,16 @@ class ProductController extends Controller
             )->with(['supplier'])
                 ->groupBy('variations.id');
             return DataTables::of($products)
+            ->addColumn('show_at_the_main_pos_page', function ($row) {
+                $checked='';
+                if (!empty($row->show_at_the_main_pos_page)&& $row->show_at_the_main_pos_page=="yes"){
+                    $checked='checked';
+                }else{
+                    $checked='';
+                }
+                return ' <input id="show_at_the_main_pos_page'.$row->id.'" data-id='.$row->id.' name="show_at_the_main_pos_page" type="checkbox"
+                '. $checked .' value="1" class="show_at_the_main_pos_page">';
+            })
                 ->addColumn('image', function ($row) {
                     $image = $row->getFirstMediaUrl('product');
                     if (!empty($image)) {
@@ -392,7 +405,7 @@ class ProductController extends Controller
 
                     return $html;
                 })
-                ->addColumn('selection_checkbox_delete', function ($row) {
+                ->addColumn('selection_checkbox_delete', function ($row)  {
                     $html = '<input type="checkbox" name="product_selected_delete" class="product_selected_delete" value="' . $row->variation_id . '" data-product_id="' . $row->id . '" />';
 
                     return $html;
@@ -457,6 +470,7 @@ class ProductController extends Controller
                     }
                 ])
                 ->rawColumns([
+                    'show_at_the_main_pos_page',
                     'selection_checkbox',
                     'selection_checkbox_send',
                     'selection_checkbox_delete',
@@ -643,7 +657,8 @@ class ProductController extends Controller
                 'type' => !empty($request->this_product_have_variant) ? 'variable' : 'single',
                 'active' => !empty($request->active) ? 1 : 0,
                 'have_weight' => !empty($request->have_weight) ? 1 : 0,
-                'created_by' => Auth::user()->id
+                'created_by' => Auth::user()->id,
+                'show_at_the_main_pos_page' => !empty($request->show_at_the_main_pos_page) ? 'yes' : 'no',
             ];
             DB::beginTransaction();
             $product = Product::create($product_data);
@@ -893,6 +908,7 @@ class ProductController extends Controller
                 'active' => !empty($request->active) ? 1 : 0,
                 'have_weight' => !empty($request->have_weight) ? 1 : 0,
                 'edited_by' => Auth::user()->id,
+                'show_at_the_main_pos_page' => !empty($request->show_at_the_main_pos_page) ? 'yes' : 'no',
             ];
 
 
@@ -1017,7 +1033,8 @@ class ProductController extends Controller
             $variation = Variation::find($id);
             $variation_count = Variation::where('product_id', $variation->product_id)->count();
             if ($variation_count > 1) {
-
+                $variation->deleted_by= request()->user()->id;
+                $variation->save();
                 $variation->delete();
                 ProductStore::where('variation_id', $id)->delete();
                 $output = [
@@ -1028,7 +1045,11 @@ class ProductController extends Controller
                 ProductStore::where('product_id', $variation->product_id)->delete();
                 $product = Product::where('id', $variation->product_id)->first();
                 $product->clearMediaCollection('product');
+                $product->deleted_by= request()->user()->id;
+                $product->save();
                 $product->delete();
+                $variation->deleted_by= request()->user()->id;
+                $variation->save();
                 $variation->delete();
             }
             $output = [
@@ -1369,6 +1390,89 @@ class ProductController extends Controller
         }
         return $dataNewImages;
     }
+
+    public function toggleAppearancePos($id){
+        $products_count=Product::where('show_at_the_main_pos_page','yes')->count();
+        if(isset($products_count) && $products_count <40){
+            $product=Product::find($id);
+            if($product->show_at_the_main_pos_page=='no'){
+                $product->show_at_the_main_pos_page='yes';
+                $product->save();
+                return [
+                    'success' => 'success',
+                    'msg' => __('lang.added_to_pos_window'),
+                    'status'=>'success'
+                ];
+            }else{
+                $product->show_at_the_main_pos_page='no';
+                $product->save();
+                return [
+                    'success' => 'success',
+                    'msg' => __('lang.hide_from_pos_window'),
+                    'status'=>'success'
+                ];
+            }
+        }else{
+            return [
+                'success' => 'Failed!',
+                'msg' => __("lang.Cant_Add_More_Than_40_Products"),
+                'status'=>'error'
+            ];
+        }
+    }
+    public function multiDeleteRow(Request $request){
+        if (!auth()->user()->can('product_module.product.delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        try {
+            DB::beginTransaction();
+            foreach ($request->ids as $id){
+                $variation = Variation::where('product_id', $id)->first();
+                $variation_count = Variation::where('product_id', $variation->product_id)->count();
+                if ($variation_count > 1) {
+                    $variation->delete();
+                    ProductStore::where('variation_id', $id)->delete();
+                    manufacturingProduct::where('variation_id', $id)->delete();
+                    $output = [
+                        'success' => true,
+                        'msg' => __('lang.deleted')
+                    ];
+                } else {
+                    ProductStore::where('product_id', $variation->product_id)->delete();
+                    $product = Product::where('id', $variation->product_id)->first();
+                    manufacturingProduct::where('variation_id', $id)->delete();
+                    $product->clearMediaCollection('product');
+                    $product->delete();
+                    $variation->delete();
+                }
+                $ENABLE_POS_Branch = env('ENABLE_POS_Branch', false);
+                $POS_SYSTEM_URL = env('Branch_SYSTEM_URL', null);
+                $POS_ACCESS_TOKEN = env('Branch_ACCESS_TOKEN', null);
+                if($ENABLE_POS_Branch && $POS_SYSTEM_URL &&$POS_ACCESS_TOKEN ){
+                    $response = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $POS_ACCESS_TOKEN,
+                    ])->post($POS_SYSTEM_URL . '/api/delete_product/'.$id, [])->json();
+
+                }
+            }
+            $output = [
+                'success' => true,
+                'msg' => __('lang.success')
+            ];
+
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('lang.something_went_wrong')
+            ];
+        }
+
+        return $output;
+    }
+
     public function updateColumnVisibility(Request $request)
     {
         $columnVisibility = $request->input('columnVisibility');
