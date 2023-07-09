@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::get('product/delete-product-image/{id}', 'ProductController@deleteProductImage');
     Route::get('product/toggle-appearance-pos/{id}', 'ProductController@toggleAppearancePos');
     Route::resource('product', ProductController::class);
+    Route::post('/update-column-visibility', 'ProductController@updateColumnVisibility');
+
     Route::post('product/multiDeleteRow', 'ProductController@multiDeleteRow');
     Route::get('raw-material/add-stock/create', 'AddStockController@create');
     Route::get('raw-material/add-stock', 'AddStockController@index');

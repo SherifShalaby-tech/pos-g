@@ -39,7 +39,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Cache;
 use Lang;
-
+use Illuminate\Support\Facades\Cache;
 class ProductController extends Controller
 {
     /**
@@ -1390,6 +1390,7 @@ class ProductController extends Controller
         }
         return $dataNewImages;
     }
+
     public function toggleAppearancePos($id){
         $products_count=Product::where('show_at_the_main_pos_page','yes')->count();
         if(isset($products_count) && $products_count <40){
@@ -1471,6 +1472,7 @@ class ProductController extends Controller
 
         return $output;
     }
+
     public function updateColumnVisibility(Request $request)
     {
         $columnVisibility = $request->input('columnVisibility');
