@@ -3044,6 +3044,7 @@ $(document).on("change", ".discount_category", function (e) {
                 console.log(response.result)
                 qty=__read_number($(this).find('.quantity'))
                 $(".discount_type"+product_id).val(response.result.discount_type);
+                $(".discount_category_name"+product_id).val(response.result.discount_category);
                 __write_number($(".discount_value"+product_id), response.result.discount);
                 __write_number($(".discount_amount"+product_id), response.result.discount*qty);
                 

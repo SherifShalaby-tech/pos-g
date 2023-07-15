@@ -39,7 +39,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Cache;
 use Lang;
-use Illuminate\Support\Facades\Cache;
 class ProductController extends Controller
 {
     /**
@@ -1391,33 +1390,31 @@ class ProductController extends Controller
         return $dataNewImages;
     }
 
-    public function toggleAppearancePos($id){
+    public function toggleAppearancePos($id,Request $request){
         $products_count=Product::where('show_at_the_main_pos_page','yes')->count();
-        if(isset($products_count) && $products_count <40){
+        if(isset($products_count) && $products_count <4){
             $product=Product::find($id);
             if($product->show_at_the_main_pos_page=='no'){
                 $product->show_at_the_main_pos_page='yes';
                 $product->save();
-                return [
-                    'success' => 'success',
-                    'msg' => __('lang.added_to_pos_window'),
-                    'status'=>'success'
-                ];
             }else{
                 $product->show_at_the_main_pos_page='no';
                 $product->save();
-                return [
-                    'success' => 'success',
-                    'msg' => __('lang.hide_from_pos_window'),
-                    'status'=>'success'
-                ];
             }
         }else{
-            return [
-                'success' => 'Failed!',
-                'msg' => __("lang.Cant_Add_More_Than_40_Products"),
-                'status'=>'error'
-            ];
+            $product=Product::find($id);
+                if($product->show_at_the_main_pos_page=='yes'){
+                    $product->show_at_the_main_pos_page='no';
+                    $product->save();
+                }else{
+                    if($request->check=="yes"){
+                        return [
+                            'success' => 'Failed!',
+                            'msg' => __("lang.Cant_Add_More_Than_40_Products"),
+                            'status'=>'error'
+                        ];
+                    }
+                }
         }
     }
     public function multiDeleteRow(Request $request){
