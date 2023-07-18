@@ -242,7 +242,7 @@ if (empty($invoice_lang)) {
                             </tr>
                             @if ($transaction->transaction_sell_lines->where('product_discount_type', '!=', 'surplus')->whereNotNull('discount_category')->sum('product_discount_amount') > 0)
                             <tr>
-                                <th style="font-size: 16px;" colspan="3">@lang('lang.category_discount')</th>
+                                <th style="font-size: 16px;" colspan="3">@lang('lang.category_discount', [], $invoice_lang)</th>
                             </tr>
                             @foreach ($transaction->transaction_sell_lines as $line)
                                 @if(!empty($line->discount_category))
