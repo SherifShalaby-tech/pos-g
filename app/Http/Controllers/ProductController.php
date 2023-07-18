@@ -39,7 +39,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Cache;
 use Lang;
-use Illuminate\Support\Facades\Cache;
 class ProductController extends Controller
 {
     /**
@@ -918,47 +917,32 @@ class ProductController extends Controller
             $product->update($product_data);
 
             $this->productUtil->createOrUpdateVariations($product, $request);
-            $index_discounts = [];
-            $index_discounts_olds = [];
-            if ($request->discount_type) {
-                if (count($request->discount_type) > 0) {
-                    $index_discounts = array_keys($request->discount_type);
-                    if ($request->discount_ids != null) {
-                        $index_discounts_olds = array_keys($request->discount_ids);
-                        ProductDiscount::where('product_id', $product->id)->whereNotIn('id', $request->discount_ids)->delete();
-                    } else {
-                        ProductDiscount::where('product_id', $product->id)->delete();
-                    }
+            $index_discounts=[];
+            ProductDiscount::where('product_id',$product->id)->delete();
+            $index_discounts=[];
+            if($request->has('discount_type')){
+                if(count($request->discount_type)>0){
+                    $index_discounts=array_keys($request->discount_type);
                 }
+            }
 
-                foreach ($index_discounts as $index_discount) {
-                    $discount_customers = $this->getDiscountCustomerFromType($request->get('discount_customer_types_' . $index_discount));
-                    $data_des = [
+
+                foreach ($index_discounts as $index_discount){
+                    $discount_customers = $this->getDiscountCustomerFromType($request->get('discount_customer_types_'.$index_discount));
+                    $data_des=[
                         'product_id' => $product->id,
                         'discount_type' => $request->discount_type[$index_discount],
                         'discount_category' => $request->discount_category[$index_discount],
-                        'is_discount_permenant' => !empty($request->is_discount_permenant[$index_discount]) ? 1 : 0,
-                        'discount_customer_types' => $request->get('discount_customer_types_' . $index_discount),
+                        'is_discount_permenant'=>!empty($request->is_discount_permenant[$index_discount])? 1 : 0,
+                        'discount_customer_types' => $request->get('discount_customer_types_'.$index_discount),
                         'discount_customers' => $discount_customers,
                         'discount' => $this->commonUtil->num_uf($request->discount[$index_discount]),
                         'discount_start_date' => !empty($request->discount_start_date[$index_discount]) ? $this->commonUtil->uf_date($request->discount_start_date[$index_discount]) : null,
                         'discount_end_date' => !empty($request->discount_end_date[$index_discount]) ? $this->commonUtil->uf_date($request->discount_end_date[$index_discount]) : null
                     ];
 
-
-                    if (in_array($index_discount, $index_discounts_olds)) {
-                        ProductDiscount::where('id', $request->discount_ids[$index_discount])->update($data_des);
-                    } else {
-                        ProductDiscount::create($data_des);
-                    }
-
-
+                    ProductDiscount::create($data_des);
                 }
-
-
-            } else {
-                ProductDiscount::where('product_id', $product->id)->delete();
-            }
 
 
             if (!empty($request->consumption_details)) {
@@ -1391,33 +1375,31 @@ class ProductController extends Controller
         return $dataNewImages;
     }
 
-    public function toggleAppearancePos($id){
+    public function toggleAppearancePos($id,Request $request){
         $products_count=Product::where('show_at_the_main_pos_page','yes')->count();
         if(isset($products_count) && $products_count <40){
             $product=Product::find($id);
             if($product->show_at_the_main_pos_page=='no'){
                 $product->show_at_the_main_pos_page='yes';
                 $product->save();
-                return [
-                    'success' => 'success',
-                    'msg' => __('lang.added_to_pos_window'),
-                    'status'=>'success'
-                ];
             }else{
                 $product->show_at_the_main_pos_page='no';
                 $product->save();
-                return [
-                    'success' => 'success',
-                    'msg' => __('lang.hide_from_pos_window'),
-                    'status'=>'success'
-                ];
             }
         }else{
-            return [
-                'success' => 'Failed!',
-                'msg' => __("lang.Cant_Add_More_Than_40_Products"),
-                'status'=>'error'
-            ];
+            $product=Product::find($id);
+                if($product->show_at_the_main_pos_page=='yes'){
+                    $product->show_at_the_main_pos_page='no';
+                    $product->save();
+                }else{
+                    if($request->check=="yes"){
+                        return [
+                            'success' => 'Failed!',
+                            'msg' => __("lang.Cant_Add_More_Than_40_Products"),
+                            'status'=>'error'
+                        ];
+                    }
+                }
         }
     }
     public function multiDeleteRow(Request $request){
