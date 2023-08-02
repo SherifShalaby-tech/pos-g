@@ -1406,4 +1406,6 @@ return [
     'hide_from_pos_window'=>'تم الاخفاء من شاشة البيع الرئيسية',
     'select_to_delete'=>'حدد للحذف',
     'monthly_sale_and_purchase_report' => 'تقرير البيع والشراء الشهري',
+    'selling_price_for_this_product_is_changed'=>'تم تغيير سعر البيع لهذا المنتج',
+    
 ];
