@@ -181,6 +181,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::post('internal-stock-return/update-status/{id}', 'InternalStockReturnController@postUpdateStatus');
     Route::get('internal-stock-return/send-the-goods/{id}', 'InternalStockReturnController@sendTheGoods');
     Route::resource('internal-stock-return', InternalStockReturnController::class);
+    Route::post('/update-stock-column-visibility', 'AddStockController@updateStockColumnVisibility');
 
     Route::resource('raw-materials/internal-stock-request', InternalStockRequestController::class);
     Route::resource('raw-materials/internal-stock-return', InternalStockReturnController::class);
