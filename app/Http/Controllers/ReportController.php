@@ -1532,6 +1532,7 @@ class ReportController extends Controller
         }
         $transactions = $query->select(
             DB::raw("SUM(IF(transactions.type='sell', tsl.quantity * p.sell_price, 0)) as sold_amount"),
+            DB::raw("SUM(IF(transactions.type='sell', tsl.quantity * tsl.purchase_price, 0)) as purchase_cost"),
             DB::raw("SUM(IF(transactions.type='sell', tsl.quantity * p.purchase_price, 0)) as purchased_amount"),
             DB::raw("SUM(IF(transactions.type='sell', tsl.quantity, 0)) as sold_qty"),
             DB::raw("SUM(IF(transactions.type='add_stock', pl.quantity, 0)) as purchased_qty"),
@@ -1630,6 +1631,7 @@ class ReportController extends Controller
                 $query->where('created_by', $created_by);
             }
             $sale_data = $query->select(
+
                 DB::raw('SUM(discount_amount) AS total_discount'),
                 DB::raw('SUM(total_product_discount) AS total_product_discount'),
                 DB::raw('SUM(total_tax) AS total_tax'),
@@ -1921,6 +1923,7 @@ class ReportController extends Controller
         }
 
         $transactions = $query->select(
+            'sale_note',
             DB::raw("SUM(IF(transactions.type='sell', final_total, 0)) as sold_amount"),
             DB::raw("SUM(IF(transactions.type='sell', tsl.quantity, 0)) as sold_qty"),
             DB::raw('(SELECT SUM(product_stores.qty_available) FROM product_stores JOIN products ON product_stores.product_id=products.id WHERE products.id=p.id ' . $store_query . ') as in_stock'),

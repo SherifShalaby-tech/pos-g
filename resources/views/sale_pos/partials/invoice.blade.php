@@ -125,7 +125,8 @@ if (empty($invoice_lang)) {
                     {{ $transaction->customer->mobile_number }} <br>
                 @endif
                 @if (!empty($transaction->sale_note))
-                    @lang('lang.sale_note', [], $invoice_lang): {{ $transaction->sale_note }} <br>
+{{--                    @lang('lang.sale_note', [], $invoice_lang):--}}
+                    {{ $transaction->sale_note }} <br>
                 @endif
             </p>
             @if (session('system_mode') == 'garments')
