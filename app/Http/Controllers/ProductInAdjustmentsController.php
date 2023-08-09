@@ -221,13 +221,13 @@ class ProductInAdjustmentsController extends Controller
                 ->editColumn('batch_number', '{{$batch_number}}')
                 ->editColumn('default_sell_price', function ($row) {
                     $price= AddStockLine::where('variation_id',$row->variation_id)
-                        ->whereColumn('quantity',">",'quantity_sold')->first();
+                    ->latest()->first();
                     $price= $price? ($price->sell_price > 0 ? $price->sell_price : $row->default_sell_price):$row->default_sell_price;
                     return $this->productUtil->num_f($price);
                 })//, '{{@num_format($default_sell_price)}}')
                 ->editColumn('default_purchase_price', function ($row) {
                     $price= AddStockLine::where('variation_id',$row->variation_id)
-                        ->whereColumn('quantity',">",'quantity_sold')->first();
+                    ->latest()->first();
                     $price= $price? ($price->purchase_price > 0 ? $price->purchase_price : $row->default_purchase_price):$row->default_purchase_price;
 
                     return $this->productUtil->num_f($price);
@@ -574,6 +574,8 @@ class ProductInAdjustmentsController extends Controller
     {
         try {
            $product_adjust = ProductInAdjustment::find($id);
+           $product_adjust->deleted_by= request()->user()->id;
+           $product_adjust->save();
             $products = ProductInAdjustmentDetails::where('product_adjustments_id',$id)->get();
             foreach($products as $product){
                 ProductStore::where('product_id', $product->product_id)->where('variation_id',$product->variation_id)

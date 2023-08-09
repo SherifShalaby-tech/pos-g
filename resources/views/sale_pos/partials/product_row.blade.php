@@ -13,6 +13,13 @@
                 $default_purchase_price=$stockLines?($stockLines->purchase_price == 0? $Variation->default_purchase_price : $stockLines->purchase_price ) : $Variation->default_purchase_price;
                 $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
             }
+            $product_unit = \App\Models\Product::where('id',$product->product_id)->first();
+            if($product_unit && isset($product_unit->multiple_units)){
+                foreach ($product_unit->multiple_units as $unit) {
+                    
+                    $check_unit = \App\Models\Unit::where('id',$unit)->first();
+                }
+            }
 
         @endphp
         @if($product->variation_name != "Default")
@@ -83,7 +90,7 @@
                 </button>
             </span>
             <input type="number" class="form-control quantity  qty numkey input-number" step="any"
-                autocomplete="off" style="width: 50px;"
+                autocomplete="off" style="width: 50px;" @isset($check_unit) @if($check_unit->name == "قطعه" || $check_unit->name == "Piece") oninput="this.value = Math.round(this.value);" @endif @endisset
                 @if(!$product->is_service)max="{{preg_match('/\.\d*[1-9]+/', (string)$product->qty_available) ? $product->qty_available : @num_format($product->qty_available)}}"@endif
             name="transaction_sell_line[{{$loop->index + $index}}][quantity]"
             required
@@ -98,7 +105,7 @@
 
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 12% @else 14% @endif">
-        <input type="text" class="form-control sell_price"
+        <input type="text" class="form-control sell_price" data-variation_id="{{$product->variation_id}}"
             name="transaction_sell_line[{{$loop->index + $index}}][sell_price]" required
             @if(!auth()->user()->can('product_module.sell_price.create_and_edit')) readonly @elseif(env('IS_SUB_BRANCH',false)) readonly @endif
         value="@if(isset($default_sell_price)){{@num_format(($default_sell_price) / $exchange_rate)}}@else{{0}}@endif">
@@ -143,7 +150,7 @@
                 @endif
             </select>
         @endif
-
+        <input type="hidden" name="transaction_sell_line[{{$loop->index + $index}}][discount_category]" class="discount_category_name{{$product->product_id}}" />
     </td>
     <td style="width: @if(session('system_mode')  != 'restaurant') 9% @else 15% @endif">
         <span class="sub_total_span" style="font-weight: bold;"></span>

@@ -2,6 +2,17 @@
 $exchange_rate = !empty($sale->exchange_rate) ? $sale->exchange_rate : 1;
 @endphp
 @forelse ($products as $product)
+@php
+$Variation=\App\Models\Variation::where('id',$product->variation_id)->first();
+    if($Variation){
+        $stockLines=\App\Models\AddStockLine::where('sell_price','>',0)->where('variation_id',$Variation->id)
+        ->latest()->first();
+        $default_sell_price=$stockLines?$stockLines->sell_price : $Variation->default_sell_price;
+        $default_purchase_price=$stockLines?$stockLines->purchase_price : $Variation->default_purchase_price;
+        $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
+
+    }
+@endphp
     <tr class="product_row">
         <td style="width: 20%">
             @if ($product->variation->name != 'Default')
@@ -21,8 +32,8 @@ $exchange_rate = !empty($sale->exchange_rate) ? $sale->exchange_rate : 1;
                 value="{{ $product->variation_id }}">
             <input type="hidden" name="transaction_sell_line[{{ $loop->index }}][purchase_price]" class="purchase_price"
                 value="@if (isset($product->purchase_price)) {{ @num_format($product->purchase_price) }}@else{{ 0 }} @endif">
-            <input type="hidden" name="transaction_sell_line[{{ $loop->index }}][price_hidden]" class="price_hidden"
-                value="@if (isset($product->variation->default_sell_price)) {{ @num_format($product->variation->default_sell_price / $exchange_rate) }}@else{{ 0 }} @endif">
+            <input type="hidden" name="transaction_sell_line[{{$loop->index}}][price_hidden]" class="price_hidden"
+                value="@if(isset($default_sell_price)){{@num_format(($default_sell_price) / $exchange_rate)}}@else{{0}}@endif">
             <input type="hidden" name="transaction_sell_line[{{ $loop->index }}][tax_id]" class="tax_id"
                 value="{{ $product->tax_id }}">
             <input type="hidden" name="transaction_sell_line[{{ $loop->index }}][tax_method]" class="tax_method"
@@ -42,11 +53,12 @@ $exchange_rate = !empty($sale->exchange_rate) ? $sale->exchange_rate : 1;
             <!-- after calculation actual discounted amount for row product row -->
         </td>
         <td style="width: 15%">
-            <div class="input-group"><span class="input-group-btn">
+            <div class="input-group">
+                {{-- <span class="input-group-btn">
                     <button type="button" class="btn btn-danger minus">
                         <span class="dripicons-minus"></span>
                     </button>
-                </span>
+                </span> --}}
                 <input type="text" class="form-control quantity  qty numkey input-number" step="any"
                     name="transaction_sell_line[{{ $loop->index }}][quantity]" required
                     value="@if (isset($product->quantity)) {{ preg_match('/\.\d*[1-9]+/', (string)$product->quantity) ? $product->quantity : @num_format($product->quantity) }}@else{{ 1 }} @endif">
@@ -80,9 +92,9 @@ $exchange_rate = !empty($sale->exchange_rate) ? $sale->exchange_rate : 1;
                 name="transaction_sell_line[{{ $loop->index }}][sub_total]"
                 value="{{ @num_format($product->sub_total) }}">
         </td>
-        <td style="width: 15%">
+        {{-- <td style="width: 15%">
             <button type="button" class="btn btn-danger btn-sx remove_row"><i class="fa fa-times"></i></button>
-        </td>
+        </td> --}}
     </tr>
 @empty
 @endforelse

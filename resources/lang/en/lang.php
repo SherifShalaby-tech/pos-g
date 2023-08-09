@@ -1409,4 +1409,13 @@ return [
     'select_class_value' =>'Please select a value for the class field.',
     'products_count' => 'Products Count',
     'add_to_customer_balance' => 'Add to customer balance',
+    'categories_count' => 'Categories Count',
+    'show_at_the_main_pos_page'=>'Show At The Main Pos Page',
+    'added_to_pos_window'=>'Show At The Main Pos Page',
+    'Cant_Add_More_Than_40_Products'=>"Can't Add More Than 40 Products",
+    'hide_from_pos_window'=>'Hide From Pos Window',
+    'select_to_delete'=>'Select To Delete',
+    'monthly_sale_and_purchase_report' => 'Monthly Sale And Purchase Report',
+    'selling_price_for_this_product_is_changed'=>'Selling Price For This Product Is Changed',
+    
 ];

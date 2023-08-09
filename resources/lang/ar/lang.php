@@ -1400,5 +1400,13 @@ return [
     'select_class_value' =>'.من فضلك اختار فئة',
     'products_count' => 'عدد المنتجات',
     'add_to_customer_balance' => 'اضافة الى حساب العميل',
-
+    'categories_count' => 'عدد الاقسام',
+    'added_to_pos_window'=>'اظهار فى شاشة البيع الرئيسية',
+    'show_at_the_main_pos_page'=>'اظهار فى شاشة البيع الرئيسية',
+    'Cant_Add_More_Than_40_Products'=>'لا يمكن اضافة اكثر من 40 منتج الى شاشة البيع الرئيسية',
+    'hide_from_pos_window'=>'تم الاخفاء من شاشة البيع الرئيسية',
+    'select_to_delete'=>'حدد للحذف',
+    'monthly_sale_and_purchase_report' => 'تقرير البيع والشراء الشهري',
+    'selling_price_for_this_product_is_changed'=>'تم تغيير سعر البيع لهذا المنتج',
+    
 ];

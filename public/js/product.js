@@ -24,6 +24,29 @@ $(document).ready(function () {
         branding: false,
     });
 });
+var brand_id = null;
+$(document).on("submit", "#quick_add_brand_form", function (e) {
+    e.preventDefault();
+    var data = new FormData(this);
+    $.ajax({
+        method: "post",
+        url: $(this).attr("action"),
+        dataType: "json",
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            if (result.success) {
+                swal("Success", result.msg, "success");
+                $(".view_modal").modal("hide");
+                brand_id = result.brand_id;
+                get_brand_dropdown();
+            } else {
+                swal("Error", result.msg, "error");
+            }
+        },
+    });
+});
 $(".different_prices_for_stores_div").slideUp();
 $("#different_prices_for_stores").change(function () {
     if ($(this).prop("checked")) {
@@ -124,6 +147,28 @@ $(document).on("click", ".variant_different_prices_for_stores", function () {
 });
 $("#submit-btn").on("click", function (e) {
     e.preventDefault();
+    let sku = $('#sku').val();
+  
+    if (sku.trim() !== "") {
+      $.ajax({
+        method: "get",
+        url: "/product/check-sku/" + sku,
+        data: {},
+        success: function (result) {
+          console.log(result.success);
+          if (!result.success) {
+            swal("Error", result.msg, "error");
+          } else {
+            submitForm();
+          }
+        },
+      });
+    } else {
+      submitForm();
+    }
+  });
+  
+function submitForm() {
     if ($("#product-form").valid()) {
         tinyMCE.triggerSave();
         document.getElementById("loader").style.display = "block";
@@ -139,16 +184,16 @@ $("#submit-btn").on("click", function (e) {
                     $("#sku").val("").change();
                     $("#name").val("").change();
                     $(".translations").val("").change();
-                    if(!$('#clear_all_input_form').is(':checked')){
-                        $('.clear_input_form').val('');
-                        $('.clear_input_form').selectpicker('refresh');
-                    }
 
+                    if (!$('#clear_all_input_form').is(':checked')) {
+                    $('.clear_input_form').val('');
+                    $('.clear_input_form').selectpicker('refresh');
+                    }
+                    const previewContainer = document.querySelector('.preview-container');
+                    previewContainer.innerHTML = '';
                 } else {
                     swal("Error", response.msg, "error");
                 }
-                const previewContainer = document.querySelector('.preview-container');
-                previewContainer.innerHTML = '';
             },
             error: function (response) {
                 myFunction();
@@ -158,7 +203,7 @@ $("#submit-btn").on("click", function (e) {
             },
         });
     }
-});
+}
 // transform cropper dataURI output to a Blob which Dropzone accepts
 function dataURItoBlob(dataURI) {
     var byteString = atob(dataURI.split(",")[1]);
@@ -222,7 +267,7 @@ $(document).on("submit", "form#quick_add_category_form", function (e) {
                 $.ajax({
                     method: "get",
                     url:
-                        "/category/get-dropdown?product_class_id=" +
+                        "/category/get-dropdown?type=category&product_class_id=" +
                         $("#product_class_id").val(),
                     data: {},
                     contactType: "html",
@@ -327,29 +372,7 @@ $( document ).ready(function() {
     });
 });
 
-var brand_id = null;
-$(document).on("submit", "form#quick_add_brand_form", function (e) {
-    e.preventDefault();
-    var data = new FormData(this);
-    $.ajax({
-        method: "post",
-        url: $(this).attr("action"),
-        dataType: "json",
-        data: data,
-        processData: false,
-        contentType: false,
-        success: function (result) {
-            if (result.success) {
-                swal("Success", result.msg, "success");
-                $(".view_modal").modal("hide");
-                brand_id = result.brand_id;
-                get_brand_dropdown();
-            } else {
-                swal("Error", result.msg, "error");
-            }
-        },
-    });
-});
+
 
 function get_brand_dropdown() {
     let category_id = $("#category_id").val();
