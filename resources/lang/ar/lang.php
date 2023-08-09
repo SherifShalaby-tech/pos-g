@@ -1408,5 +1408,5 @@ return [
     'select_to_delete'=>'حدد للحذف',
     'monthly_sale_and_purchase_report' => 'تقرير البيع والشراء الشهري',
     'selling_price_for_this_product_is_changed'=>'تم تغيير سعر البيع لهذا المنتج',
-    
+    'total_rows'=>'عدد الموظفين',
 ];
