@@ -38,6 +38,7 @@ use App\Utils\Util;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -92,10 +93,10 @@ class AddStockController extends Controller
             ->leftjoin('users', 'transactions.created_by', '=', 'users.id')
             ->leftjoin('currencies as paying_currency', 'transactions.paying_currency_id', 'paying_currency.id')
             ->whereIn('type',['material_manufactured','add_stock'])
-           ->orWhere(function($query){
-                $manufacturingIds=Transaction::where('type','material_manufactured')->pluck('manufacturing_id');
-                $query->whereNotIn('manufacturing_id',$manufacturingIds)->where('type','material_under_manufacture');
-            })
+        //    ->orWhere(function($query){
+        //         $manufacturingIds=Transaction::where('type','material_manufactured')->pluck('manufacturing_id');
+        //         $query->whereNotIn('manufacturing_id',$manufacturingIds)->where('type','material_under_manufacture');
+        //     })
             ->where('status', '!=', 'draft');
 
 
@@ -130,9 +131,9 @@ class AddStockController extends Controller
             if (!empty(request()->end_time)) {
                 $query->where('transaction_date', '<=', request()->end_date . ' ' . Carbon::parse(request()->end_time)->format('H:i:s'));
             }
-            if (strtolower($request->session()->get('user.job_title')) == 'cashier') {
-                $query->where('transactions.created_by', $request->session()->get('user.id'));
-            }
+            // if (strtolower($request->session()->get('user.job_title')) == 'cashier') {
+            //     $query->where('transactions.created_by', $request->session()->get('user.id'));
+            // }
 
             $add_stocks = $query->select(
                 'transactions.*',
@@ -442,7 +443,7 @@ class AddStockController extends Controller
         }
         DB::commit();
 
-        if ($data['submit'] == 'print') {
+        if (isset($data['submit']) && $data['submit'] == 'print') {
             $print = 'print';
             $url = action('AddStockController@show', $transaction->id) . '?print=' . $print;
 
@@ -1039,5 +1040,13 @@ class AddStockController extends Controller
         }
 
         return $this->commonUtil->createDropdownHtml($array, __('lang.please_select'));
+    }
+
+    
+    public function updateStockColumnVisibility(Request $request)
+    {
+        $stockColumnVisibility = $request->input('stockColumnVisibility');
+        Cache::forever('key_' . auth()->id(), $stockColumnVisibility);
+        return response()->json(['success' => true]);
     }
 }

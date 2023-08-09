@@ -290,7 +290,7 @@ class ProductUtil extends Util
                     $v['default_purchase_price'] = (float)$this->num_uf($v['default_purchase_price']);
                     $v['default_sell_price'] = (float)$this->num_uf($v['default_sell_price']);
                     $variation = Variation::find($v['id']);
-                    $variation->name = $v['name'];
+                    $variation->name = $request->name;
                     $variation->sub_sku = $sub_sku;
                     $variation->multiple_thread_colors = $multiple_thread_colors;
                     $variation->color_id = $color_id;

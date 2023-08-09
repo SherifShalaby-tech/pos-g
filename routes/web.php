@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::post('general/upload-image-temp', 'GeneralController@uploadImageTemp');
     Route::post('general/upload-file-temp', 'GeneralController@uploadFileTemp');
     Route::get('general/view-uploaded-files/{model_name}/{model_id}', 'GeneralController@viewUploadedFiles');
-
+    Route::post('/update-column-visibility', 'ProductController@updateColumnVisibility');
     Route::get('product/get-raw-material-details/{raw_material_id}', 'ProductController@getRawMaterialDetail');
     Route::get('product/get-raw-material-row', 'ProductController@getRawMaterialRow');
     Route::get('product/get-raw-discount', 'ProductController@getRawDiscount');
@@ -53,8 +53,11 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::get('product/check-name', 'ProductController@checkName');
     Route::get('product-stocks', 'ProductController@getProductStocks');
     Route::get('product/delete-product-image/{id}', 'ProductController@deleteProductImage');
+    Route::get('product/toggle-appearance-pos/{id}', 'ProductController@toggleAppearancePos');
     Route::resource('product', ProductController::class);
+    Route::post('/update-column-visibility', 'ProductController@updateColumnVisibility');
 
+    Route::post('product/multiDeleteRow', 'ProductController@multiDeleteRow');
     Route::get('raw-material/add-stock/create', 'AddStockController@create');
     Route::get('raw-material/add-stock', 'AddStockController@index');
     Route::get('raw-material/add-product-row', 'RawMaterialController@addProductRow');
@@ -178,6 +181,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::post('internal-stock-return/update-status/{id}', 'InternalStockReturnController@postUpdateStatus');
     Route::get('internal-stock-return/send-the-goods/{id}', 'InternalStockReturnController@sendTheGoods');
     Route::resource('internal-stock-return', InternalStockReturnController::class);
+    Route::post('/update-stock-column-visibility', 'AddStockController@updateStockColumnVisibility');
 
     Route::resource('raw-materials/internal-stock-request', InternalStockRequestController::class);
     Route::resource('raw-materials/internal-stock-return', InternalStockReturnController::class);
@@ -217,7 +221,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
     Route::get('pos/get-sale-promotion-details-if-valid', 'SellPosController@getSalePromotionDetailsIfValid');
     Route::get('pos/get-transaction-details/{transaction_id}', 'SellPosController@getTransactionDetails');
     Route::post('pos/update-transaction-status-cancel/{transaction_id}', 'SellPosController@updateTransactionStatusCancel');
-
+    Route::post('pos/change-selling-price/{variation_id}', 'SellPosController@changeSellingPrice');
     Route::resource('pos', SellPosController::class);
     Route::get('dining-room/get-dining-rooms', 'DiningRoomController@getDiningRooms');
     Route::get('dining-room/check-dining-room-name', 'DiningRoomController@checkDiningRoomName');

@@ -11,7 +11,9 @@
         $recent_stock=[];
     }else{
         $recent_stock = \App\Models\Transaction::where('type','add_stock')->orderBy('created_at', 'desc')->first();
+        if(!empty($recent_stock)){
         $transaction_payment = $recent_stock->transaction_payments->first();
+        }
     }
 @endphp
 @section('content')
@@ -238,12 +240,13 @@
 
                         </div>
 
-                        <div class="col-sm-12">
-                            <button type="submit" name="submit" id="print" style="margin: 10px" value="save"
+                       
+                        {!! Form::close() !!}
+                         <div class="col-sm-12">
+                            <button type="submit" name="submit" id="submit-save" style="margin: 10px" value="save"
                                 class="btn btn-primary pull-right btn-flat submit">@lang( 'lang.save' )</button>
 
                         </div>
-                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
@@ -257,6 +260,46 @@
     <script src="{{ asset('js/add_stock.js') }}"></script>
     <script src="{{ asset('js/product_selection.js') }}"></script>
     <script type="text/javascript">
+          $(document).ready(function() {
+            var hiddenColumnArray = JSON.parse('{!! addslashes(json_encode(Cache::get("key_" . auth()->id(), []))) !!}');
+            $.each(hiddenColumnArray, function(index, value) {
+                $('.column-toggle').each(function() {
+                if ($(this).val() == value) {
+                    // alert(value)
+                    toggleColumnVisibility(value, $(this));
+                }
+                });
+            });
+            $(document).on('click', '.column-toggle', function() {
+                var column_index = parseInt($(this).val());
+                toggleColumnVisibility(column_index, $(this));
+                if (hiddenColumnArray.includes(column_index)) {
+                hiddenColumnArray.splice(hiddenColumnArray.indexOf(column_index), 1);
+                } else {
+                hiddenColumnArray.push(column_index);
+                }
+                hiddenColumnArray = [...new Set(hiddenColumnArray)]; // Remove duplicates
+                // Update the columnVisibility cache data
+                $.ajax({
+                url: '/update-stock-column-visibility', // Replace with your route or endpoint for updating cache data
+                method: 'POST',
+                data: { stockColumnVisibility: hiddenColumnArray },
+                    success: function() {
+                        console.log('Column visibility updated successfully.');
+                    }
+                });
+            });
+            function toggleColumnVisibility(column_index, this_btn) {
+                var column = product_table.column(column_index);
+                column.visible(!column.visible());
+                if (column.visible()) {
+                $(this_btn).addClass('badge-primary').removeClass('badge-warning');
+                } else {
+                $(this_btn).removeClass('badge-primary').addClass('badge-warning');
+                }
+            }
+        });
+
         $(document).on('click', '#add-selected-btn', function() {
             $('#select_products_modal').modal('hide');
             // $.each(product_selected, function(index, value) {

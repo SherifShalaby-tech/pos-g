@@ -848,9 +848,20 @@ $(document).on("change", "#sell_price", function () {
         return;
     }
 });
-$(document).on("change","#is_discount_permenant",function () {
-    $(".discount_start_date").prop('disabled', (i, v) => !v);
-    $(".discount_start_date").val(null);
-    $(".discount_end_date").prop('disabled', (i, v) => !v);
-    $(".discount_end_date").val(null);
+$(document).on("change",".is_discount_permenant",function () {
+    $(this).closest("tr").find(".discount_start_date").prop('disabled', (i, v) => !v);
+    $(this).closest("tr").find(".discount_start_date").val(null);
+    $(this).closest("tr").find(".discount_end_date").prop('disabled', (i, v) => !v);
+    $(this).closest("tr").find(".discount_end_date").val(null);
 });
+
+// $(document).on("change", "#name", function () {
+//     let name=$(this).val();
+//     $("#variation_table > tbody > tr").each(function () {
+//         alert($(this).find('.v_sub_sku').val())
+//         if($(this).find('.v_sub_sku').val()==$('#sku').val()){
+            
+//             $(this).find('.v_name').val(name);
+//         }
+//     });
+// });

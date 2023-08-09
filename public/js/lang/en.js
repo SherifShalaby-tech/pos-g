@@ -11,4 +11,14 @@ LANG = {
         "The selling price is less than purchase price",
     warning: "Warning",
     walk_in_customer:'Walk-in-customer',
+    purchase_price_and_sell_price_equal_to_zero:'Purchase Price and Sell Price Equal To Zero',
+    sell_price_equal_to_zero:'Selling Price Equal To Zero',
+    purchase_price_equal_to_zero:'Purchase Price Equal To Zero',
+    continue:'continue',
+    qty_msg:'Quantity Must Be Greater Than 0 .',
+    sorry_you_should_select_products_to_continue_delete:'sorry you should select products to continue delete',
+    all_transactions_related_to_this_products_will_be_deleted:'All Transactions related to this product will be deleted; stocks, sales, purchases, etc.',
+    change_price_permenatly:'Do You Wanna Change Price Permenatly ?',
+    price_changed_only_for_this_transaction:'Price Changed Only For This Transaction',
+    
 };

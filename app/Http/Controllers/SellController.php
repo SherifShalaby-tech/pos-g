@@ -436,12 +436,18 @@ class SellController extends Controller
                         $html .= '<li class="divider"></li>';
                         if (auth()->user()->can('sale.pay.create_and_edit')) {
                             if ($row->status != 'draft' && $row->payment_status != 'paid' && $row->status != 'canceled') {
-                                $html .=
-                                    ' <li>
-                                    <a data-href="' . action('TransactionPaymentController@addPayment', $row->id) . '"
-                                        data-container=".view_modal" class="btn btn-modal"><i class="fa fa-plus"></i>
-                                        ' . __('lang.add_payment') . '</a>
-                                    </li>';
+                                $final_total=$row->final_total;
+                                if (!empty($row->return_parent)) {
+                                    $final_total = $this->commonUtil->num_f($row->final_total - $row->return_parent->final_total);
+                                }
+                                if($final_total > 0) {
+                                    $html .=
+                                        ' <li>
+                                        <a data-href="' . action('TransactionPaymentController@addPayment', $row->id) . '"
+                                            data-container=".view_modal" class="btn btn-modal"><i class="fa fa-plus"></i>
+                                            ' . __('lang.add_payment') . '</a>
+                                        </li>';
+                                }
                             }
                         }
                         $html .= '<li class="divider"></li>';
@@ -708,8 +714,15 @@ class SellController extends Controller
                 }
                 $transaction_sell_line->delete();
             }
+            $return_ids =Transaction::where('return_parent_id', $id)->pluck('id');
+
+
+
+
             Transaction::where('return_parent_id', $id)->delete();
             Transaction::where('parent_sale_id', $id)->delete();
+
+            CashRegisterTransaction::wherein('transaction_id', $return_ids)->delete();
 
             $this->transactionUtil->updateCustomerRewardPoints($transaction->customer_id, 0, $transaction->rp_earned, 0, $transaction->rp_redeemed);
 
