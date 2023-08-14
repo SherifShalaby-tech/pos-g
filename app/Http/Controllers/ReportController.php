@@ -1686,7 +1686,7 @@ class ReportController extends Controller
      *
      * @return view
      */
-    public function getMonthlySaleReport(Request $request)
+      public function getMonthlySaleReport(Request $request)
     {
         $store_id = $this->transactionUtil->getFilterOptionValues($request)['store_id'];
 
@@ -1703,9 +1703,9 @@ class ReportController extends Controller
             $start_date = $year . '-' . date('m', $start) . '-' . '01';
             $end_date = $year . '-' . date('m', $start) . '-' . '31';
 
-            $total_discount_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
+            $total_sell_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
             if (!empty($store_id)) {
-                $total_discount_query->where('store_id', $store_id);
+                $total_sell_query->where('store_id', $store_id);
             }
             $total_discount[] = $total_discount_query->sum('discount_amount');
 
@@ -1727,6 +1727,45 @@ class ReportController extends Controller
             }
             $total[] = $total_query->sum('final_total');
 
+            $total_discount_sell[] = $total_sell_query->sum('discount_amount');
+            //
+            $total_addstock_query = Transaction::where('type', 'add_stock')->where('status', 'received')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date)
+            ->with('add_stock_lines'); 
+           
+            if (!empty($store_id)) {
+                $total_addstock_query->where('store_id', $store_id);
+            }
+            $total_discount_addstock[] = $total_addstock_query->sum('discount_amount');
+            // $current_stock[] = $total_addstock_query->get()
+            // ->sum(function ($transaction) {
+            //     return $transaction->add_stock_lines->sum('quantity');
+            // });
+            ///
+            $total_tax_sell[] = $total_sell_query->sum('total_tax');
+            ///
+            $total_tax_addstock[] = $total_addstock_query->sum('total_tax');
+            //
+            $shipping_cost_sell[] = $total_sell_query->sum('delivery_cost');
+            //
+            $shipping_cost_addstock[] = $total_addstock_query->sum('delivery_cost');
+            ///
+
+            $total_sell[] = $total_sell_query->sum('grand_total');
+
+            //
+            $total_addstock[] = $total_addstock_query->sum('final_total');
+            $term=$total_sell_query->with('transaction_sell_lines');
+                $total_net_profit[] = $term->get()
+                ->sum(function ($transaction) {
+                    return $transaction->transaction_sell_lines->sum(function ($line) {
+                        return $line->sell_price * ($line->quantity - $line->quantity_returned);
+                    });
+                })-$term->get()
+                ->sum(function ($transaction) {
+                    return $transaction->transaction_sell_lines->sum(function ($line) {
+                        return $line->purchase_price * ($line->quantity - $line->quantity_returned);
+                    });
+                });
             $start = strtotime("+1 month", $start);
         }
         $stores = Store::getDropdown();
@@ -1738,6 +1777,17 @@ class ReportController extends Controller
             'shipping_cost',
             'total',
             'stores'
+            'total_discount_sell',
+            'total_tax_sell',
+            'shipping_cost_sell',
+            'total_sell',
+            'stores',
+            'total_discount_addstock',
+            'total_tax_addstock',
+            'shipping_cost_addstock',
+            'total_addstock',
+            'total_net_profit',
+            // 'total_p'
         ));
     }
     /**
