@@ -1091,11 +1091,11 @@ class ReportController extends Controller
         $pos_id = $this->transactionUtil->getFilterOptionValues($request)['pos_id'];
 
         $add_stock_query = Transaction::leftjoin('stores', 'transactions.store_id', 'stores.id')
-//            ->leftjoin('add_stock_lines', 'transactions.id', 'add_stock_lines.transaction_id')
+            ->leftjoin('add_stock_lines', 'transactions.id', 'add_stock_lines.transaction_id')
             ->leftjoin('transaction_payments', 'transactions.id', 'transaction_payments.transaction_id')
-//            ->leftjoin('suppliers', 'transactions.supplier_id', 'suppliers.id')
-            ->where('transactions.type', 'add_stock');
-//            ->where('transactions.payment_status', 'paid');
+            ->leftjoin('suppliers', 'transactions.supplier_id', 'suppliers.id')
+            ->where('transactions.type', 'add_stock')
+            ->where('transactions.payment_status', 'paid');
 
         if (!empty($request->start_date)) {
             $add_stock_query->whereDate('transaction_date', '>=', $request->start_date);
@@ -1130,11 +1130,11 @@ class ReportController extends Controller
         )->first();
 
         $sale_query = Transaction::leftjoin('stores', 'transactions.store_id', 'stores.id')
-//            ->leftjoin('transaction_sell_lines', 'transactions.id', 'transaction_sell_lines.transaction_id')
+            ->leftjoin('transaction_sell_lines', 'transactions.id', 'transaction_sell_lines.transaction_id')
             ->leftjoin('transaction_payments', 'transactions.id', 'transaction_payments.transaction_id')
-//            ->leftjoin('customers', 'transactions.customer_id', 'customers.id')
+            ->leftjoin('customers', 'transactions.customer_id', 'customers.id')
             ->where('transactions.type', 'sell')
-//            ->where('transactions.payment_status', 'paid')
+            ->where('transactions.payment_status', 'paid')
             ->where('transactions.status', 'final');
 
         if (!empty($request->start_date)) {
@@ -1173,11 +1173,11 @@ class ReportController extends Controller
         )->first();
 
         $sale_return_query = Transaction::leftjoin('stores', 'transactions.store_id', 'stores.id')
-//            ->leftjoin('transaction_sell_lines', 'transactions.id', 'transaction_sell_lines.transaction_id')
+            ->leftjoin('transaction_sell_lines', 'transactions.id', 'transaction_sell_lines.transaction_id')
             ->leftjoin('transaction_payments', 'transactions.id', 'transaction_payments.transaction_id')
-//            ->leftjoin('customers', 'transactions.customer_id', 'customers.id')
+            ->leftjoin('customers', 'transactions.customer_id', 'customers.id')
             ->where('transactions.type', 'sell_return')
-//            ->where('transactions.payment_status', 'paid')
+            ->where('transactions.payment_status', 'paid')
             ->where('transactions.status', 'final');
 
         if (!empty($request->start_date)) {
@@ -1216,11 +1216,11 @@ class ReportController extends Controller
         )->first();
 
         $purchase_return_query = Transaction::leftjoin('stores', 'transactions.store_id', 'stores.id')
-//            ->leftjoin('transaction_sell_lines', 'transactions.id', 'transaction_sell_lines.transaction_id')
+            ->leftjoin('transaction_sell_lines', 'transactions.id', 'transaction_sell_lines.transaction_id')
             ->leftjoin('transaction_payments', 'transactions.id', 'transaction_payments.transaction_id')
-//            ->leftjoin('customers', 'transactions.customer_id', 'customers.id')
+            ->leftjoin('customers', 'transactions.customer_id', 'customers.id')
             ->where('transactions.type', 'purchase_return')
-//            ->where('transactions.payment_status', 'paid')
+            ->where('transactions.payment_status', 'paid')
             ->where('transactions.status', 'final');
 
         if (!empty($request->start_date)) {
@@ -1531,8 +1531,9 @@ class ReportController extends Controller
             $query->where('p.id', $request->product_id);
         }
         $transactions = $query->select(
-            DB::raw("SUM(IF(transactions.type='sell', tsl.quantity * tsl.sell_price, 0)) as sold_amount"),
-            DB::raw("SUM(IF(transactions.type='add_stock', pl.quantity * pl.purchase_price, 0)) as purchased_amount"),
+            DB::raw("SUM(IF(transactions.type='sell', tsl.quantity * p.sell_price, 0)) as sold_amount"),
+            DB::raw("SUM(IF(transactions.type='sell', tsl.quantity * tsl.purchase_price, 0)) as purchase_cost"),
+            DB::raw("SUM(IF(transactions.type='sell', tsl.quantity * p.purchase_price, 0)) as purchased_amount"),
             DB::raw("SUM(IF(transactions.type='sell', tsl.quantity, 0)) as sold_qty"),
             DB::raw("SUM(IF(transactions.type='add_stock', pl.quantity, 0)) as purchased_qty"),
             DB::raw('(SELECT SUM(product_stores.qty_available) FROM product_stores JOIN products ON product_stores.product_id=products.id WHERE products.id=p.id ' . $store_query . ') as in_stock'),
@@ -1630,6 +1631,7 @@ class ReportController extends Controller
                 $query->where('created_by', $created_by);
             }
             $sale_data = $query->select(
+
                 DB::raw('SUM(discount_amount) AS total_discount'),
                 DB::raw('SUM(total_product_discount) AS total_product_discount'),
                 DB::raw('SUM(total_tax) AS total_tax'),
@@ -1705,6 +1707,26 @@ class ReportController extends Controller
             if (!empty($store_id)) {
                 $total_sell_query->where('store_id', $store_id);
             }
+            $total_discount[] = $total_discount_query->sum('discount_amount');
+
+            $total_tax_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
+            if (!empty($store_id)) {
+                $total_tax_query->where('store_id', $store_id);
+            }
+            $total_tax[] = $total_tax_query->sum('total_tax');
+
+            $shipping_cost_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
+            if (!empty($store_id)) {
+                $shipping_cost_query->where('store_id', $store_id);
+            }
+            $shipping_cost[] = $shipping_cost_query->sum('delivery_cost');
+
+            $total_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
+            if (!empty($store_id)) {
+                $total_query->where('store_id', $store_id);
+            }
+            $total[] = $total_query->sum('final_total');
+
             $total_discount_sell[] = $total_sell_query->sum('discount_amount');
             //
             $total_addstock_query = Transaction::where('type', 'add_stock')->where('status', 'received')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date)
@@ -1721,7 +1743,6 @@ class ReportController extends Controller
             ///
             $total_tax_sell[] = $total_sell_query->sum('total_tax');
             ///
-   
             $total_tax_addstock[] = $total_addstock_query->sum('total_tax');
             //
             $shipping_cost_sell[] = $total_sell_query->sum('delivery_cost');
@@ -1748,10 +1769,14 @@ class ReportController extends Controller
             $start = strtotime("+1 month", $start);
         }
         $stores = Store::getDropdown();
-        ///////
 
         return view('reports.monthly_sale_report', compact(
             'year',
+            'total_discount',
+            'total_tax',
+            'shipping_cost',
+            'total',
+            'stores'
             'total_discount_sell',
             'total_tax_sell',
             'shipping_cost_sell',
@@ -1948,6 +1973,7 @@ class ReportController extends Controller
         }
 
         $transactions = $query->select(
+            'sale_note',
             DB::raw("SUM(IF(transactions.type='sell', final_total, 0)) as sold_amount"),
             DB::raw("SUM(IF(transactions.type='sell', tsl.quantity, 0)) as sold_qty"),
             DB::raw('(SELECT SUM(product_stores.qty_available) FROM product_stores JOIN products ON product_stores.product_id=products.id WHERE products.id=p.id ' . $store_query . ') as in_stock'),
