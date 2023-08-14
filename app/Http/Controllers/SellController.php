@@ -187,6 +187,7 @@ class SellController extends Controller
                 'transactions.payment_status',
                 'transactions.status',
                 'transactions.id',
+                'transactions.sale_note',
                 'transactions.transaction_date',
                 'transactions.service_fee_value',
                 'transactions.invoice_no',
@@ -237,6 +238,7 @@ class SellController extends Controller
                     $received_currency_id = $row->received_currency_id ?? $default_currency_id;
                     return '<span data-currency_id="' . $received_currency_id . '">' . $final_total . '</span>';
                 })
+
                 ->addColumn('paid', function ($row) use ($request, $default_currency_id) {
                     $amount_paid = 0;
                     if (!empty($request->method)) {
@@ -257,6 +259,9 @@ class SellController extends Controller
                     $received_currency_id = $row->received_currency_id ?? $default_currency_id;
 
                     return '<span data-currency_id="' . $received_currency_id . '">' . number_format($due,2) . '</span>';
+                })
+                ->editColumn('sale_note', function($row) {
+                    return $row->sale_note;
                 })
                 ->addColumn('customer_type', function ($row) {
                     if (!empty($row->customer->customer_type)) {
