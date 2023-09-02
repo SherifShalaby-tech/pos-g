@@ -51,7 +51,14 @@ class System extends Model
         foreach ($config_languages as $key => $value) {
             $languages[$key] = $value['full_name'];
         }
-
         return $languages;
+    }
+    public static function getFonts()
+    {
+        return [
+            'max' => __('lang.max'),
+            'min' => __('lang.min'),
+            'avg' => __('lang.avg'),
+        ];
     }
 }
