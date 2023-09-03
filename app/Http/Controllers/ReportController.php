@@ -1686,7 +1686,7 @@ class ReportController extends Controller
      *
      * @return view
      */
-      public function getMonthlySaleReport(Request $request)
+    public function getMonthlySaleReport(Request $request)
     {
         $store_id = $this->transactionUtil->getFilterOptionValues($request)['store_id'];
 
@@ -1707,26 +1707,6 @@ class ReportController extends Controller
             if (!empty($store_id)) {
                 $total_sell_query->where('store_id', $store_id);
             }
-            $total_discount[] = $total_discount_query->sum('discount_amount');
-
-            $total_tax_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
-            if (!empty($store_id)) {
-                $total_tax_query->where('store_id', $store_id);
-            }
-            $total_tax[] = $total_tax_query->sum('total_tax');
-
-            $shipping_cost_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
-            if (!empty($store_id)) {
-                $shipping_cost_query->where('store_id', $store_id);
-            }
-            $shipping_cost[] = $shipping_cost_query->sum('delivery_cost');
-
-            $total_query = Transaction::where('type', 'sell')->where('status', 'final')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date);
-            if (!empty($store_id)) {
-                $total_query->where('store_id', $store_id);
-            }
-            $total[] = $total_query->sum('final_total');
-
             $total_discount_sell[] = $total_sell_query->sum('discount_amount');
             //
             $total_addstock_query = Transaction::where('type', 'add_stock')->where('status', 'received')->whereDate('transaction_date', '>=', $start_date)->whereDate('transaction_date', '<=', $end_date)
@@ -1743,6 +1723,7 @@ class ReportController extends Controller
             ///
             $total_tax_sell[] = $total_sell_query->sum('total_tax');
             ///
+   
             $total_tax_addstock[] = $total_addstock_query->sum('total_tax');
             //
             $shipping_cost_sell[] = $total_sell_query->sum('delivery_cost');
@@ -1769,14 +1750,10 @@ class ReportController extends Controller
             $start = strtotime("+1 month", $start);
         }
         $stores = Store::getDropdown();
+        ///////
 
         return view('reports.monthly_sale_report', compact(
             'year',
-            'total_discount',
-            'total_tax',
-            'shipping_cost',
-            'total',
-            'stores'
             'total_discount_sell',
             'total_tax_sell',
             'shipping_cost_sell',
