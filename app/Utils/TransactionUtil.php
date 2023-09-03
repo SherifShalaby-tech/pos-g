@@ -1364,10 +1364,11 @@ class TransactionUtil extends Util
             }
         }
         $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
-       $font='16px';
-       $line_height1='10px';
-       $line_height2='24';
-       $font_size_at_invoice=System::getProperty('font_size_at_invoice');
+        $total_due= $this->getCustomerBalance($transaction->customer_id)['balance'];
+        $font='16px';
+        $line_height1='20px';
+        $line_height2='24px';
+        $font_size_at_invoice=System::getProperty('font_size_at_invoice');
         if (!empty($font_size_at_invoice)){
             if($font_size_at_invoice == 'max'){
                 $font='16px';
@@ -1381,6 +1382,10 @@ class TransactionUtil extends Util
                 $font='12px';
                 $line_height1='15px';
                 $line_height2='21px';
+            }else{
+                $font='16px';
+                $line_height1='20px';
+                $line_height2='24';
             }
         }
         if ($invoice_lang == 'ar_and_en') {
