@@ -648,7 +648,7 @@
                 columnDefs: [{
                     "targets": [0, 3],
                     "orderable": false,
-                    "searchable": false
+                    "searchable": true,
                 }],
                 columns: [
                     {
