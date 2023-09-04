@@ -1364,7 +1364,7 @@ class TransactionUtil extends Util
             }
         }
         $enable_tekstil = System::query()->where("key","enable_tekstil")->first();
-        $total_due= $this->getCustomerBalance($transaction->customer_id)['balance'];
+        // $total_due= $this->getCustomerBalance($transaction->customer_id)['balance'];
         $font='16px';
         $line_height1='20px';
         $line_height2='24px';
