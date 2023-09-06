@@ -398,7 +398,7 @@ function get_label_product_row(
                 is_direct_sale: $("#is_direct_sale").val(),
                 batch_number_id:add_stock_lines_id
             },
-            success: function (result) {         
+            success: function (result) {
                 if (!result.success) {
                     swal("Error", result.msg, "error");
                     return;
@@ -453,7 +453,7 @@ function check_for_sale_promotion() {
                 let  discount = 0;
                 let  sum_item_discount = 0;
                 result.sale_promotion_details.forEach((data, index) => {
-                    
+
                     let sum_discount = 0;
                     if (
                         data.type === "package_promotion"
@@ -523,7 +523,7 @@ function check_for_sale_promotion() {
                             $("#product_table tbody")
                                 .find("tr")
                                 .each(function () {
-                                    
+
                                     var row_product_id = $(this)
                                         .find(".variation_id")
                                         .val()
@@ -544,7 +544,7 @@ function check_for_sale_promotion() {
                                                 .find(".promotion_discount_type")
                                                 .val("percentage");
                                         }
-                                        
+
                                         $(this)
                                             .find(".promotion_discount_value")
                                             .val(discount_value*qty);
@@ -637,25 +637,25 @@ function calculate_sub_totals() {
 
         product_discount_total += product_discount;
         sub_total -= product_discount;
-        grand_total += sub_total;
+        grand_total += roundToNearestQuarter(sub_total);
         $(".grand_total_span").text(
             __currency_trans_from_en(grand_total, false)
         );
 
         let coupon_discount = calculate_coupon_discount(tr);
-        if (sub_total > coupon_discount) {
+        if (roundToNearestQuarter(sub_total) > coupon_discount) {
             total_coupon_discount += coupon_discount;
         }
-        if (sub_total <= coupon_discount) {
-            total_coupon_discount += sub_total;
+        if (roundToNearestQuarter(sub_total) <= coupon_discount) {
+            total_coupon_discount += roundToNearestQuarter(sub_total);
         }
 
-        __write_number($(tr).find(".sub_total"), sub_total);
+        __write_number($(tr).find(".sub_total"), roundToNearestQuarter(sub_total));
         $(tr)
             .find(".sub_total_span")
-            .text(__currency_trans_from_en(sub_total, false));
+            .text(__currency_trans_from_en(roundToNearestQuarter(sub_total), false));
 
-        total += sub_total;
+        total += roundToNearestQuarter(sub_total);
 
         item_count++;
 
@@ -670,7 +670,7 @@ function calculate_sub_totals() {
 
         if (main_tax_type == "product_tax") {
             if (main_tax_id == tax_id) {
-                let item_tax = (sub_total * tax_rate) / 100;
+                let item_tax = (roundToNearestQuarter(sub_total) * tax_rate) / 100;
                 item_tax = item_tax / exchange_rate;
                 __write_number($(tr).find(".item_tax"), item_tax);
                 total_item_tax += item_tax;
@@ -774,6 +774,11 @@ function calculate_sub_totals() {
 
     $(".final_total_span").text(__currency_trans_from_en(total, false));
 }
+
+function roundToNearestQuarter(number) {
+    return Math.round(number * 4) / 4;
+}
+
 function calculate_product_surplus(tr) {
     let surplus = 0;
 
@@ -815,7 +820,7 @@ function calculate_promotion_discount(tr) {
         discount = value;
     }
     if (type == "percentage") {
-        discount = __get_percent_value(sub_total, value);
+        discount = __get_percent_value(roundToNearestQuarter(sub_total), value);
     }
     discount = discount / exchange_rate;
     $(tr).find(".promotion_discount_amount").val(discount);
@@ -862,7 +867,7 @@ function calculate_coupon_discount(tr) {
         discount = value;
     }
     if (type == "percentage") {
-        discount = __get_percent_value(sub_total, value);
+        discount = __get_percent_value(roundToNearestQuarter(sub_total), value);
     }
     discount = discount / exchange_rate;
     $(tr).find(".coupon_discount_amount").val(discount);
@@ -1241,7 +1246,7 @@ $(document).on("change", ".received_amount", function () {
                 $(this_row).find(".received_amount").val(new_amount)
             }else{
                 $(".add_to_customer_balance").addClass("hide");
-            }   
+            }
         });
     } else {
         $(this_row)
@@ -1256,7 +1261,7 @@ $(document).on("click", ".close-payment-madal", function () {
     __write_number($("#add_to_customer_balance"),0);
     $(".add_to_customer_balance").attr("disabled", false);
     $(".add_to_customer_balance").addClass("hide");
-   
+
 });
 
 $(document).on("click", "#add_payment_row", function () {
@@ -1768,7 +1773,7 @@ $(document).ready(function () {
                 });
         },
     });
- 
+
     draft_table = $("#draft_table").DataTable({
         lengthChange: true,
         paging: true,
@@ -3017,7 +3022,7 @@ $(document).on("change", "#upload_documents", function (event) {
 //             $.ajax({
 //                 method: "get",
 //                 url: "/pos/add-discounts",
-//                 data:{ 
+//                 data:{
 //                     customer_id: customer_id,
 //                     product_id: product_id,
 //                     add_stock_lines_id:add_stock_lines_id
@@ -3053,7 +3058,7 @@ $(document).on("change", "#upload_documents", function (event) {
 //                 }
 
 //         });
-    
+
 //     });
 // });
 $(document).on("change", ".discount_category", function (e) {
@@ -3062,7 +3067,7 @@ $(document).on("change", ".discount_category", function (e) {
     $.ajax({
         method: "get",
         url: "/pos/get-product-discount",
-        data:{ 
+        data:{
             product_discount_id: product_discount_id,
             // product_id,product_id
         },
@@ -3074,14 +3079,14 @@ $(document).on("change", ".discount_category", function (e) {
                 $(".discount_category_name"+product_id).val(response.result.discount_category);
                 __write_number($(".discount_value"+product_id), response.result.discount);
                 __write_number($(".discount_amount"+product_id), response.result.discount*qty);
-                
+
             }else{
                 $(".discount_type"+product_id).val('');
                 __write_number($(".discount_value"+product_id), 0);
                 __write_number($(".discount_amount"+product_id), 0);
-            }  
+            }
             check_for_sale_promotion();
-            calculate_sub_totals();                  
+            calculate_sub_totals();
         },
     });
 });
