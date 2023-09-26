@@ -972,9 +972,9 @@ class ProductController extends Controller
                 }
             }
 
-            if (strlen($request->input('image')) == 0) {
+            if (!isset($request->cropImages) || count($request->cropImages) == 0) {
                 // You can clear the media collection here if needed
-                // $product->clearMediaCollection('product');
+                $product->clearMediaCollection('product');
             }
             if (!empty($request->supplier_id)) {
                 SupplierProduct::updateOrCreate(
