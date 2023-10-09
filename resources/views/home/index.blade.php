@@ -2,8 +2,8 @@
 @section('title', __('lang.dashboard'))
 
 @php
-$module_settings = App\Models\System::getProperty('module_settings');
-$module_settings = !empty($module_settings) ? json_decode($module_settings, true) : [];
+    $module_settings = App\Models\System::getProperty('module_settings');
+    $module_settings = !empty($module_settings) ? json_decode($module_settings, true) : [];
 @endphp
 @section('content')
     @if (!empty($module_settings['dashboard']))
@@ -14,14 +14,19 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         <h3>@lang('lang.welcome') <span>{{ Auth::user()->name }}</span> </h3>
                     </div>
                     @if (auth()->user()->can('superadmin') ||
-                        auth()->user()->is_admin ||
-                        auth()->user()->can('dashboard.profit.view'))
+                            auth()->user()->is_admin ||
+                            auth()->user()->can('dashboard.profit.view'))
                         @if (strtolower(session('user.job_title')) != 'deliveryman')
                             <div class="filter-toggle btn-group">
                                 <div class="row">
                                     <div class="col-md-2">
                                         <label for="store_id"><b>@lang('lang.store')</b></label>
-                                        {!! Form::select('store_id', $stores, session('user.is_superadmin') ? null : key($stores), ['class' => 'form-control ','multiple','data-live-search' => 'true', 'id' => 'store_id']) !!}
+                                        {!! Form::select('store_id', $stores, session('user.is_superadmin') ? null : key($stores), [
+                                            'class' => 'form-control ',
+                                            'multiple',
+                                            'data-live-search' => 'true',
+                                            'id' => 'store_id',
+                                        ]) !!}
 
                                     </div>
                                     <div class="col-md-3">
@@ -57,14 +62,13 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
         @if (strtolower(session('user.job_title')) != 'deliveryman')
             <div class="container-fluid">
                 <div class="row">
-                    @if(auth()->user()->can('superadmin') || auth()->user()->is_admin)
+                    @if (auth()->user()->can('superadmin') || auth()->user()->is_admin)
                         <!-- Count item widget-->
                         <div class="col-sm-2">
                             <div class="wrapper count-title text-center">
                                 <div class="icon"><i class="fa fa-cubes" style="color: #498636"></i>
                                 </div>
-                                <div class="name"><strong
-                                        style="color: #498636">@lang('lang.current_stock_value')</strong>
+                                <div class="name"><strong style="color: #498636">@lang('lang.current_stock_value')</strong>
                                 </div>
                                 <div class="count-number current_stock_value-data">
                                     {{ @num_format(0) }}</div>
@@ -73,11 +77,9 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         <!-- Count item widget-->
                         <div class="col-sm-2">
                             <div class="wrapper count-title text-center">
-                                <div class="icon"><i class="dripicons-graph-bar"
-                                        style="color: #733686"></i>
+                                <div class="icon"><i class="dripicons-graph-bar" style="color: #733686"></i>
                                 </div>
-                                <div class="name"><strong
-                                        style="color: #733686">@lang('lang.revenue')</strong>
+                                <div class="name"><strong style="color: #733686">@lang('lang.revenue')</strong>
                                 </div>
                                 <div class="count-number revenue-data">{{ @num_format(0) }}
                                 </div>
@@ -88,8 +90,7 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                             <div class="wrapper count-title text-center">
                                 <div class="icon"><i class="dripicons-return" style="color: #ff8952"></i>
                                 </div>
-                                <div class="name"><strong
-                                        style="color: #ff8952">@lang('lang.sale_return')</strong>
+                                <div class="name"><strong style="color: #ff8952">@lang('lang.sale_return')</strong>
                                 </div>
                                 <div class="count-number sell_return-data">
                                     {{ @num_format(0) }}
@@ -101,50 +102,66 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                             <div class="wrapper count-title text-center">
                                 <div class="icon"><i class="dripicons-media-loop" style="color: #297ff9"></i>
                                 </div>
-                                <div class="name"><strong
-                                        style="color: #297ff9">@lang('lang.total_taxes')</strong>
+                                <div class="name"><strong style="color: #297ff9">@lang('lang.total_taxes')</strong>
                                 </div>
                                 <div class="count-number total_tax">{{ @num_format(0) }}
+                                </div>
+                            </div>
+                            <div class="wrapper count-title text-center" style="margin-top: 20px;">
+                                <div class="icon"><i class="dripicons-trophy" style="color: #3f6dad"></i>
+                                </div>
+                                <div class="name"><strong
+                                        style="color: #3f6dad">@lang('lang.purchase')</strong>
+                                </div>
+                                <div class="count-number purchase-data">{{ @num_format(0) }}
                                 </div>
                             </div>
                         </div>
                         <!-- Count item widget-->
                         <div class="col-sm-2">
-                                <div class="wrapper count-title text-center">
-                                    <div class="icon"><i class="dripicons-media-loop"
-                                            style="color: #00c689"></i>
-                                    </div>
-                                    <div class="name"><strong
-                                            style="color: #00c689">@lang('lang.purchase_return')</strong>
-                                    </div>
-                                    <div class="count-number purchase_return-data">
-                                        {{ @num_format(0) }}</div>
+                            <div class="wrapper count-title text-center">
+                                <div class="icon"><i class="dripicons-media-loop" style="color: #00c689"></i>
+                                </div>
+                                <div class="name"><strong style="color: #00c689">@lang('lang.purchase_return')</strong>
+                                </div>
+                                <div class="count-number purchase_return-data">
+                                    {{ @num_format(0) }}</div>
+                            </div>
+                            <div class="wrapper count-title text-center" style="margin-top: 20px;">
+                                <div class="icon"><i class="dripicons-trophy" style="color: #3f6dad"></i>
+                                </div>
+                                <div class="name"><strong
+                                        style="color: #3f6dad">@lang('lang.expense')</strong>
+                                </div>
+                                <div class="count-number expense-data">{{ @num_format(0) }}
                                 </div>
                             </div>
+                        </div>
                         <!-- Count item widget-->
                         <div class="col-sm-2">
-                                <div class="wrapper count-title text-center">
-                                    <div class="icon"><i class="dripicons-trophy" style="color: #297ff9"></i>
-                                    </div>
-                                    <div class="name"><strong
-                                            style="color: #297ff9">@lang('lang.profit')</strong>
-                                    </div>
-                                    <div class="count-number profit-data">{{ @num_format(0) }}
-                                    </div>
+                            <div class="wrapper count-title text-center">
+                                <div class="icon"><i class="dripicons-trophy" style="color: #297ff9"></i>
                                 </div>
-                                <div class="wrapper count-title text-center" style="margin-top: 20px;">
-                                    <div class="icon"><i class="dripicons-trophy" style="color: #3f6dad"></i>
-                                    </div>
-                                    <div class="name"><strong
-                                            style="color: #3f6dad">@lang('lang.net_profit')</strong>
-                                    </div>
-                                    <div class="count-number net_profitt-data">{{ @num_format(0) }}
-                                    </div>
+                                <div class="name"><strong style="color: #297ff9">@lang('lang.profit')</strong>
+                                </div>
+                                <div class="count-number profit-data">{{ @num_format(0) }}
                                 </div>
                             </div>
-                        @endif
-                    </div>
+                            <div class="wrapper count-title text-center" style="margin-top: 20px;">
+                                <div class="icon"><i class="dripicons-trophy" style="color: #3f6dad"></i>
+                                </div>
+                                <div class="name"><strong style="color: #3f6dad">@lang('lang.net_profit')</strong>
+                                </div>
+                                <div class="count-number net_profitt-data">{{ @num_format(0) }}
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                       
+                    @endif
                 </div>
+            </div>
             </div>
 
             <div class="container-fluid" id="chart_and_table_section">
@@ -214,6 +231,8 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                     let purchase_return_string = '<div>';
                     let profit_string = '<div>';
                     let net_profit_string = '<div>';
+                    let expense_string = '<div>';
+                    let purchase_string = '<div>';
                     result.forEach(element => {
                         currenct_stock_string += `<h3 class="dashboard_currency currency_total_${element.currency.currency_id}"
                                             data-currency_id="${element.currency.currency_id}"
@@ -227,7 +246,7 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                                                 class="total">${__currency_trans_from_en(element.data.current_stock_value, false)}</span>
                                         </h3>
                                       `;
-                                      currenct_stock_string_p +=`<h5 class="dashboard_currency currency_total_${element.currency.currency_id}"
+                        currenct_stock_string_p += `<h5 class="dashboard_currency currency_total_${element.currency.currency_id}"
                                             data-currency_id="${element.currency.currency_id}"
                                             data-is_default="${element.currency.is_default}"
                                             data-conversion_rate="${element.currency.conversion_rate}"
@@ -238,7 +257,7 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                                                 class="total">${__currency_trans_from_en(element.data.current_stock_value_product, false)}</span>
                                         <span style="color: #3fc3ee">P</span>
                                         </h5>`;
-                                        currenct_stock_string_m +=`<h5 class="dashboard_currency currency_total_${element.currency.currency_id}"
+                        currenct_stock_string_m += `<h5 class="dashboard_currency currency_total_${element.currency.currency_id}"
                             data-currency_id="${element.currency.currency_id}"
                             data-is_default="${element.currency.is_default}"
                             data-conversion_rate="${element.currency.conversion_rate}"
@@ -318,6 +337,28 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                             <span
                                 class="total">${__currency_trans_from_en(element.data.net_profit, false)}</span>
                         </h3>`;
+                        expense_string += `<h3 class="dashboard_currency currency_total_${element.currency.currency_id}"
+                                            data-currency_id="${element.currency.currency_id}"
+                                            data-is_default="${element.currency.is_default}"
+                                            data-conversion_rate="${element.currency.conversion_rate}"
+                                            data-base_conversion="${element.currency.conversion_rate * element.data.expense}"
+                                            data-orig_value="${element.data.expense}">
+                                            <span class="symbol" style="padding-right: 10px;">
+                                                ${element.currency.symbol}</span>
+                                            <span
+                                                class="total">${__currency_trans_from_en(element.data.expense, false)}</span>
+                                        </h3>`;
+                        purchase_string += `<h3 class="dashboard_currency currency_total_${element.currency.currency_id}"
+                                            data-currency_id="${element.currency.currency_id}"
+                                            data-is_default="${element.currency.is_default}"
+                                            data-conversion_rate="${element.currency.conversion_rate}"
+                                            data-base_conversion="${element.currency.conversion_rate * element.data.purchase}"
+                                            data-orig_value="${element.data.purchase}">
+                                            <span class="symbol" style="padding-right: 10px;">
+                                                ${element.currency.symbol}</span>
+                                            <span
+                                                class="total">${__currency_trans_from_en(element.data.purchase, false)}</span>
+                                        </h3>`;
                     });
                     currenct_stock_string += `</div>`;
                     currenct_stock_string_p += `</div>`;
@@ -328,13 +369,16 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                     total_tax_string += `</div>`;
                     profit_string += `</div>`;
                     net_profit_string += '</div>';
+                    expense_string += '</div>';
+                    purchase_string += '</div>';
                     $(".revenue-data").html(revenue_string);
 
 
                     $('.revenue-data').show(500);
 
                     $('.current_stock_value-data').hide();
-                    $(".current_stock_value-data").html(currenct_stock_string + currenct_stock_string_p + currenct_stock_string_m);
+                    $(".current_stock_value-data").html(currenct_stock_string + currenct_stock_string_p +
+                        currenct_stock_string_m);
                     $('.current_stock_value-data').show(500);
 
                     $('.sell_return-data').hide();
@@ -356,6 +400,14 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                     $('.net_profitt-data').hide();
                     $(".net_profitt-data").html(net_profit_string);
                     $('.net_profitt-data').show(500);
+
+                    $('.expense-data').hide();
+                    $(".expense-data").html(expense_string);
+                    $('.expense-data').show(500);
+
+                    $('.purchase-data').hide();
+                    $(".purchase-data").html(purchase_string);
+                    $('.purchase-data').show(500);
                 },
             });
             getChartAndTableSection(start_date, end_date, store_id);
