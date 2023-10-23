@@ -57,7 +57,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
             <label for="show_at_the_main_pos_page"><strong>@lang('lang.show_at_the_main_pos_page')</strong></label>
         </div>
     </div>
-    <div class="col-md-4">
+    {{-- <div class="col-md-4">
         <div class="form-group supplier_div">
             {!! Form::label('supplier_id', __('lang.supplier'), []) !!}
             <div class="input-group my-group">
@@ -71,7 +71,7 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                 </span>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="col-md-4">
         @if (session('system_mode') == 'restaurant')
             {!! Form::label('product_class_id', __('lang.category') . ' *', []) !!}
@@ -307,13 +307,13 @@ $clear_all_input_form = App\Models\System::getProperty('clear_all_input_form');
                 <label for="price_based_on_raw_material"><strong>@lang('lang.price_based_on_raw_material')</strong></label>
             </div>
         </div>
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
             <div class="i-checks">
                 <input id="buy_from_supplier" name="buy_from_supplier" type="checkbox" value="1"
                     class="form-control-custom">
                 <label for="buy_from_supplier"><strong>@lang('lang.buy_from_supplier')</strong></label>
             </div>
-        </div>
+        </div> --}}
         <div class="col-md-12">
             <table class="table table-bordered" id="consumption_table">
                 <thead>
