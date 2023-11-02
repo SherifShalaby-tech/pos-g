@@ -1423,4 +1423,6 @@ return [
     'max'=>'Max',
     'min'=>'Min',
     'avg'=>'Avg',
+    'check_purchase_price_please' => 'please make sure that purchase price is less than sell price',
+
 ];
