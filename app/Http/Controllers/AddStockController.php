@@ -963,7 +963,7 @@ class AddStockController extends Controller
                 $payment_data = [
                     'transaction_id' => $transaction->id,
                     'amount' => $this->commonUtil->num_uf($request->amount),
-                    'method' => $request->Nmethod,
+                    'method' => $request->method,
                     'paid_on' => $this->commonUtil->uf_date($data['paid_on']),
                     'ref_number' => $request->ref_number,
                     'source_type' => $request->source_type,
