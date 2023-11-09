@@ -656,6 +656,7 @@ $(document).on("change", "#sell_price", function () {
     $(".store_prices").val($(this).val());
     $(".default_sell_price").val($(this).val());
 });
+
 $(document).on("change", "#purchase_price", function () {
     let purchase_price = __read_number($("#purchase_price"));
     let default_profit_percentage = __read_number(
