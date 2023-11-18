@@ -86,7 +86,7 @@
                                                 <th style="width: 7%" class="col-sm-8">@lang( 'lang.image' )</th>
                                                 <th style="width: 10%" class="col-sm-8">@lang( 'lang.products' )</th>
                                                 <th style="width: 10%" class="col-sm-4">@lang( 'lang.sku' )</th>
-                                                <th style="width: 5%" class="col-sm-4">@lang( 'lang.quantity' )</th>
+                                                <th style="width: 10%" class="col-sm-4">@lang( 'lang.quantity' )</th>
                                                 <th style="width: 10%" class="col-sm-4">@lang( 'lang.unit' )</th>
                                                 <th style="width: 30%" class="col-sm-4">@lang( 'lang.purchase_price' )</th>
                                                 <th style="width: 30%" class="col-sm-4">@lang( 'lang.selling_price' )</th>
@@ -122,7 +122,7 @@
                                                     {{!empty($product->variation) ?$product->variation->sub_sku:''}}
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control quantity  quantity_{{$loop->index}}" min=1 name="add_stock_lines[{{$loop->index}}][quantity]" required
+                                                    <input type="text" class="form-control quantity  quantity_{{$loop->index}}" min="1" name="add_stock_lines[{{$loop->index}}][quantity]" required
                                                         value="@if(isset($product->quantity)){{preg_match('/\.\d*[1-9]+/', (string)$product->quantity) ? $product->quantity : @num_format($product->quantity)}}@else{{1}}@endif" index_id="{{$loop->index}}">
                                                 </td>
                                                 <td>
@@ -159,7 +159,6 @@
                                                     @endphp
                                                     <td>
                                                         <input type="hidden" name="current_stock" class="current_stock"
-{{--                                                            value="@if (isset($current_stock)) {{ preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock : @num_format($current_stock) }}@else{{ 0 }} @endif">--}}
                                                             value="@if (isset($current_stock)) {{ number_format($current_stock,App\Models\System::getProperty('numbers_length_after_dot')) }} @else{{ 0 }} @endif">
                                                         <span class="current_stock_text">
                                                             @if (isset($current_stock))
@@ -598,5 +597,14 @@
                 tr.find('.days_before_the_expiry_date').val(15);
             }
         })
+        $(document).ready(function() {
+            $('form#edit_stock_form').submit(function() {
+                $('.quantity').each(function() {
+                    var inputValue = $(this).val();
+                    var sanitizedValue = inputValue.replace(/,/g, '');
+                    $(this).val(sanitizedValue);
+                });
+            });
+        });
     </script>
 @endsection
