@@ -105,11 +105,11 @@
                     </p>
                     @if (!empty($print['size']) && !empty($details['details']->size_name))
                         <p style="margin-top: -12px; text-align: right; font-weight: bold; margin-bottom: 0px;">
-                            {{ $details['details']->size_name }}</p>
+                            {{ $details['details']->size_name }}&nbsp;</p>
                     @endif
 
                     {{-- Grade --}}
-                    <span style="display: block !important;font-weight: bold;font-size: 19px;margin-bottom: 1px;"  >
+                    <span style="display: block !important">
                         @if (!empty($print['grade']) && !empty($details['details']->grade_name))
                             @lang('lang.grade'):
                             {{ $details['details']->grade_name }}
@@ -132,12 +132,12 @@
                         </span>
                     @endif
 
-                    <img class="center-block" style="width:250px !important; height: 70px; margin: 0; padding: 0 10px;"
+                    <img class="center-block" style="width:250px !important; height: 35px !important; margin: 0; padding: 0 10px;"
                         src="data:image/png;base64,{{ DNS1D::getBarcodePNG($details['details']->sub_sku, $details['details']->barcode_type, 3, 30, [39, 48, 54], true) }}">
 
                 </div>
                 <div class="row">
-                    <div class="col-md-4" style="font-size: 14px; margin-top: -30px;">
+                    <div class="col-md-4" style="font-size: 14px;">
                         @if (!empty($print['site_title']))
                             <p style="text-align: left; word-wrap: break-word;">
                                 {{ $print['site_title'] }}
