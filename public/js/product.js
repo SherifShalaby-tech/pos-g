@@ -184,7 +184,7 @@ function submitForm() {
                     $("#sku").val("").change();
                     $("#name").val("").change();
                     $(".translations").val("").change();
-
+                    $("#show_at_the_main_pos_page").prop('checked', false);
                     if (!$('#clear_all_input_form').is(':checked')) {
                     $('.clear_input_form').val('');
                     $('.clear_input_form').selectpicker('refresh');
