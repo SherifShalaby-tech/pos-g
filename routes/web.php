@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Models\AddStockLine;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
@@ -204,6 +205,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
 
     Route::get('store-pos/get-pos-details-by-store/{store_id}', 'StorePosController@getPosDetailsByStore');
     Route::resource('store-pos', StorePosController::class);
+    Route::post('user/check-admin-password', [HomeController::class, 'checkAdminPassword'])->name('check_admin_password');
 
     Route::get('pos/update-status-to-cancel/{id}', 'SellPosController@updateStatusToCancel');
     Route::get('pos/get-non-identifiable-item-row', 'SellPosController@getNonIdentifiableItemRow');
