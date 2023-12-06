@@ -86,7 +86,7 @@
         @while ($details['qty'] > 0)
             <div style="height:1.2in !important; line-height: {{ $page_height }}in;  display: inline-block;"
                 class="sticker-border text-center">
-                <div style="display:inline-block;vertical-align:middle;line-height:14px !important; font-size: 14px;">
+                <div style="display:inline-block;vertical-align:middle;line-height:17px !important; font-size: 14px;">
 
                     <p class="text-center" style="padding: 2px !important; margin: 0px;">
                         @if (!empty($print['name']))
@@ -103,7 +103,7 @@
                         @endif
                     </p>
                     @if (!empty($print['size']) && !empty($details['details']->size_name))
-                        <p style="margin-top: -12px; text-align: right; font-weight: bold; margin-bottom: 0px;">
+                        <p style="margin-top: -17px; text-align: right; font-weight: bold; margin-bottom: 0px;">
                             {{ $details['details']->size_name }}&nbsp;&nbsp;</p>
                     @endif
                     {{-- Price --}}
@@ -115,7 +115,7 @@
                                 ->latest()
                                 ->first();
                         @endphp
-                        <p style="margin-top: -13px; text-align: left; font-weight: bold; margin-bottom: 0px;">
+                        <p style="margin-top: -8px; text-align: left; font-weight: bold; margin-bottom: 0px;">
                             &nbsp;&nbsp;
                             {{ !empty($stockLines) ? @num_format($stockLines->sell_price) : @num_format($details['details']->default_sell_price) }}{{ $currency->symbol??''}}
                             
