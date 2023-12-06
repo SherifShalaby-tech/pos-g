@@ -1417,4 +1417,9 @@ return [
 
     'category_report'=>'تقرير المنتج',
     'category_purchases'=>'مبيعات المنتج',
+    'are_you_sure'=>'هل انت متاكد ؟',
+    'are_you_sure_you_wanna_update_it'=>'هل متاك من التعديل',
+    'please_enter_your_password'=>'ادخل كلمة السر الصحيح',
+    'type_your_password'=>'اكتب كلمة السر',
+    'correct_password'=>'كلمة السر صحيحة',
 ];

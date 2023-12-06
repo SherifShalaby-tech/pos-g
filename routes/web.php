@@ -269,6 +269,7 @@ Route::group(['middleware' => ['auth', 'SetSessionData', 'language', 'timezone']
 
     Route::group(['prefix' => 'hrm'], function () {
         Route::resource('job', JobController::class);
+        Route::get('print/employee-barcode/{id}','EmployeeController@printEmployeeBarcode')->name('print_employee_barcode');
         Route::get('get-same-job-employee-details/{id}', 'EmployeeController@getSameJobEmployeeDetails');
         Route::get('get-balance-leave-details/{id}', 'EmployeeController@getBalanceLeaveDetails');
         Route::get('get-employee-details-by-id/{id}', 'EmployeeController@getDetails');
