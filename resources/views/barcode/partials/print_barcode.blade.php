@@ -146,11 +146,7 @@
 
 
 
-                    {{-- <img class="center-block"
-                        style="width:250px !important; height: 35px !important; margin: 0; padding: 0 10px;"
-                        src="data:image/png;base64,{{ DNS1D::getBarcodePNG($details['details']->sub_sku, $details['details']->barcode_type, 3, 30, [39, 48, 54], true) }}"> --}}
-                      <div class="center-block"
-                        style="width:250px !important; height: 35px !important; margin: 0; padding: 0 10px;">
+                    <div class="center-block" style="max-width: 95%; overflow: hidden;padding-left:6px;">
                         {!! DNS1D::getBarcodeSVG($details['details']->sub_sku, "C128", 3, 40, '#2A3239') !!}
                     </div>
                 </div>
@@ -162,7 +158,7 @@
                             </p>
                         @endif
                         @if (!empty($print['store']))
-                            <p style="text-align: left; word-wrap: break-word; padding-top: 3px;">
+                            <p style="text-align: left; word-wrap: break-word; padding-top: 1px;">
                                 <br>{{ $print['store'] }}
                             </p>
                         @endif
@@ -173,7 +169,7 @@
                             ->first();
                     @endphp
                     <div class="col-md-4" style="font-size: 14px; margin-top: -30px;"></div>
-                    <div class="col-md-4" style="font-size: 14px; margin-top: -30px;padding-right:6px">
+                    <div class="col-md-4" style="font-size: 14px; margin-top: -33px;padding-right:6px">
                         @if (!empty($print['size_variations']))
                             <p style="text-align: right; word-wrap: break-word;">
                                 {{ implode(', ', $product->sizes->pluck('name')->toArray()) }}
