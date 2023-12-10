@@ -169,7 +169,6 @@ class SellPosController extends Controller
      */
     public function store(Request $request)
     {
-
         // try {
         $transaction_data = [
             'store_id' => $request->store_id,
