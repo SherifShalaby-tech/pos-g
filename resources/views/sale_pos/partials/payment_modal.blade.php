@@ -30,7 +30,7 @@
                                     <div class="col-md-6 mt-1">
                                         <label class="change_text">@lang('lang.change'): </label>
                                         <span class="change" class="ml-2">0.00</span>
-                                        <input type="text" name="payments[0][change_amount]" class="change_amount"
+                                        <input type="hidden" name="payments[0][change_amount]" class="change_amount"
                                             id="change_amount">
                                         <input type="hidden" name="payments[0][pending_amount]" class="pending_amount">
                                         <div class="col-md-6">
