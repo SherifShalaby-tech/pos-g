@@ -142,9 +142,9 @@
                                         <select class="form-control" name="paper_size" required id="paper-size"
                                             tabindex="-98">
                                             <option value="0">Select paper size...</option>
-                                            <option value="36">36 mm (1.4 inch)</option>
-                                            <option value="24">24 mm (0.94 inch)</option>
-                                            <option value="18">18 mm (0.7 inch)</option>
+                                            <option value="3">4x3</option>
+                                            <option value="2.5">4x2.5</option>
+                                            {{-- <option value="18">18 mm (0.7 inch)</option> --}}
                                         </select>
                                     </div>
                                 </div>
