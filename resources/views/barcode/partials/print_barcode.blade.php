@@ -182,9 +182,7 @@
                         {{$details['details']->sub_sku}}
                     </div> --}}
                     <div class="center-block" style="max-width: 95%; overflow: hidden; padding-left: 6px; vertical-align: top;">
-                        @if($page_height == 3) 
-                        {!! DNS1D::getBarcodeSVG($details['details']->sub_sku, "C128", 1,25, '#2A3239') !!}
-                        @else {!! DNS1D::getBarcodeSVG($details['details']->sub_sku, "C128", 1,20, '#2A3239') !!} @endif
+                        {!! DNS1D::getBarcodeSVG($details['details']->sub_sku, "C128", 4,80, '#2A3239') !!}
                     </div>
                     @if (!empty($print['site_title']))
                             <p style="margin: 0%;">
