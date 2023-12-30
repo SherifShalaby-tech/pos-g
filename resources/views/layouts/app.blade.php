@@ -223,6 +223,13 @@
                 url: $(this).data('href'),
                 dataType: 'html',
                 success: function(result) {
+                    if(result){
+                        if($('.add_closing_cash').length>0){
+                            $('.add_closing_cash').hide();
+                            $('.close').click();
+                            $('#overlay').hide();
+                        }
+                    }
                     $(container).html(result).modal('show');
                 },
             });
