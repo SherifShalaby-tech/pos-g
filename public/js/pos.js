@@ -1622,6 +1622,10 @@ function reset_pos_form() {
     $("#received_currency_id").val(default_currency_id);
     $("#received_currency_id").change();
     $("#received_currency_id").selectpicker("refresh");
+
+    __write_number($("#add_to_customer_balance"),0);
+    $(".add_to_customer_balance").attr("disabled", false);
+    $(".add_to_customer_balance").addClass("hide");
 }
 $(document).ready(function () {
     $("#terms_and_condition_id").val($("#terms_and_condition_hidden").val());
@@ -2198,6 +2202,7 @@ $(document).on("click", ".use_it_deposit_balance", function () {
 
     let used_deposit_balance = __read_number($("#used_deposit_balance"));
     __write_number($("#amount"), used_deposit_balance);
+    $(".received_amount").change();
 });
 
 $(document).on("click", ".add_to_deposit", function () {

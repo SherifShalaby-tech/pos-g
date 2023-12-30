@@ -6,12 +6,32 @@
     <td style="width: @if(session('system_mode')  != 'restaurant') 18%; @else 20%; @endif font-size: 13px;">
         @php
         $Variation=\App\Models\Variation::where('id',$product->variation_id)->first();
-            if($Variation){
-                // ->where('batch_number',$product->batch_number)
-                $stockLines=\App\Models\AddStockLine::where('variation_id',$Variation->id)->whereColumn('quantity',">",'quantity_sold')->first();
-                $default_sell_price=$stockLines?($stockLines->sell_price == 0? $Variation->default_sell_price : $stockLines->sell_price )  : $Variation->default_sell_price;
-                $default_purchase_price=$stockLines?($stockLines->purchase_price == 0? $Variation->default_purchase_price : $stockLines->purchase_price ) : $Variation->default_purchase_price;
-                $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
+        if($product->is_service!=1){
+                $Variation=\App\Models\Variation::where('id',$product->variation_id)->first();
+                    if($Variation){
+                        $stockLines=\App\Models\AddStockLine::where('sell_price','>',0)->where('variation_id',$Variation->id)
+                        ->whereHas('transaction', function ($query) {
+                        $query->where('type', '!=', 'supplier_service');
+                        })
+                        ->latest()->first();
+                        $default_sell_price=$stockLines?$stockLines->sell_price : 0;
+                        $default_purchase_price=$stockLines?$stockLines->purchase_price : 0;
+                        $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
+
+                    }
+            }else{
+                $Variation=\App\Models\Variation::where('id',$product->variation_id)->first();
+                    if($Variation){
+                        $stockLines=\App\Models\AddStockLine::where('sell_price','>',0)->where('variation_id',$Variation->id)
+                        ->whereHas('transaction', function ($query) {
+                            $query->where('type', '!=', 'supplier_service');
+                        })
+                        ->latest()->first();
+                        $default_sell_price= $Variation->default_sell_price??0;
+                        $default_purchase_price= $Variation->default_purchase_price??0;
+                        $cost_ratio_per_one = $stockLines ? $stockLines->cost_ratio_per_one : 0;
+
+                    }
             }
             $product_unit = \App\Models\Product::where('id',$product->product_id)->first();
             if($product_unit && isset($product_unit->multiple_units)){

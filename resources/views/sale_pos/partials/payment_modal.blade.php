@@ -30,7 +30,7 @@
                                     <div class="col-md-6 mt-1">
                                         <label class="change_text">@lang('lang.change'): </label>
                                         <span class="change" class="ml-2">0.00</span>
-                                        <input type="text" name="payments[0][change_amount]" class="change_amount"
+                                        <input type="hidden" name="payments[0][change_amount]" class="change_amount"
                                             id="change_amount">
                                         <input type="hidden" name="payments[0][pending_amount]" class="pending_amount">
                                         <div class="col-md-6">
@@ -123,6 +123,10 @@
                                         <button type="button"
                                             class="ml-1 btn btn-danger add_to_deposit">@lang('lang.add_to_deposit')</button>
                                         <input type="hidden" name="add_to_deposit" id="add_to_deposit" value="0">
+                                    </div>
+                                    <div class="col-md-12 mb-2 ">
+                                        <button type="button" id="add_payment_row" class="btn btn-primary btn-block">
+                                            @lang('lang.add_payment_row')</button>
                                     </div>
                                 </div>
                             </div>
