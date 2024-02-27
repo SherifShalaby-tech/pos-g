@@ -403,7 +403,9 @@ function get_label_product_row(
                 weighing_scale_barcode: weighing_scale_barcode,
                 dining_table_id: $("#dining_table_id").val(),
                 is_direct_sale: $("#is_direct_sale").val(),
-                batch_number_id:add_stock_lines_id
+                batch_number_id:add_stock_lines_id,
+                is_edit:($("#is_edit").length === 0)?0:$("#is_edit").val(),
+                transaction_id:($("#transaction_id").length === 0)?0:$("#transaction_id").val(),
             },
             success: function (result) {
                 if (!result.success) {
