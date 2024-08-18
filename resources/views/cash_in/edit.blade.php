@@ -20,9 +20,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('amount', __( 'lang.amount' ) . ':*') !!}
-                            {!! Form::text('amount', @num_format($cash_in->amount), ['class' => 'form-control', 'placeholder' =>
+                            {!! Form::text('amount', @num_format($cash_in->amount), ['class' => 'form-control',
+                            'placeholder' =>
                             __(
-                            'lang.amount' ), 'required' ]);
+                            'lang.amount' ), 'required' ])
                             !!}
                         </div>
                     </div>

@@ -1,7 +1,8 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
-        {!! Form::open(['url' => action('ColorController@update', $color->id), 'method' => 'put', 'id' => 'color_add_form' ]) !!}
+        {!! Form::open(['url' => action('ColorController@update', $color->id), 'method' => 'put', 'id' =>
+        'color_add_form' ]) !!}
 
         <div class="modal-header">
 
@@ -13,12 +14,14 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
-                {!! Form::text('name', $color->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ), 'required' ]);
+                {!! Form::text('name', $color->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ),
+                'required' ])
                 !!}
             </div>
             <div class="form-group">
                 {!! Form::label('color_hex', __( 'lang.color_hex' ) . ':*') !!}
-                {!! Form::text('color_hex', $color->color_hex, ['class' => 'form-control', 'placeholder' => __( 'lang.color_hex' ) ]);
+                {!! Form::text('color_hex', $color->color_hex, ['class' => 'form-control', 'placeholder' => __(
+                'lang.color_hex' ) ])
                 !!}
             </div>
         </div>

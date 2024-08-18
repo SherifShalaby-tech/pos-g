@@ -28,18 +28,19 @@
 </head>
 
 <body onload="myFunction()">
+
     <div id="loader"></div>
     @if (request()->segment(1) != 'pos')
-        @include('layouts.partials.header')
+    @include('layouts.partials.header')
     @endif
     <div class="@if (request()->segment(1) != 'pos') page @else pos-page @endif">
         @include('layouts.partials.sidebar')
         <div style="display:none" id="content" class="animate-bottom">
             @foreach ($errors->all() as $message)
-                <div class="alert alert-danger alert-dismissible text-center">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>{{ $message }}
-                </div>
+            <div class="alert alert-danger alert-dismissible text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>{{ $message }}
+            </div>
             @endforeach
             <input type="hidden" id="__language" value="{{ session('language') }}">
             <input type="hidden" id="__decimal" value=".">
@@ -50,6 +51,14 @@
             <input type="hidden" id="__precision" value="3">
             <input type="hidden" id="__quantity_precision" value="3">
             <input type="hidden" id="system_mode" value="{{ env('SYSTEM_MODE') }}">
+
+
+
+
+
+
+
+
             @yield('content')
         </div>
 
@@ -87,9 +96,9 @@
         </div>
 
         @php
-            $cash_register = App\Models\CashRegister::where('user_id', Auth::user()->id)
-                ->where('status', 'open')
-                ->first();
+        $cash_register = App\Models\CashRegister::where('user_id', Auth::user()->id)
+        ->where('status', 'open')
+        ->first();
         @endphp
         <input type="hidden" name="is_register_close" id="is_register_close"
             value="@if (!empty($cash_register)) {{ 0 }}@else{{ 1 }} @endif">
@@ -110,6 +119,7 @@
 
     @include('layouts.partials.currencies_obj')
     @include('layouts.partials.javascript')
+
     <script>
         $.ajaxSetup({
             headers: {
@@ -431,6 +441,8 @@
         $.fn.modal.Constructor.prototype._enforceFocus = function() {};
         $('input').attr('autocomplete', 'off');
     </script>
+
 </body>
+
 
 </html>

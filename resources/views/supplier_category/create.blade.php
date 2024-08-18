@@ -14,7 +14,8 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
-                {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ), 'required' ]);
+                {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ), 'required'
+                ])
                 !!}
             </div>
             <input type="hidden" name="quick_add" value="{{$quick_add }}">

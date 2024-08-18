@@ -12,21 +12,22 @@
                         <div class="form-group">
                             {!! Form::label('nonid_name', __('lang.name') . ':' ) !!}
                             {!! Form::text('nonid_name', null, ['class' => 'form-control', 'id' =>
-                            'nonid_name']); !!}
+                            'nonid_name']) !!}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             {!! Form::label('nonid_purchase_price', __('lang.purchase_price') . ':' ) !!}
                             {!! Form::text('nonid_purchase_price', null, ['class' => 'form-control', 'id' =>
-                            'nonid_purchase_price', 'required']); !!}
+                            'nonid_purchase_price', 'required']) !!}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             {!! Form::label('nonid_sell_price', __('lang.sell_price') . ':' ) !!}
-                            {!! Form::text('nonid_sell_price', null, ['class' => 'form-control', 'id' => 'nonid_sell_price',
-                            'required']);
+                            {!! Form::text('nonid_sell_price', null, ['class' => 'form-control', 'id' =>
+                            'nonid_sell_price',
+                            'required'])
                             !!}
                         </div>
                     </div>
@@ -34,7 +35,7 @@
                         <div class="form-group">
                             {!! Form::label('nonid_quantity', __('lang.quantity') . ':' ) !!}
                             {!! Form::text('nonid_quantity', null, ['class' => 'form-control', 'id' => 'nonid_quantity',
-                            'required']);
+                            'required'])
                             !!}
                         </div>
                     </div>

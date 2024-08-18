@@ -15,13 +15,13 @@
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
                 {!! Form::text('name', $size->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ),
-                'required' ]);
+                'required' ])
                 !!}
             </div>
             <div class="form-group">
                 {!! Form::label('size_code', __( 'lang.size_code' ) . ':*') !!}
                 {!! Form::text('size_code', $size->size_code, ['class' => 'form-control', 'placeholder' => __(
-                'lang.size_code' )]);
+                'lang.size_code' )])
                 !!}
             </div>
         </div>

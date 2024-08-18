@@ -11,15 +11,17 @@
             <div class="modal-body">
                 <div class="form-group">
                     {!! Form::label('discount_type', __( 'lang.type' ) . ':*') !!}
-                    {!! Form::select('discount_type', ['fixed' => 'Fixed', 'percentage' => 'Percentage'], !empty($transaction) ? $transaction->discount_type : 'fixed',
+                    {!! Form::select('discount_type', ['fixed' => 'Fixed', 'percentage' => 'Percentage'],
+                    !empty($transaction) ? $transaction->discount_type : 'fixed',
                     ['class' =>
                     'form-control', 'data-live-search' => 'true']) !!}
                 </div>
                 <div class="form-group">
                     {!! Form::label('discount_value', __( 'lang.discount_value' ) . ':*') !!}
-                    {!! Form::text('discount_value', !empty($transaction) ? @num_format($transaction->discount_value) : null, ['class' => 'form-control', 'placeholder' => __(
+                    {!! Form::text('discount_value', !empty($transaction) ? @num_format($transaction->discount_value) :
+                    null, ['class' => 'form-control', 'placeholder' => __(
                     'lang.discount_value' ),
-                    'required' ]);
+                    'required' ])
                     !!}
                 </div>
                 <input type="hidden" name="discount_amount" id="discount_amount">

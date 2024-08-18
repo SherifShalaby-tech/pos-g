@@ -2,73 +2,90 @@
 @section('title', __('lang.cash'))
 
 @section('content')
-<div class="col-md-12  no-print">
-    <div class="card">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.cash')</h3>
-        </div>
-        <div class="col-md-12 card pt-3 pb-3">
-            <form action="">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('start_date', __('lang.start_date'), []) !!}
-                            {!! Form::text('start_date', request()->start_date, ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('start_time', __('lang.start_time'), []) !!}
-                            {!! Form::text('start_time', request()->start_time, ['class' => 'form-control
-                            time_picker sale_filter']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('end_date', __('lang.end_date'), []) !!}
-                            {!! Form::text('end_date', request()->end_date, ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('end_time', __('lang.end_time'), []) !!}
-                            {!! Form::text('end_time', request()->end_time, ['class' => 'form-control time_picker
-                            sale_filter']) !!}
-                        </div>
-                    </div>
+<section class="forms pt-2">
+    <div class="container-fluid">
+        <div class="col-md-12  no-print">
 
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {!! Form::label('store_id', __('lang.store'), []) !!}
-                            {!! Form::select('store_id', $stores, request()->store_id, ['class' =>
-                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {!! Form::label('store_pos_id', __('lang.pos'), []) !!}
-                            {!! Form::select('store_pos_id', $store_pos, request()->store_pos_id, ['class' =>
-                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {!! Form::label('user_id', __('lang.user'), []) !!}
-                            {!! Form::select('user_id', $users, request()->user_id, ['class' =>
-                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <br>
-                        <button type="submit" class="btn btn-success mt-2">@lang('lang.filter')</button>
-                        <a href="{{action('CashController@index')}}"
-                            class="btn btn-danger mt-2 ml-2">@lang('lang.clear_filter')</a>
-                    </div>
 
+            <x-page-title>
+                <h4 class="print-title">@lang('lang.cash')</h4>
+            </x-page-title>
+
+
+
+
+            <x-collapse-button color="secondary my-2 d-flex" collapse-id="CashListFilter">
+                Filter
+                <div style="width: 20px" class="ml-2">
+                    <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
                 </div>
-            </form>
-        </div>
-        <div class="card-body">
+            </x-collapse-button>
+
+            <x-collapse-body collapse-id="CashListFilter">
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('start_date', __('lang.start_date'), []) !!}
+                                {!! Form::text('start_date', request()->start_date, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('start_time', __('lang.start_time'), []) !!}
+                                {!! Form::text('start_time', request()->start_time, ['class' => 'form-control
+                                time_picker sale_filter']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('end_date', __('lang.end_date'), []) !!}
+                                {!! Form::text('end_date', request()->end_date, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('end_time', __('lang.end_time'), []) !!}
+                                {!! Form::text('end_time', request()->end_time, ['class' => 'form-control
+                                time_picker
+                                sale_filter']) !!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('store_id', __('lang.store'), []) !!}
+                                {!! Form::select('store_id', $stores, request()->store_id, ['class' =>
+                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('store_pos_id', __('lang.pos'), []) !!}
+                                {!! Form::select('store_pos_id', $store_pos, request()->store_pos_id, ['class' =>
+                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('user_id', __('lang.user'), []) !!}
+                                {!! Form::select('user_id', $users, request()->user_id, ['class' =>
+                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <br>
+                            <button type="submit" class="btn btn-success mt-2">@lang('lang.filter')</button>
+                            <a href="{{action('CashController@index')}}"
+                                class="btn btn-danger mt-2 ml-2">@lang('lang.clear_filter')</a>
+                        </div>
+
+                    </div>
+                </form>
+            </x-collapse-body>
+
+
+
             <div class="table-responsive">
                 <table id="store_table" class="table dataTable">
                     <thead>
@@ -103,32 +120,36 @@
                             <td>{{ucfirst($cash_register->cashier->employee->store_pos ?? '')}}</td>
                             <td>{{ucfirst($cash_register->notes)}}</td>
                             <td>{{ucfirst($cash_register->status)}}</td>
-                            <td>{{@num_format($cash_register->total_cash_sales - $cash_register->total_refund_cash - $cash_register->total_sell_return)}}
+                            <td>{{@num_format($cash_register->total_cash_sales -
+                                $cash_register->total_refund_cash - $cash_register->total_sell_return)}}
                             </td>
                             <td>
 
                                 {{
-                                    DB::table('cash_register_transactions')
-                                    ->where('cash_register_id', $cash_register->id)
-                                    ->where('transaction_type', 'sell')
-                                    ->whereIn('transaction_id', function ($query) use ($cash_register) {
-                                        $query->select('id')
-                                            ->from('transactions')
-                                            ->where(function ($query) use ($cash_register) {
-                                                $query->whereRaw('created_at <> updated_at');
-                                                $query->WhereRaw('updated_at >= (created_at + INTERVAL 1 MINUTE)');
-                                                $query->where('created_at', '<=',\Carbon\Carbon::parse($cash_register->created_at));
-                                            })->
-                                            OrWhere(function ($query) use ($cash_register) {
-                                                $query->whereRaw('created_at <> updated_at');
-                                                $query->WhereRaw('updated_at >= (created_at + INTERVAL 1 MINUTE)');
-                                                $query->where('created_by', '!=', $cash_register->user_id)
-                                                    ->where('created_at', '<=', \Carbon\Carbon::parse($cash_register->closed_at))
-                                                    ->where('created_at', '>=', \Carbon\Carbon::parse($cash_register->created_at));
-                                            });
-                                    })
-                                    ->sum('amount');
-                                }}
+                                DB::table('cash_register_transactions')
+                                ->where('cash_register_id', $cash_register->id)
+                                ->where('transaction_type', 'sell')
+                                ->whereIn('transaction_id', function ($query) use ($cash_register) {
+                                $query->select('id')
+                                ->from('transactions')
+                                ->where(function ($query) use ($cash_register) {
+                                $query->whereRaw('created_at <> updated_at');
+                                    $query->WhereRaw('updated_at >= (created_at + INTERVAL 1 MINUTE)');
+                                    $query->where('created_at', '<=',\Carbon\Carbon::parse($cash_register->
+                                        created_at));
+                                        })->
+                                        OrWhere(function ($query) use ($cash_register) {
+                                        $query->whereRaw('created_at <> updated_at');
+                                            $query->WhereRaw('updated_at >= (created_at + INTERVAL 1 MINUTE)');
+                                            $query->where('created_by', '!=', $cash_register->user_id)
+                                            ->where('created_at', '<=', \Carbon\Carbon::parse($cash_register->
+                                                closed_at))
+                                                ->where('created_at', '>=',
+                                                \Carbon\Carbon::parse($cash_register->created_at));
+                                                });
+                                                })
+                                                ->sum('amount')
+                                                }}
                             </td>
                             @if(session('system_mode') == 'restaurant')
                             <td>{{@num_format($cash_register->total_dining_in)}}</td>
@@ -138,12 +159,17 @@
                             <td>{{@num_format($cash_register->total_purchases)}}</td>
                             <td>{{@num_format($cash_register->total_expenses)}}</td>
                             <td>{{@num_format($cash_register->total_wages_and_compensation)}}</td>
-                            <td>{{@num_format($cash_register->total_cash_sales - $cash_register->total_refund_cash +
+                            <td>{{@num_format($cash_register->total_cash_sales -
+                                $cash_register->total_refund_cash +
                                 $cash_register->total_cash_in - $cash_register->total_cash_out -
-                                $cash_register->total_purchases - $cash_register->total_expenses - $cash_register->total_wages_and_compensation - $cash_register->total_sell_return)}}</td>
+                                $cash_register->total_purchases - $cash_register->total_expenses -
+                                $cash_register->total_wages_and_compensation -
+                                $cash_register->total_sell_return)}}</td>
                             <td>{{@num_format($cash_register->closing_amount)}}</td>
-                            <td>@if(!empty($cash_register->closed_at)){{@format_datetime($cash_register->closed_at)}}@endif</td>
-                            <td>{{!empty($cash_register->cash_given) ? $cash_register->cash_given->name : ''}}</td>
+                            <td>@if(!empty($cash_register->closed_at)){{@format_datetime($cash_register->closed_at)}}@endif
+                            </td>
+                            <td>{{!empty($cash_register->cash_given) ? $cash_register->cash_given->name : ''}}
+                            </td>
                             <td>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-sm dropdown-toggle"
@@ -175,7 +201,8 @@
                                         <li>
                                             <a data-href="{{action('CashController@addClosingCash', $cash_register->id)}}"
                                                 data-container=".view_modal" class="btn btn-modal"><i
-                                                    class="fa fa-window-close"></i> @lang('lang.add_closing_cash')</a>
+                                                    class="fa fa-window-close"></i>
+                                                @lang('lang.add_closing_cash')</a>
                                         </li>
                                         <li class="divider"></li>
                                         @endcan
@@ -212,9 +239,10 @@
                     </tfoot>
                 </table>
             </div>
+
         </div>
     </div>
-</div>
+</section>
 @endsection
 
 @section('javascript')

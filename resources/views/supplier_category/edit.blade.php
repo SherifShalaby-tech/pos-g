@@ -1,7 +1,8 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
-        {!! Form::open(['url' => action('SupplierCategoryController@update', $supplier_category->id), 'method' => 'put', 'id' => 'supplier_category_add_form'
+        {!! Form::open(['url' => action('SupplierCategoryController@update', $supplier_category->id), 'method' => 'put',
+        'id' => 'supplier_category_add_form'
         ]) !!}
 
         <div class="modal-header">
@@ -14,8 +15,9 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
-                {!! Form::text('name', $supplier_category->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ),
-                'required' ]);
+                {!! Form::text('name', $supplier_category->name, ['class' => 'form-control', 'placeholder' => __(
+                'lang.name' ),
+                'required' ])
                 !!}
             </div>
         </div>

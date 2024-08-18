@@ -7,7 +7,9 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
-                <a id="toggle-btn" href="#" class="menu-btn"><i class="fa fa-bars" style="margin-top: 10px !important;"> </i></a>
+                <a id="toggle-btn" href="#" class="menu-btn border-0">
+                    <img src="{{ asset('front/sidebar_icons/menu.svg') }}" alt="">
+                </a>
                 <span class="brand-big">@if($logo)<img src="{{asset('/uploads/'.$logo)}}"
                         width="50">&nbsp;&nbsp;@endif<a href="{{url('/')}}">
                         <h1 class="d-inline">{{$site_title}}</h1>
@@ -15,17 +17,21 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
 
                 <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
                     <li class="nav-item">
-                        <a href="{{action('SellController@create')}}" id="commercial_invoice_btn" data-toggle="tooltip" data-title="@lang('lang.add_sale')"
-                             class="btn no-print"><img src="{{asset('images/396 Commercial Invoice Icon.png')}}" alt="" style="height: 40px; width: 35px;">
+                        <a href="{{action('SellController@create')}}" id="commercial_invoice_btn" data-toggle="tooltip"
+                            data-title="@lang('lang.add_sale')" class="btn no-print"><img
+                                src="{{asset('images/396 Commercial Invoice Icon.png')}}" alt=""
+                                style="height: 40px; width: 35px;">
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a target="_blank" href="https://api.whatsapp.com/send?phone={{$watsapp_numbers}}" id="contact_us_btn" data-toggle="tooltip" data-title="@lang('lang.contact_us')"
-                            style="background-image:  url('{{asset('images/watsapp.jpg')}}');background-size: 40px;" class="btn no-print">
+                        <a target="_blank" href="https://api.whatsapp.com/send?phone={{$watsapp_numbers}}"
+                            id="contact_us_btn" data-toggle="tooltip" data-title="@lang('lang.contact_us')"
+                            style="background-image:  url('{{asset('images/watsapp.jpg')}}');background-size: 40px;"
+                            class="btn no-print">
                         </a>
                     </li>
-                    <li class="nav-item"><button class="btn-danger btn-sm hide" id="power_off_btn"  data-toggle="tooltip" data-title="@lang('lang.shut_down')"><i
-                                class="fa fa-power-off"></i></button></li>
+                    <li class="nav-item"><button class="btn-danger btn-sm hide" id="power_off_btn" data-toggle="tooltip"
+                            data-title="@lang('lang.shut_down')"><i class="fa fa-power-off"></i></button></li>
                     @can('sale.pos.create_and_edit')
                     <li class="nav-item"><a class="dropdown-item btn-pos btn-sm"
                             href="{{action('SellPosController@create')}}"><i class="dripicons-shopping-bag"></i><span>
@@ -108,5 +114,5 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
             </div>
         </div>
     </nav>
-    
+
 </header>

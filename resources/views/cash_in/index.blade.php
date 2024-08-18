@@ -2,65 +2,80 @@
 @section('title', __('lang.cash_in'))
 
 @section('content')
-<div class="col-md-12  no-print">
-    <div class="card">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.cash_in')</h3>
-        </div>
-        <div class="col-md-12 card pt-3 pb-3">
-            <form action="">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('start_date', __('lang.start_date'), []) !!}
-                            {!! Form::text('start_date', request()->start_date, ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('start_time', __('lang.start_time'), []) !!}
-                            {!! Form::text('start_time', request()->start_time, ['class' => 'form-control
-                            time_picker sale_filter']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('end_date', __('lang.end_date'), []) !!}
-                            {!! Form::text('end_date', request()->end_date, ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::label('end_time', __('lang.end_time'), []) !!}
-                            {!! Form::text('end_time', request()->end_time, ['class' => 'form-control time_picker
-                            sale_filter']) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {!! Form::label('user_id', __('lang.user'), []) !!}
-                            {!! Form::select('user_id', $users, request()->user_id, ['class' =>
-                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {!! Form::label('sender_id', __('lang.sender'), []) !!}
-                            {!! Form::select('sender_id', $users, request()->sender_id, ['class' =>
-                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <br>
-                        <button type="submit" class="btn btn-success mt-2">@lang('lang.filter')</button>
-                        <a href="{{action('CashInController@index')}}"
-                            class="btn btn-danger mt-2 ml-2">@lang('lang.clear_filter')</a>
-                    </div>
+<section class="forms pt-2">
+    <div class="container-fluid">
+        <div class="col-md-12  no-print">
 
+            <x-page-title>
+                <h4 class="print-title">@lang('lang.cash_in')</h4>
+            </x-page-title>
+
+
+
+
+            <x-collapse-button color="secondary my-2 d-flex" collapse-id="CashInListFilter">
+                Filter
+                <div style="width: 20px" class="ml-2">
+                    <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
                 </div>
-            </form>
-        </div>
-        <div class="card-body">
+            </x-collapse-button>
+
+            <x-collapse-body collapse-id="CashInListFilter">
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('start_date', __('lang.start_date'), []) !!}
+                                {!! Form::text('start_date', request()->start_date, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('start_time', __('lang.start_time'), []) !!}
+                                {!! Form::text('start_time', request()->start_time, ['class' => 'form-control
+                                time_picker sale_filter']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('end_date', __('lang.end_date'), []) !!}
+                                {!! Form::text('end_date', request()->end_date, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('end_time', __('lang.end_time'), []) !!}
+                                {!! Form::text('end_time', request()->end_time, ['class' => 'form-control time_picker
+                                sale_filter']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('user_id', __('lang.user'), []) !!}
+                                {!! Form::select('user_id', $users, request()->user_id, ['class' =>
+                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('sender_id', __('lang.sender'), []) !!}
+                                {!! Form::select('sender_id', $users, request()->sender_id, ['class' =>
+                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <br>
+                            <button type="submit" class="btn btn-success mt-2">@lang('lang.filter')</button>
+                            <a href="{{action('CashInController@index')}}"
+                                class="btn btn-danger mt-2 ml-2">@lang('lang.clear_filter')</a>
+                        </div>
+
+                    </div>
+                </form>
+            </x-collapse-body>
+
+
+
             <div class="table-responsive">
                 <table id="store_table" class="table dataTable">
                     <thead>
@@ -83,7 +98,7 @@
                             <td>{{@format_datetime($cash_register->created_at)}}</td>
                             <td>{{ucfirst($cash_register->cashier_name)}}</td>
                             @php
-                                $employee = App\Models\Employee::find($cash_register->employee_id);
+                            $employee = App\Models\Employee::find($cash_register->employee_id);
                             @endphp
                             <td>{{ucfirst($employee->store_pos ?? '')}}</td>
                             <td>{{ucfirst($cash_register->job_title ?? '')}}</td>
@@ -139,11 +154,9 @@
                     </tfoot>
                 </table>
             </div>
+
         </div>
     </div>
-</div>
+</section>
 @endsection
-
-@section('javascript')
-
-@endsection
+@section('javascript') @endsection

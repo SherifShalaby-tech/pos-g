@@ -1,7 +1,8 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
-        {!! Form::open(['url' => action('StorePosController@update', $store_pos->id), 'method' => 'put', 'id' => 'store_pos_edit_form' ]) !!}
+        {!! Form::open(['url' => action('StorePosController@update', $store_pos->id), 'method' => 'put', 'id' =>
+        'store_pos_edit_form' ]) !!}
 
         <div class="modal-header">
 
@@ -20,8 +21,9 @@
             </div>
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
-                {!! Form::text('name', $store_pos->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ), 'required'
-                ]);
+                {!! Form::text('name', $store_pos->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ),
+                'required'
+                ])
                 !!}
             </div>
             <div class="form-group">

@@ -2,58 +2,70 @@
 @section('title', __('lang.compensated'))
 
 @section('content')
-<section class="">
+<section class="forms pt-2">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header d-flex align-items-center">
-                <h3 class="print-title">@lang('lang.compensated_from_supplier')</h3>
+
+
+        <x-page-title>
+            <h4 class="print-title">@lang('lang.compensated_from_supplier')</h4>
+
+        </x-page-title>
+
+        <x-collapse-button color="secondary my-2 d-flex" collapse-id="CompensatedListFilter">
+            Filter
+            <div style="width: 20px" class="ml-2">
+                <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
             </div>
-            <div class="card-body">
-                <form action="">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('supplier_id', __('lang.supplier'), []) !!}
-                                {!! Form::select('supplier_id', $suppliers, request()->supplier_id, ['class' =>
-                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('store_id', __('lang.store'), []) !!}
-                                {!! Form::select('store_id', $stores, request()->store_id, ['class' =>
-                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('created_by', __('lang.created_by'), []) !!}
-                                {!! Form::select('created_by', $users, request()->created_by, ['class' =>
-                                'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('start_date', __('lang.start_date'), []) !!}
-                                {!! Form::text('start_date', request()->start_date, ['class' => 'form-control']) !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('end_date', __('lang.end_date'), []) !!}
-                                {!! Form::text('end_date', request()->end_date, ['class' => 'form-control']) !!}
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <br>
-                            <button type="submit" class="btn btn-success mt-2">@lang('lang.filter')</button>
-                            <a href="{{action('RemoveStockController@getCompensated')}}"
-                                class="btn btn-danger mt-2 ml-2">@lang('lang.clear_filter')</a>
+        </x-collapse-button>
+
+        <x-collapse-body collapse-id="CompensatedListFilter">
+            <form action="">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('supplier_id', __('lang.supplier'), []) !!}
+                            {!! Form::select('supplier_id', $suppliers, request()->supplier_id, ['class' =>
+                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('store_id', __('lang.store'), []) !!}
+                            {!! Form::select('store_id', $stores, request()->store_id, ['class' =>
+                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('created_by', __('lang.created_by'), []) !!}
+                            {!! Form::select('created_by', $users, request()->created_by, ['class' =>
+                            'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('start_date', __('lang.start_date'), []) !!}
+                            {!! Form::text('start_date', request()->start_date, ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('end_date', __('lang.end_date'), []) !!}
+                            {!! Form::text('end_date', request()->end_date, ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <br>
+                        <button type="submit" class="btn btn-success mt-2">@lang('lang.filter')</button>
+                        <a href="{{action('RemoveStockController@getCompensated')}}"
+                            class="btn btn-danger mt-2 ml-2">@lang('lang.clear_filter')</a>
+                    </div>
+                </div>
+            </form>
+        </x-collapse-body>
+
+
+
     </div>
 
     <div class="table-responsive">
@@ -91,8 +103,7 @@
                         {{@num_format($remove_stock->compensated_value)}}
                     </td>
                     <td><a data-href="{{action('GeneralController@viewUploadedFiles', ['model_name' => 'Transaction', 'model_id' => $remove_stock->id, 'collection_name' => 'remove_stock'])}}"
-                            data-container=".view_modal"
-                            class="btn btn-modal">@lang('lang.view')</a></td>
+                            data-container=".view_modal" class="btn btn-modal">@lang('lang.view')</a></td>
                     <td>
 
                         <div class="btn-group">

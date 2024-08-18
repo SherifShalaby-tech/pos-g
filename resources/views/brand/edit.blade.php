@@ -19,6 +19,7 @@
         margin: 30px 0px;
         border: 1px solid #ddd;
     }
+
     .preview img {
         width: 100%;
         height: 100%;
@@ -200,7 +201,8 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
-        {!! Form::open(['url' => action('BrandController@update', $brand->id), 'method' => 'put', 'id' => 'brand_edit_form', 'files' => true ]) !!}
+        {!! Form::open(['url' => action('BrandController@update', $brand->id), 'method' => 'put', 'id' =>
+        'brand_edit_form', 'files' => true ]) !!}
 
         <div class="modal-header">
 
@@ -212,53 +214,53 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
-                {!! Form::text('name', $brand->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ), 'required' ]);
+                {!! Form::text('name', $brand->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ),
+                'required' ])
                 !!}
             </div>
 
-{{--            @include('layouts.partials.image_crop', ['image_url' => $brand->getFirstMediaUrl('brand') ?? null])--}}
-           <div class="form-group">
-               <label for="file-input-edit-brand"> {{ __('categories.image') }}</label>
-               <div class="container mt-3">
-                   <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
-                       <div class="col-12">
-                           <div class="mt-3">
-                               <div class="row">
-                                   <div class="col-10 offset-1">
-                                       <div class="variants">
-                                           <div class='file file--upload w-100'>
-                                               <label for='file-input-edit-brand' class="w-100">
-                                                   <i class="fas fa-cloud-upload-alt"></i>Upload
-                                               </label>
-                                               <input type="file" id="file-input-edit-brand">
-                                           </div>
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                       <div class="col-10 offset-1">
-                           <div class="preview-edit-brand-container">
-                               @if($brand)
-                                   <div id="preview{{ $brand->id }}" class="preview">
-                                       @if (!empty($brand->getFirstMediaUrl('brand')))
-                                           <img src="{{ $brand->getFirstMediaUrl('brand') }}"
-                                                id="img{{  $brand->id }}" alt="">
-                                       @else
-                                           <img src="{{ asset('/uploads/'.session('logo')) }}" alt=""
-                                                id="img{{  $brand->id }}">
-                                       @endif
-                                   </div>
-                               @endif
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </div>
+            {{-- @include('layouts.partials.image_crop', ['image_url' => $brand->getFirstMediaUrl('brand') ?? null])--}}
+            <div class="form-group">
+                <label for="file-input-edit-brand"> {{ __('categories.image') }}</label>
+                <div class="container mt-3">
+                    <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
+                        <div class="col-12">
+                            <div class="mt-3">
+                                <div class="row">
+                                    <div class="col-10 offset-1">
+                                        <div class="variants">
+                                            <div class='file file--upload w-100'>
+                                                <label for='file-input-edit-brand' class="w-100">
+                                                    <i class="fas fa-cloud-upload-alt"></i>Upload
+                                                </label>
+                                                <input type="file" id="file-input-edit-brand">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-10 offset-1">
+                            <div class="preview-edit-brand-container">
+                                @if($brand)
+                                <div id="preview{{ $brand->id }}" class="preview">
+                                    @if (!empty($brand->getFirstMediaUrl('brand')))
+                                    <img src="{{ $brand->getFirstMediaUrl('brand') }}" id="img{{  $brand->id }}" alt="">
+                                    @else
+                                    <img src="{{ asset('/uploads/'.session('logo')) }}" alt=""
+                                        id="img{{  $brand->id }}">
+                                    @endif
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="cropped_edit_brand_images"></div>
         <div class="modal fade" id="editBrandModal" tabindex="-1" role="dialog" aria-labelledby="editBrandModalLabel"
-             aria-hidden="true">
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -271,8 +273,7 @@
                         <div id="croppie-modal-brand-edit" style="display:none">
                             <div id="croppie-container-brand-edit"></div>
                             <button data-dismiss="modal" id="croppie-cancel-btn-brand-edit" type="button"
-                                    class="btn btn-secondary"><i
-                                    class="fas fa-times"></i></button>
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
                             <button id="croppie-submit-btn-brand-edit" type="button" class="btn btn-primary"><i
                                     class="fas fa-crop"></i></button>
                         </div>

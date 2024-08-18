@@ -1,7 +1,8 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
-        {!! Form::open(['url' => action('GradeController@update', $grade->id), 'method' => 'put', 'id' =>'grade_add_form' ]) !!}
+        {!! Form::open(['url' => action('GradeController@update', $grade->id), 'method' => 'put', 'id'
+        =>'grade_add_form' ]) !!}
 
         <div class="modal-header">
 
@@ -13,7 +14,8 @@
         <div class="modal-body">
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
-                {!! Form::text('name', $grade->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ), 'required' ]);
+                {!! Form::text('name', $grade->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ),
+                'required' ])
                 !!}
             </div>
         </div>

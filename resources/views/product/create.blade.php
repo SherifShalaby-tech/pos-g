@@ -1,275 +1,279 @@
 @extends('layouts.app')
 @section('title', __('lang.product'))
 @section('style')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
-    <style>
-        .preview-container {
-            /* display: flex;
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
+<style>
+    .preview-container {
+        /* display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 20px; */
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 170px);
-        }
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 170px);
+    }
 
-        .preview {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            padding: 4px;
-            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            margin: 30px 0px;
-            border: 1px solid #ddd;
-        }
+    .preview {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        padding: 4px;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        margin: 30px 0px;
+        border: 1px solid #ddd;
+    }
 
-        .preview img {
-            width: 100%;
-            height: 100%;
-            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            border: 1px solid #ddd;
-            object-fit: cover;
+    .preview img {
+        width: 100%;
+        height: 100%;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        border: 1px solid #ddd;
+        object-fit: cover;
 
-        }
+    }
 
-        .delete-btn {
-            position: absolute;
-            top: 156px;
-            right: 0px;
-            /*border: 2px solid #ddd;*/
-            border: none;
-            cursor: pointer;
-        }
+    .delete-btn {
+        position: absolute;
+        top: 156px;
+        right: 0px;
+        /*border: 2px solid #ddd;*/
+        border: none;
+        cursor: pointer;
+    }
 
-        .delete-btn {
-            background: transparent;
-            color: rgba(235, 32, 38, 0.97);
-        }
+    .delete-btn {
+        background: transparent;
+        color: rgba(235, 32, 38, 0.97);
+    }
 
-        .crop-btn {
-            position: absolute;
-            top: 156px;
-            left: 0px;
-            /*border: 2px solid #ddd;*/
-            border: none;
-            cursor: pointer;
-            background: transparent;
-            color: #007bff;
-        }
-    </style>
+    .crop-btn {
+        position: absolute;
+        top: 156px;
+        left: 0px;
+        /*border: 2px solid #ddd;*/
+        border: none;
+        cursor: pointer;
+        background: transparent;
+        color: #007bff;
+    }
+</style>
 
-    <style>
-        .variants {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+<style>
+    .variants {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        .variants>div {
-            margin-right: 5px;
-        }
+    .variants>div {
+        margin-right: 5px;
+    }
 
-        .variants>div:last-of-type {
-            margin-right: 0;
-        }
+    .variants>div:last-of-type {
+        margin-right: 0;
+    }
 
-        .file {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .file {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        .file>input[type='file'] {
-            display: none
-        }
+    .file>input[type='file'] {
+        display: none
+    }
 
-        .file>label {
-            font-size: 1rem;
-            font-weight: 300;
-            cursor: pointer;
-            outline: 0;
-            user-select: none;
-            border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
-            border-style: solid;
-            border-radius: 4px;
-            border-width: 1px;
-            background-color: hsl(0, 0%, 100%);
-            color: hsl(0, 0%, 29%);
-            padding-left: 16px;
-            padding-right: 16px;
-            padding-top: 16px;
-            padding-bottom: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .file>label {
+        font-size: 1rem;
+        font-weight: 300;
+        cursor: pointer;
+        outline: 0;
+        user-select: none;
+        border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+        border-style: solid;
+        border-radius: 4px;
+        border-width: 1px;
+        background-color: hsl(0, 0%, 100%);
+        color: hsl(0, 0%, 29%);
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        .file>label:hover {
-            border-color: hsl(0, 0%, 21%);
-        }
+    .file>label:hover {
+        border-color: hsl(0, 0%, 21%);
+    }
 
-        .file>label:active {
-            background-color: hsl(0, 0%, 96%);
-        }
+    .file>label:active {
+        background-color: hsl(0, 0%, 96%);
+    }
 
-        .file>label>i {
-            padding-right: 5px;
-        }
+    .file>label>i {
+        padding-right: 5px;
+    }
 
-        .file--upload>label {
-            color: hsl(204, 86%, 53%);
-            border-color: hsl(204, 86%, 53%);
-        }
+    .file--upload>label {
+        color: hsl(204, 86%, 53%);
+        border-color: hsl(204, 86%, 53%);
+    }
 
-        .file--upload>label:hover {
-            border-color: hsl(204, 86%, 53%);
-            background-color: hsl(204, 86%, 96%);
-        }
+    .file--upload>label:hover {
+        border-color: hsl(204, 86%, 53%);
+        background-color: hsl(204, 86%, 96%);
+    }
 
-        .file--upload>label:active {
-            background-color: hsl(204, 86%, 91%);
-        }
+    .file--upload>label:active {
+        background-color: hsl(204, 86%, 91%);
+    }
 
-        .file--uploading>label {
+    .file--uploading>label {
+        color: hsl(48, 100%, 67%);
+        border-color: hsl(48, 100%, 67%);
+    }
+
+    .file--uploading>label>i {
+        animation: pulse 5s infinite;
+    }
+
+    .file--uploading>label:hover {
+        border-color: hsl(48, 100%, 67%);
+        background-color: hsl(48, 100%, 96%);
+    }
+
+    .file--uploading>label:active {
+        background-color: hsl(48, 100%, 91%);
+    }
+
+    .file--success>label {
+        color: hsl(141, 71%, 48%);
+        border-color: hsl(141, 71%, 48%);
+    }
+
+    .file--success>label:hover {
+        border-color: hsl(141, 71%, 48%);
+        background-color: hsl(141, 71%, 96%);
+    }
+
+    .file--success>label:active {
+        background-color: hsl(141, 71%, 91%);
+    }
+
+    .file--danger>label {
+        color: hsl(348, 100%, 61%);
+        border-color: hsl(348, 100%, 61%);
+    }
+
+    .file--danger>label:hover {
+        border-color: hsl(348, 100%, 61%);
+        background-color: hsl(348, 100%, 96%);
+    }
+
+    .file--danger>label:active {
+        background-color: hsl(348, 100%, 91%);
+    }
+
+    .file--disabled {
+        cursor: not-allowed;
+    }
+
+    .file--disabled>label {
+        border-color: #e6e7ef;
+        color: #e6e7ef;
+        pointer-events: none;
+    }
+
+    @keyframes pulse {
+        0% {
             color: hsl(48, 100%, 67%);
-            border-color: hsl(48, 100%, 67%);
         }
 
-        .file--uploading>label>i {
-            animation: pulse 5s infinite;
+        50% {
+            color: hsl(48, 100%, 38%);
         }
 
-        .file--uploading>label:hover {
-            border-color: hsl(48, 100%, 67%);
-            background-color: hsl(48, 100%, 96%);
+        100% {
+            color: hsl(48, 100%, 67%);
         }
-
-        .file--uploading>label:active {
-            background-color: hsl(48, 100%, 91%);
-        }
-
-        .file--success>label {
-            color: hsl(141, 71%, 48%);
-            border-color: hsl(141, 71%, 48%);
-        }
-
-        .file--success>label:hover {
-            border-color: hsl(141, 71%, 48%);
-            background-color: hsl(141, 71%, 96%);
-        }
-
-        .file--success>label:active {
-            background-color: hsl(141, 71%, 91%);
-        }
-
-        .file--danger>label {
-            color: hsl(348, 100%, 61%);
-            border-color: hsl(348, 100%, 61%);
-        }
-
-        .file--danger>label:hover {
-            border-color: hsl(348, 100%, 61%);
-            background-color: hsl(348, 100%, 96%);
-        }
-
-        .file--danger>label:active {
-            background-color: hsl(348, 100%, 91%);
-        }
-
-        .file--disabled {
-            cursor: not-allowed;
-        }
-
-        .file--disabled>label {
-            border-color: #e6e7ef;
-            color: #e6e7ef;
-            pointer-events: none;
-        }
-
-        @keyframes pulse {
-            0% {
-                color: hsl(48, 100%, 67%);
-            }
-
-            50% {
-                color: hsl(48, 100%, 38%);
-            }
-
-            100% {
-                color: hsl(48, 100%, 67%);
-            }
-        }
-    </style>
+    }
+</style>
 @endsection
 
 
 @section('content')
-    <section class="forms">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="row mr-2 ml-2">
-                            <div class="card-header d-flex align-items-center col-md-7">
-                                <h4>@lang('lang.add_new_product')</h4>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
-                            {!! Form::open(['url' => action('ProductController@store'), 'id' => 'product-form', 'method' => 'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
-                            @include('product.partial.create_product_form')
-                            <div class="row">
-                                <div class="col-md-4 mt-5">
-                                    <div class="form-group">
-                                        <input type="button" value="{{ trans('lang.save') }}" id="submit-btn"
-                                            class="btn btn-primary">
-                                    </div>
+<section class="forms pt-2">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <x-page-title>
+                    <h4>@lang('lang.add_new_product')</h4>
+                </x-page-title>
+
+
+
+
+                <div class="card">
+                    <div class="card-body">
+                        <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
+                        {!! Form::open(['url' => action('ProductController@store'), 'id' => 'product-form', 'method' =>
+                        'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
+                        @include('product.partial.create_product_form')
+                        <div class="row">
+                            <div class="col-md-4 mt-5">
+                                <div class="form-group">
+                                    <input type="button" value="{{ trans('lang.save') }}" id="submit-btn"
+                                        class="btn btn-primary">
                                 </div>
                             </div>
-                            {!! Form::close() !!}
                         </div>
+                        {!! Form::close() !!}
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="modal fade" id="product_cropper_modal" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@lang('lang.crop_image_before_upload')</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="img-container">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <img src="" id="product_sample_image" />
-                            </div>
-                            <div class="col-md-4">
-                                <div class="product_preview_div"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="product_crop" class="btn btn-primary">@lang('lang.crop')</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
+</section>
+
+<div class="modal fade" id="product_cropper_modal" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@lang('lang.crop_image_before_upload')</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="" id="product_sample_image" />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="product_preview_div"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="product_crop" class="btn btn-primary">@lang('lang.crop')</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
 @section('javascript')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-    <script>
-        var fileInput = document.querySelector('#file-input');
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+<script>
+    var fileInput = document.querySelector('#file-input');
         var previewContainer = document.querySelector('.preview-container');
         var croppieModal = document.querySelector('#croppie-modal');
         var croppieContainer = document.querySelector('#croppie-container');
@@ -403,11 +407,11 @@
             }, 300);
         }
 
-    </script>
+</script>
 
 
-    <script>
-        function get_unit(units,row_id) {
+<script>
+    function get_unit(units,row_id) {
             $v=document.getElementById('select_unit_id_'+row_id).value;
 
             $.each(units, function(key, value) {
@@ -423,10 +427,10 @@
                 }
             });
         }
-    </script>
-    <script src="{{ asset('js/product.js') }}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
+</script>
+<script src="{{ asset('js/product.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
             $('#discount_customer_types').selectpicker('selectAll');
             $('#category_id').change();
 
@@ -439,5 +443,5 @@
         $('.v_unit').on('change', function() {
             alert( this.value );
         });
-    </script>
+</script>
 @endsection

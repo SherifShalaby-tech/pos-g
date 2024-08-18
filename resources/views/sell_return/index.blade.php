@@ -2,88 +2,119 @@
 @section('title', __('lang.sale_return'))
 
 @section('content')
+<section class="forms pt-2">
+
     <div class="container-fluid no-print">
-
-
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header d-flex align-items-center">
-                    <h3 class="print-title">@lang('lang.sale_return')</h3>
+
+
+            <x-page-title>
+                <h4 class="print-title">@lang('lang.sale_return')</h4>
+
+            </x-page-title>
+
+
+
+
+            <x-collapse-button color="secondary my-2 d-flex" collapse-id="SellReturnListFilter">
+                Filter
+                <div style="width: 20px" class="ml-2">
+                    <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
                 </div>
-                <div class="card-body">
-                    <form action="">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('customer_id', __('lang.customer'), []) !!}
-                                    {!! Form::select('customer_id', $customers, request()->customer_id, ['class' => 'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('payment_status', __('lang.payment_status'), []) !!}
-                                    {!! Form::select('payment_status', $payment_status_array, request()->payment_status, ['class' => 'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('store_id', __('lang.store'), []) !!}
-                                    {!! Form::select('store_id', $stores, request()->store_id, ['class' => 'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    {!! Form::label('pos_id', __('lang.pos'), []) !!}
-                                    {!! Form::select('pos_id', $store_pos, request()->pos_id, ['class' => 'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
-                                </div>
-                            </div>
-                            @if (session('system_mode') == 'restaurant')
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('dining_room_id', __('lang.dining_room'), []) !!}
-                                        {!! Form::select('dining_room_id', $dining_rooms, request()->dining_room_id, ['class' => 'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('dining_table_id', __('lang.dining_table'), []) !!}
-                                        {!! Form::select('dining_table_id', $dining_tables, request()->dining_table_id, ['class' => 'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    {!! Form::label('start_date', __('lang.start_date'), []) !!}
-                                    {!! Form::text('start_date', request()->start_date, ['class' => 'form-control sale_filter']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    {!! Form::label('start_time', __('lang.start_time'), []) !!}
-                                    {!! Form::text('start_time', request()->start_time, ['class' => 'form-control time_picker sale_filter']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    {!! Form::label('end_date', __('lang.end_date'), []) !!}
-                                    {!! Form::text('end_date', request()->end_date, ['class' => 'form-control sale_filter']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    {!! Form::label('end_time', __('lang.end_time'), []) !!}
-                                    {!! Form::text('end_time', request()->end_time, ['class' => 'form-control time_picker sale_filter']) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <br>
-                                <button type="button" href="{{ action('SellReturnController@index') }}"
-                                    class="btn btn-danger mt-2 ml-2 clear_filter">@lang('lang.clear_filter')</button>
+            </x-collapse-button>
+
+            <x-collapse-body collapse-id="SellReturnListFilter">
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('customer_id', __('lang.customer'), []) !!}
+                                {!! Form::select('customer_id', $customers, request()->customer_id, ['class' =>
+                                'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' =>
+                                'true']) !!}
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('payment_status', __('lang.payment_status'), []) !!}
+                                {!! Form::select('payment_status', $payment_status_array, request()->payment_status,
+                                ['class' => 'form-control sale_filter', 'placeholder' => __('lang.all'),
+                                'data-live-search' => 'true']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('store_id', __('lang.store'), []) !!}
+                                {!! Form::select('store_id', $stores, request()->store_id, ['class' => 'form-control
+                                sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('pos_id', __('lang.pos'), []) !!}
+                                {!! Form::select('pos_id', $store_pos, request()->pos_id, ['class' => 'form-control
+                                sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
+                            </div>
+                        </div>
+                        @if (session('system_mode') == 'restaurant')
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('dining_room_id', __('lang.dining_room'), []) !!}
+                                {!! Form::select('dining_room_id', $dining_rooms, request()->dining_room_id,
+                                ['class' =>
+                                'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search' =>
+                                'true']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::label('dining_table_id', __('lang.dining_table'), []) !!}
+                                {!! Form::select('dining_table_id', $dining_tables, request()->dining_table_id,
+                                ['class'
+                                => 'form-control sale_filter', 'placeholder' => __('lang.all'), 'data-live-search'
+                                =>
+                                'true']) !!}
+                            </div>
+                        </div>
+                        @endif
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('start_date', __('lang.start_date'), []) !!}
+                                {!! Form::text('start_date', request()->start_date, ['class' => 'form-control
+                                sale_filter']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                {!! Form::label('start_time', __('lang.start_time'), []) !!}
+                                {!! Form::text('start_time', request()->start_time, ['class' => 'form-control
+                                time_picker sale_filter']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('end_date', __('lang.end_date'), []) !!}
+                                {!! Form::text('end_date', request()->end_date, ['class' => 'form-control
+                                sale_filter'])
+                                !!}
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                {!! Form::label('end_time', __('lang.end_time'), []) !!}
+                                {!! Form::text('end_time', request()->end_time, ['class' => 'form-control
+                                time_picker
+                                sale_filter']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <br>
+                            <button type="button" href="{{ action('SellReturnController@index') }}"
+                                class="btn btn-danger mt-2 ml-2 clear_filter">@lang('lang.clear_filter')</button>
+                        </div>
+                    </div>
+                </form>
+            </x-collapse-body>
         </div>
         <div class="table-responsive no-print">
             <table id="sell_return_table" class="table">
@@ -122,13 +153,14 @@
             </table>
         </div>
     </div>
-    <!-- This will be printed -->
-    <section class="invoice print_section print-only" id="receipt_section"> </section>
+</section>
+<!-- This will be printed -->
+<section class="invoice print_section print-only" id="receipt_section"> </section>
 @endsection
 
 @section('javascript')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             sell_return_table = $("#sell_return_table").DataTable({
                 lengthChange: true,
                 paging: true,
@@ -344,5 +376,5 @@
             __currency_convert_recursively($("#receipt_section"));
             __print_receipt("receipt_section");
         }
-    </script>
+</script>
 @endsection

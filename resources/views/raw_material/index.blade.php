@@ -2,36 +2,50 @@
 @section('title', __('lang.raw_materials'))
 
 @section('content')
+<section class="forms pt-2">
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h4 class="print-title">@lang('lang.raw_materials_list')</h4>
-        </div>
-        @can('product_module.raw_material.create_and_edit')
-            <a style="color: white" href="{{ action('RawMaterialController@create') }}" class="btn btn-info"><i
-                    class="dripicons-plus"></i>
-                @lang('lang.add_new_raw_material')</a>
-        @endcan
 
-        <div class="card mt-3">
+        <x-page-title>
+            <h4 class="print-title">@lang('lang.raw_materials_list')</h4>
+
+            <x-slot name="buttons">
+                @can('product_module.raw_material.create_and_edit')
+                <a style="color: white" href="{{ action('RawMaterialController@create') }}" class="btn btn-primary"><i
+                        class="dripicons-plus"></i>
+                    @lang('lang.add_new_raw_material')</a>
+                @endcan
+            </x-slot>
+        </x-page-title>
+
+
+
+        <x-collapse-button color="secondary my-2 d-flex" collapse-id="RawMaterialListFilter">
+            Filter
+            <div style="width: 20px" class="ml-2">
+                <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
+            </div>
+        </x-collapse-button>
+
+        <x-collapse-body collapse-id="RawMaterialListFilter">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
                             {!! Form::label(
-    'variation_id',
-    __('lang.product') .
-        ':
-                        (' .
-        __('lang.that_raw_materials_are_used_for') .
-        ')',
-    [],
-) !!}
+                            'variation_id',
+                            __('lang.product') .
+                            ':
+                            (' .
+                            __('lang.that_raw_materials_are_used_for') .
+                            ')',
+                            [],
+                            ) !!}
                             {!! Form::select('variation_id', $products, request()->variation_id, [
-    'class' => 'form-control filter_product
-                        selectpicker',
-    'data-live-search' => 'true',
-    'placeholder' => __('lang.all'),
-]) !!}
+                            'class' => 'form-control filter_product
+                            selectpicker',
+                            'data-live-search' => 'true',
+                            'placeholder' => __('lang.all'),
+                            ]) !!}
                         </div>
                     </div>
 
@@ -39,19 +53,20 @@
                         <div class="form-group">
                             {!! Form::label('brand_id', __('lang.brand') . ':', []) !!}
                             {!! Form::select('brand_id', $brands, request()->brand_id, [
-    'class' => 'form-control
-                        filter_product
-                        selectpicker',
-    'data-live-search' => 'true',
-    'placeholder' => __('lang.all'),
-]) !!}
+                            'class' => 'form-control
+                            filter_product
+                            selectpicker',
+                            'data-live-search' => 'true',
+                            'placeholder' => __('lang.all'),
+                            ]) !!}
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
                             {!! Form::label('store_id', __('lang.store'), []) !!}
-                            {!! Form::select('store_id', $stores, request()->store_id, ['class' => 'form-control filter_product', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
+                            {!! Form::select('store_id', $stores, request()->store_id, ['class' => 'form-control
+                            filter_product', 'placeholder' => __('lang.all'), 'data-live-search' => 'true']) !!}
                         </div>
                     </div>
 
@@ -59,11 +74,11 @@
                         <div class="form-group">
                             {!! Form::label('created_by', __('lang.created_by') . ':', []) !!}
                             {!! Form::select('created_by', $users, request()->created_by, [
-    'class' => 'form-control filter_product
-                        selectpicker',
-    'data-live-search' => 'true',
-    'placeholder' => __('lang.all'),
-]) !!}
+                            'class' => 'form-control filter_product
+                            selectpicker',
+                            'data-live-search' => 'true',
+                            'placeholder' => __('lang.all'),
+                            ]) !!}
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -71,7 +86,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+
+        </x-collapse-body>
+
+
         <div class="row">
             <div class="col-md-12">
                 <button type="button" value="0"
@@ -103,12 +121,11 @@
                 <button type="button" value="13"
                     class="badge badge-pill badge-primary column-toggle">@lang('lang.supplier')</button>
                 @can('product_module.purchase_price.view')
-                    <button type="button" value="14"
-                        class="badge badge-pill badge-primary column-toggle">@lang('lang.purchase_price')</button>
+                <button type="button" value="14"
+                    class="badge badge-pill badge-primary column-toggle">@lang('lang.purchase_price')</button>
                 @endcan
             </div>
         </div>
-
 
     </div>
     <div class="table-responsive">
@@ -130,7 +147,7 @@
                     <th>@lang('lang.products')</th>
                     <th>@lang('lang.supplier')</th>
                     @can('product_module.purchase_price.view')
-                        <th>@lang('lang.purchase_price')</th>
+                    <th>@lang('lang.purchase_price')</th>
                     @endcan
                     <th class="notexport">@lang('lang.action')</th>
                 </tr>
@@ -152,11 +169,12 @@
             </tfoot>
         </table>
     </div>
+</section>
 @endsection
 
 @section('javascript')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             raw_material_table = $('#raw_material_table').DataTable({
                 lengthChange: true,
                 paging: true,
@@ -359,5 +377,5 @@
             $('.filter_product').selectpicker('refresh')
             raw_material_table.ajax.reload();
         })
-    </script>
+</script>
 @endsection

@@ -22,7 +22,7 @@
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
                 {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ), 'required'
-                ]);
+                ])
                 !!}
             </div>
             <div class="form-group">

@@ -68,7 +68,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.purchase')</h3>
                                     </th>
 
@@ -99,7 +99,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.sale')</h3>
                                     </th>
 
@@ -130,7 +130,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.sale_return')</h3>
                                     </th>
 
@@ -157,7 +157,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.purchase_return')</h3>
                                     </th>
 
@@ -184,7 +184,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.profit_loss')</h3>
                                     </th>
 
@@ -212,7 +212,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.profit_loss')</h3>
                                     </th>
 
@@ -239,7 +239,8 @@
                                 <tr>
                                     <td>@lang('lang.profit')</td>
                                     <td style="text-align: right">
-                                        {{@num_format($sales->total_amount - $add_stocks->total_amount - $sale_returns->total_amount + $purchase_returns->total_amount)}}
+                                        {{@num_format($sales->total_amount - $add_stocks->total_amount -
+                                        $sale_returns->total_amount + $purchase_returns->total_amount)}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -249,7 +250,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.net_profit_net_loss')</h3>
                                     </th>
 
@@ -287,7 +288,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.payment_receied')</h3>
                                     </th>
 
@@ -313,7 +314,8 @@
                                 </tr>
                                 <tr>
                                     <td>@lang('lang.bank_transfer')</td>
-                                    <td style="text-align: right">{{@num_format($payment_received->total_bank_transfer)}}</td>
+                                    <td style="text-align: right">
+                                        {{@num_format($payment_received->total_bank_transfer)}}</td>
                                 </tr>
                                 <tr>
                                     <td>@lang('lang.credit_card')</td>
@@ -321,7 +323,8 @@
                                 </tr>
                                 <tr>
                                     <td>@lang('lang.gift_card')</td>
-                                    <td style="text-align: right">{{@num_format($payment_received->total_gift_card)}}</td>
+                                    <td style="text-align: right">{{@num_format($payment_received->total_gift_card)}}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>@lang('lang.paypal')</td>
@@ -338,7 +341,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.payment_sent')</h3>
                                     </th>
 
@@ -364,7 +367,8 @@
                                 </tr>
                                 <tr>
                                     <td>@lang('lang.bank_transfer')</td>
-                                    <td style="text-align: right">{{@num_format($payment_sent->total_bank_transfer)}}</td>
+                                    <td style="text-align: right">{{@num_format($payment_sent->total_bank_transfer)}}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>@lang('lang.credit_card')</td>
@@ -379,7 +383,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.expense')</h3>
                                     </th>
 
@@ -403,7 +407,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: var(--primary-color);">
                                         <h3>@lang('lang.payroll')</h3>
                                     </th>
 

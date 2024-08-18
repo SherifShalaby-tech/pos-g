@@ -16,7 +16,7 @@ $version_update_datatime = App\Models\System::getProperty('version_update_date')
     <div class="form-outer text-center d-flex align-items-center">
         <div class="form-inner">
             <div class="row" style="text-align: left;">
-                <div class="col-md-12" style="color: #7c5cc4">
+                <div class="col-md-12" style="color: var(--primary-color)">
                     <h4>@lang('lang.version'): {{$version_number}}</h4>
                     <h4>@lang('lang.last_update'):
                         @if(!empty($version_update_datatime)){{\Carbon\Carbon::createFromTimestamp(strtotime($version_update_datatime))->format('d-M-Y
