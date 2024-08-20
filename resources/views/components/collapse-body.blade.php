@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'collapse']) }} id="{{ $collapseId }}">
+<div {{ $attributes->merge(['class' => 'collapse ']) }} style="width:100%" id="{{ $collapseId }}">
 
     <div class="card mb-0 card-body">
 

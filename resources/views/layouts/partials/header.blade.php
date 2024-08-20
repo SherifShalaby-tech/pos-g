@@ -15,7 +15,87 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
                         <h1 class="d-inline">{{$site_title}}</h1>
                     </a></span>
 
+
+
+
                 <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                    <li class="nav-item">
+                        <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            class="nav-link dropdown-item d-flex justify-content-center align-items-center">
+                            <span style="width: 25px;height: 25px;background-color: var(--primary-color)"
+                                class="rounded-circle">
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                            <li class="d-flex" style="gap: 5px">
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#2563eb' , '#1d4ed8')">
+                                    <span style="width: 25px;height: 25px;background-color: #2563eb"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#16a34a' , '#15803d')">
+                                    <span style="width: 25px;height: 25px;background-color: #16a34a"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#ea580c','#c2410c')">
+                                    <span style="width: 25px;height: 25px;background-color: #ea580c"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#ec4899' , '#be185d')">
+                                    <span style="width: 25px;height: 25px;background-color: #ec4899"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#dc2626','#b91c1c')">
+                                    <span style="width: 25px;height: 25px;background-color: #dc2626"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#0284c7','#0369a1')">
+                                    <span style="width: 25px;height: 25px;background-color: #0284c7"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#475569','#334155')">
+                                    <span style="width: 25px;height: 25px;background-color: #475569"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#14b8a6','#0d9488')">
+                                    <span style="width: 25px;height: 25px;background-color: #14b8a6"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#eab308','#c8b400')">
+                                    <span style="width: 25px;height: 25px;background-color: #eab308"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                                <button class="border-0 d-flex justify-content-center align-items-center"
+                                    onclick="changePrimaryColor('#4f46e5','#3730a3')">
+                                    <span style="width: 25px;height: 25px;background-color: #4f46e5"
+                                        class="rounded-circle">
+                                    </span>
+                                </button>
+                            </li>
+
+
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a href="{{action('SellController@create')}}" id="commercial_invoice_btn" data-toggle="tooltip"
                             data-title="@lang('lang.add_sale')" class="btn no-print"><img

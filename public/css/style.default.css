@@ -1274,6 +1274,7 @@ button {
 
 .forms label {
     font-size: 0.8rem;
+    font-weight: 500;
 }
 
 /* FORMS MEDIAQUERIES -------------------------- */
@@ -2767,7 +2768,8 @@ a>code {
 
 .card-header h4 {
     font-size: 1.1rem;
-    font-weight: 400;
+    font-weight: 600;
+    color: var(--primary-color);
 }
 
 .card-header:first-child {

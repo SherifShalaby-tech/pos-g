@@ -1,10 +1,12 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
 
             <h4 class="modal-title">@lang( 'lang.cash_details' )</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
+            <button type="button"
+                class="btn text-primary rounded-circle d-flex justify-content-center align-items-center modal-close-btn"
+                data-dismiss="modal">&times;</button>
         </div>
 
         <div class="modal-body">
@@ -24,7 +26,8 @@
                     </tr>
                     <tr>
                         <td><b>@lang('lang.total_sales')</b></td>
-                        <td>{{ @num_format($cash_register->total_sale - $cash_register->total_refund- $total_latest_payments) }}</td>
+                        <td>{{ @num_format($cash_register->total_sale - $cash_register->total_refund-
+                            $total_latest_payments) }}</td>
                     </tr>
                     <tr>
                         <td><b>@lang('lang.total_cash_sale')</b></td>
@@ -38,9 +41,9 @@
                         </td>
                         @if(!empty($total_latest_payments) && $total_latest_payments>0)
                         <td><a data-href="{{action('CashController@showLatestPaymentDetails', $cash_register->id)}}"
-                            data-container=".view_modal" class="btn btn-modal btn-danger text-white"><i
-                                class="fa fa-eye"></i> @lang('lang.view')</a></td>
-                                @endif
+                                data-container=".view_modal" class="btn btn-modal btn-danger text-white"><i
+                                    class="fa fa-eye"></i> @lang('lang.view')</a></td>
+                        @endif
                     </tr>
                     @if(session('system_mode') == 'restaurant')
                     <tr>
@@ -82,7 +85,10 @@
                     </tr>
                     <tr>
                         <td><b>@lang('lang.current_cash')</b></td>
-                        <td>{{ @num_format($cash_register->total_cash_sales +$cash_register->total_cash_in -$cash_register->total_cash_out -$cash_register->total_purchases -$cash_register->total_expenses -$cash_register->total_wages_and_compensation -$cash_register->total_sell_return) }}
+                        <td>{{ @num_format($cash_register->total_cash_sales +$cash_register->total_cash_in
+                            -$cash_register->total_cash_out -$cash_register->total_purchases
+                            -$cash_register->total_expenses -$cash_register->total_wages_and_compensation
+                            -$cash_register->total_sell_return) }}
                         </td>
                     </tr>
                 </table>
@@ -91,7 +97,8 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">@lang( 'lang.close' )</button>
+            <button type="button" class="btn btn-default col-md-12 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
 
     </div><!-- /.modal-content -->

@@ -1,7 +1,8 @@
 <!-- Modal -->
 <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
             <h5 class="modal-title" id="forfeit_leave">@lang('lang.forfeit_leave')</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -15,7 +16,8 @@
                     <div class="form-group">
                         <label for="employee_id">@lang('lang.employee')</label>
                         @if (auth()->user()->can('superadmin') || auth()->user()->is_admin == 1)
-                        {!! Form::select('employee_id', $employees, $this_employee_id, ['class' => 'form-control select2', 'id' =>
+                        {!! Form::select('employee_id', $employees, $this_employee_id, ['class' => 'form-control
+                        select2', 'id' =>
                         'employee_id', 'required', 'placeholder' => 'Please Select']) !!}
                         @else
                         {!! Form::select('employee_id', $employees, $this_employee_id, ['class' => 'form-control
@@ -46,7 +48,8 @@
                 </div>
                 <div class="col-md-4">
                     <label for="number_of_days">@lang('lang.number_of_days')</label>
-                    <input class="form-control" type="number" id="number_of_days" step=".01" name="number_of_days" required>
+                    <input class="form-control" type="number" id="number_of_days" step=".01" name="number_of_days"
+                        required>
                 </div>
                 <div class="col-md-4">
                     <label for="start_date">@lang('lang.year')</label>
@@ -67,8 +70,10 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">@lang('lang.save')</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center">@lang('lang.save')</button>
+            <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
         {!! Form::close() !!}
     </div>

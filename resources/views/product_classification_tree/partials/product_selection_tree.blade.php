@@ -36,7 +36,8 @@ $product_selected = !empty($pct_data['product_selected']) ? $pct_data['product_s
 <div class="modal fade" id="pctModal" tabindex="-1" role="dialog" aria-labelledby="pctModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div
+                class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
                 <h5 class="modal-title" id="pctModalLabel">@lang('lang.products')</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -53,7 +54,9 @@ $product_selected = !empty($pct_data['product_selected']) ? $pct_data['product_s
                                 </div>
                                 <div class="col-md-6">
                                     {!! Form::select('search_product[]', $products, '', ['class' => 'form-control
-                                    selectpicker', 'data-live-search' => 'true', 'placeholder' => __('lang.search_product'), 'id' => 'search_pct', 'data-actions-box' => 'true', 'multiple']) !!}
+                                    selectpicker', 'data-live-search' => 'true', 'placeholder' =>
+                                    __('lang.search_product'), 'id' => 'search_pct', 'data-actions-box' => 'true',
+                                    'multiple']) !!}
                                 </div>
                             </div>
                         </div>
@@ -131,17 +134,21 @@ $product_selected = !empty($pct_data['product_selected']) ? $pct_data['product_s
 
                                                             @if($brands->count() == 0 && $sub_categories->count() == 0)
                                                             @php
-                                                                $products = App\Models\Product::leftjoin(
-                                                                    'variations', 'products.id',
-                                                                     'variations.product_id')->where('category_id', $category->id)->whereNotNull('products.name')
-                                                                ->select('products.id', 'products.name',
-                                                                  'variations.id as variation_id',
-                                                                  'variations.name as variation_name','variations.sub_sku as sku', 'variations.default_sell_price as sell_price')->groupBy('variations.id')->get();
+                                                            $products = App\Models\Product::leftjoin(
+                                                            'variations', 'products.id',
+                                                            'variations.product_id')->where('category_id',
+                                                            $category->id)->whereNotNull('products.name')
+                                                            ->select('products.id', 'products.name',
+                                                            'variations.id as variation_id',
+                                                            'variations.name as variation_name','variations.sub_sku as
+                                                            sku', 'variations.default_sell_price as
+                                                            sell_price')->groupBy('variations.id')->get();
                                                             @endphp
                                                             @foreach ($products as $product)
 
-                                                            @include('product_classification_tree.partials.product_inner_part_pst', [
-                                                                'product' => $product,
+                                                            @include('product_classification_tree.partials.product_inner_part_pst',
+                                                            [
+                                                            'product' => $product,
                                                             ])
                                                             @endforeach
                                                             @endif
@@ -149,7 +156,8 @@ $product_selected = !empty($pct_data['product_selected']) ? $pct_data['product_s
                                                             @if (!empty($brands) && $brands->count() > 0)
                                                             @include('product_classification_tree.partials.brand_inner_part_pst',
                                                             ['brands' => $brands, 'brand_selected' => $brand_selected,
-                                                            'product_class_id' => $class->id, 'category_id' => $category->id])
+                                                            'product_class_id' => $class->id, 'category_id' =>
+                                                            $category->id])
                                                             @endif
                                                             @foreach ($sub_categories as $sub_category)
                                                             <div class="accordion"
@@ -196,7 +204,8 @@ $product_selected = !empty($pct_data['product_selected']) ? $pct_data['product_s
                                                                             @include('product_classification_tree.partials.brand_inner_part_pst',
                                                                             ['brands' => $brands, 'brand_selected' =>
                                                                             $brand_selected, 'product_class_id' =>
-                                                                            $class->id, 'category_id' => $category->id, 'sub_category_id' =>
+                                                                            $class->id, 'category_id' => $category->id,
+                                                                            'sub_category_id' =>
                                                                             $sub_category->id])
                                                                             @endif
                                                                         </div>
@@ -237,7 +246,8 @@ $product_selected = !empty($pct_data['product_selected']) ? $pct_data['product_s
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@lang('lang.next')</button>
+                <button type="button" class="btn btn-default col-md-12 px-0 m-0 rounded-0 text-center"
+                    data-dismiss="modal">@lang('lang.close')</button>
             </div>
         </div>
     </div>

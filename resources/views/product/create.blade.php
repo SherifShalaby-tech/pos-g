@@ -118,11 +118,12 @@
     }
 
     .file--upload>label {
-        color: hsl(204, 86%, 53%);
-        border-color: hsl(204, 86%, 53%);
+        color: #888;
+        border: 2px dashed #888;
     }
 
     .file--upload>label:hover {
+        color: hsl(204, 86%, 53%);
         border-color: hsl(204, 86%, 53%);
         background-color: hsl(204, 86%, 96%);
     }
@@ -214,26 +215,15 @@
                     <h4>@lang('lang.add_new_product')</h4>
                 </x-page-title>
 
+                {!! Form::open(['url' => action('ProductController@store'), 'id' => 'product-form', 'method' =>
+                'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
+                @include('product.partial.create_product_form')
 
-
-
-                <div class="card">
-                    <div class="card-body">
-                        <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
-                        {!! Form::open(['url' => action('ProductController@store'), 'id' => 'product-form', 'method' =>
-                        'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
-                        @include('product.partial.create_product_form')
-                        <div class="row">
-                            <div class="col-md-4 mt-5">
-                                <div class="form-group">
-                                    <input type="button" value="{{ trans('lang.save') }}" id="submit-btn"
-                                        class="btn btn-primary">
-                                </div>
-                            </div>
-                        </div>
-                        {!! Form::close() !!}
-                    </div>
+                <div class="row justify-content-center mt-3">
+                    <input type="button" value="{{ trans('lang.save') }}" id="submit-btn" class="btn btn-primary w-25">
                 </div>
+                {!! Form::close() !!}
+
             </div>
         </div>
     </div>
@@ -242,7 +232,8 @@
 <div class="modal fade" id="product_cropper_modal" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div
+                class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
                 <h5 class="modal-title">@lang('lang.crop_image_before_upload')</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -261,8 +252,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="product_crop" class="btn btn-primary">@lang('lang.crop')</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="product_crop" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center">@lang('lang.crop')</button>
+                <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                    data-dismiss="modal">@lang('lang.cancel')</button>
             </div>
         </div>
     </div>

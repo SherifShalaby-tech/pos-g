@@ -42,11 +42,17 @@
 <!-- Custom stylesheet - for your changes-->
 <link rel="stylesheet" href="{{asset('css/custom-default.css') }}" type="text/css" id="custom-style">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Noto+Kufi+Arabic:wght@100..900&family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 </style>
+
+
 <style>
     :root {
         --primary-color: #4f46e5;
+        /* Light Blue */
+        --primary-color-hover: #362ebd;
         /* Light Blue */
         --secondary-color: #84ceed;
         /* Bright Blue */
@@ -105,13 +111,54 @@
 
 
     body {
-        font-family: "Roboto", sans-serif !important;
+        font-family: "Noto Kufi Arabic", sans-serif !important;
+        /* font-family: "Almarai", sans-serif !important; */
     }
 
-    .page-title {
-        border-left: 2px solid #4f46e5;
+    .page-title-en {
+        border-left: 2px solid var(--primary-color);
     }
 
+    .page-title-ar {
+        border-right: 2px solid var(--primary-color);
+    }
+
+    .label-ar {
+        display: block;
+        text-align: right
+    }
+
+    .label-en {
+        display: block;
+        text-align: right
+    }
+
+    .product-btn {
+        min-width: 350px;
+    }
+
+    .modal-header {
+        background: linear-gradient(to right, var(--primary-color), #6b73ff);
+        color: white
+    }
+
+    .modal-footer {
+        border: none;
+        padding: 0
+    }
+
+
+    .modal-close-btn {
+        width: 35px;
+        height: 35px;
+        font-weight: 600;
+        font-size: 1.5rem;
+        background-color: #fff;
+    }
+
+    .modal-close-btn:hover {
+        background-color: #efefef;
+    }
 
     ::-webkit-scrollbar-track {
         border: 3px solid white;
@@ -131,7 +178,7 @@
 
     .btn-modal {
         border-radius: 0 6px 6px 0px;
-        border: 2px solid #4f46e5;
+        border: 2px solid var(--primary-color);
     }
 </style>
 <style>

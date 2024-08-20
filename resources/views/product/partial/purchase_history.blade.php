@@ -2,11 +2,13 @@
     <div class="modal-content">
 
 
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
 
             <h4 class="modal-title">@lang('lang.purchase_history') ({{$product->name}})</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
+            <button type="button"
+                class="btn text-primary rounded-circle d-flex justify-content-center align-items-center modal-close-btn"
+                data-dismiss="modal">&times;</button>
         </div>
 
         <div class="modal-body">
@@ -50,7 +52,8 @@
                                     {{@num_format($add_stock->transaction_payments->sum('amount'))}}
                                 </td>
                                 <td>
-                                    {{@num_format($add_stock->final_total - $add_stock->transaction_payments->sum('amount'))}}
+                                    {{@num_format($add_stock->final_total -
+                                    $add_stock->transaction_payments->sum('amount'))}}
                                 </td>
                                 <td>@if(!empty($add_stock->due_date) && $add_stock->payment_status != 'paid')
                                     {{@format_date($add_stock->due_date)}} @endif</td>
@@ -113,7 +116,8 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">@lang( 'lang.close' )</button>
+            <button type="button" class="btn btn-default col-md-12 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
 
 

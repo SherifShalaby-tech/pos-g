@@ -1,7 +1,8 @@
 <!-- Modal -->
 <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content">
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
             <h5 class="modal-title" id="edit">@lang('lang.edit')</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -13,15 +14,18 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="job_title">@lang('lang.job_title')</label>
-                        <input type="text" class="form-control" value="{{$job->job_title}}" name="job_title" id="job_title" required>
+                        <input type="text" class="form-control" value="{{$job->job_title}}" name="job_title"
+                            id="job_title" required>
                     </div>
                 </div>
 
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">@lang('lang.save')</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center">@lang('lang.save')</button>
+          <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
         {!! Form::close() !!}
     </div>

@@ -7,7 +7,7 @@ nav.navbar a.menu-btn:hover {
 }
 
 .side-navbar {
-    background-color: #fafbfe;
+    background-color: #fff;
     position: fixed;
     top: 63px;
     left: 0;
@@ -32,7 +32,7 @@ nav.navbar a.menu-btn:hover {
     background: #f8f8f8;
     color: var(--primary-color);
     text-decoration: none;
-    border-left: 2px solid #4f46e5;
+    border-left: 2px solid var(--primary-color);
     border-radius: 0;
 }
 
@@ -578,8 +578,8 @@ th span.number-in-words {
 }
 
 .btn-primary:hover {
-    background-color: #6244a6;
-    border-color: #6244a6;
+    background-color: var(--primary-color-hover);
+    border-color: var(--primary-color-hover) !important;
 }
 
 a:hover {
@@ -618,8 +618,10 @@ table.dataTable.no-shadow {
     box-shadow: none;
 }
 
-.table thead th {
+.table thead th,
+.table td {
     border-bottom: 1px solid #e4e6fc;
+    border-top: 1px solid #b1b3b5 !important;
 }
 
 section {
@@ -781,22 +783,27 @@ nav.navbar .nav-item li.notifications a i {
 }
 
 .buttons-pdf {
-    background: #ff7588;
+    background: var(--primary-color);
     border: none;
 }
 
 .buttons-csv {
-    background: #ffc107;
+    background: var(--primary-color);
+    border: none;
+}
+
+.buttons-copy {
+    background: var(--primary-color);
     border: none;
 }
 
 .buttons-print {
-    background: #2196f3;
+    background: var(--primary-color);
     border: none;
 }
 
 .buttons-delete {
-    background: #eb543a;
+    background: var(--primary-color);
     border: none;
 }
 

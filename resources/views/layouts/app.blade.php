@@ -33,6 +33,9 @@
     @if (request()->segment(1) != 'pos')
     @include('layouts.partials.header')
     @endif
+
+
+
     <div class="@if (request()->segment(1) != 'pos') page @else pos-page @endif">
         @include('layouts.partials.sidebar')
         <div style="display:none" id="content" class="animate-bottom">
@@ -69,7 +72,8 @@
         <div class="modal" id="cropper_modal" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div
+                        class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
                         <h5 class="modal-title">@lang('lang.crop_image_before_upload')</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -88,8 +92,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="crop" class="btn btn-primary">@lang('lang.crop')</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="crop" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center">@lang('lang.crop')</button>
+                        <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                            data-dismiss="modal">@lang('lang.close')</button>
                     </div>
                 </div>
             </div>
@@ -249,14 +255,14 @@
                 $('nav.side-navbar').removeClass('shrink');
             }
         @endif
-        function myFunction() {
-            setTimeout(showPage, 150);
-        }
+        // function myFunction() {
+        //     setTimeout(showPage, 150);
+        // }
 
-        function showPage() {
-            document.getElementById("loader").style.display = "none";
-            document.getElementById("content").style.display = "block";
-        }
+        // function showPage() {
+        //     document.getElementById("loader").style.display = "none";
+        //     document.getElementById("content").style.display = "block";
+        // }
 
         $("div.alert").delay(3000).slideUp(750);
 
@@ -442,6 +448,34 @@
         $('input').attr('autocomplete', 'off');
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+loadPrimaryColor();
+setTimeout(showPage, 150);
+});
+
+function showPage() {
+document.getElementById("loader").style.display = "none";
+document.getElementById("content").style.display = "block";
+}
+
+function changePrimaryColor(color , hoverColor) {
+
+document.documentElement.style.setProperty('--primary-color', color);
+document.documentElement.style.setProperty('--primary-color-hover', hoverColor);
+localStorage.setItem('primaryColor', color);
+localStorage.setItem('primaryColorHover', hoverColor);
+}
+
+function loadPrimaryColor() {
+const savedColor = localStorage.getItem('primaryColor');
+const savedColorHover = localStorage.getItem('primaryColorHover');
+if (savedColor) {
+document.documentElement.style.setProperty('--primary-color', savedColor);
+document.documentElement.style.setProperty('--primary-color-hover', savedColorHover);
+}
+}
+    </script>
 </body>
 
 

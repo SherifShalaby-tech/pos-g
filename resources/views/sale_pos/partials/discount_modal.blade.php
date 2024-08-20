@@ -3,7 +3,8 @@
     class="modal fade text-left">
     <div role="document" class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div
+                class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
                 <h5 class="modal-title">@lang('lang.random_discount')</h5>
                 <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i
                             class="dripicons-cross"></i></span></button>
@@ -26,8 +27,8 @@
                 </div>
                 <input type="hidden" name="discount_amount" id="discount_amount">
                 <div class="modal-footer">
-                    <button type="button" name="discount_btn" id="discount_btn" class="btn btn-primary"
-                        data-dismiss="modal">@lang('lang.submit')</button>
+                    <button type="button" name="discount_btn" id="discount_btn" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center" data-dismiss="modal">@lang('lang.submit')</button>
                 </div>
             </div>
         </div>

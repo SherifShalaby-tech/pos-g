@@ -3,10 +3,11 @@
     class="modal fade text-left">
     <div role="document" class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div
+                class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
                 <h5 class="modal-title">{{ __('lang.customer_details') }}</h5>
-                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
-                        aria-hidden="true"><i class="dripicons-cross"></i></span></button>
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i
+                            class="dripicons-cross"></i></span></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -42,22 +43,24 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-primary redeem_btn pull-right" id="redeem_btn"
-                            disabled>{{ __('lang.redeem') }}</button>
+                        <button type="button" class="btn btn-primary redeem_btn pull-right" id="redeem_btn" disabled>{{
+                            __('lang.redeem') }}</button>
                     </div>
                 </div>
                 <div class="col-md-12 mb-5">
                     <div class="row">
                         <div class="col-md-4">
                             <label for="customer_address">@lang('lang.address')</label>
-                            {!! Form::textarea('customer_address', null, ['class' => 'form-control', 'rows' => 3, 'id' => 'customer_address']) !!}
+                            {!! Form::textarea('customer_address', null, ['class' => 'form-control', 'rows' => 3, 'id'
+                            => 'customer_address']) !!}
                         </div>
                         <div class="col-md-3">
                             <button type="button" class="btn btn-primary" style="margin-top: 30px;"
                                 id="update_customer_address">@lang('lang.update_address')</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" data-href="" class="btn btn-primary btn-modal text-white" data-container=".view_modal"  style="margin-top: 30px;"
+                            <button type="button" data-href="" class="btn btn-primary btn-modal text-white"
+                                data-container=".view_modal" style="margin-top: 30px;"
                                 id="pay_customer_due_btn">@lang('lang.pay_customer_due')</button>
                         </div>
                     </div>
@@ -99,7 +102,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary " data-dismiss="modal">{{ __('lang.close') }}</button>
+                <button type="button" class="btn btn-default col-md-12 px-0 m-0 rounded-0 text-center"
+                    data-dismiss="modal">@lang('lang.close')</button>
             </div>
         </div>
     </div>

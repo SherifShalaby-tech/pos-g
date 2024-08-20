@@ -196,7 +196,8 @@
                         <div class="modal fade" role="dialog" id="email_modal">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
-                                    <div class="modal-header">
+                                    <div
+                                        class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
                                         <h5 class="modal-title">@lang('lang.email')</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -213,9 +214,10 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger"
-                                            id="send-btn">@lang('lang.send')</button>
-                                        <button type="button" class="btn btn-secondary"
+                                        <button type="button" class="btn btn-danger col-md-6 px-0 m-0 rounded-0
+                 text-center" id="send-btn">@lang('lang.send')</button>
+                                        <button type="button"
+                                            class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
                                             data-dismiss="modal">@lang('lang.close')</button>
                                     </div>
                                 </div>

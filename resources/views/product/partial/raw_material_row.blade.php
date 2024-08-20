@@ -1,5 +1,5 @@
 <tr>
-    <td>
+    <td class="text-center">
         @if(!empty(!empty($consumption_product)))
         <input type="hidden" name="consumption_details[{{$row_id}}][id]" value="{{$consumption_product->id}}">
         @endif
@@ -8,26 +8,30 @@
         form-control
         raw_material_id', 'data-live-search'=>"true", 'placeholder' => __('lang.please_select')]) !!}
     </td>
-    <td>
+    <td class="text-center">
         {!! Form::text('consumption_details['.$row_id.'][amount_used]', !empty($consumption_product) ?
         @num_format($consumption_product->amount_used) : 0, ['class' => 'form-control raw_material_quantity']) !!}
     </td>
-    <td>
+    <td class="text-center">
         <p class="hide info_text text-red"></p>
         <div class="col-md-6">
-            <label for="" class="unit_label">{{!empty($consumption_product->unit) ? $consumption_product->unit->name : false}}</label>
+            <label for="" class="unit_label">{{!empty($consumption_product->unit) ? $consumption_product->unit->name :
+                false}}</label>
         </div>
         {!! Form::select('consumption_details['.$row_id.'][unit_id]', $raw_material_units,
-        !empty($consumption_product) ? $consumption_product->unit_id : false, ['class' => 'selectpicker form-control hide
+        !empty($consumption_product) ? $consumption_product->unit_id : false, ['class' => 'selectpicker form-control
+        hide
         raw_material_unit_id', 'data-live-search'=>"true", 'placeholder' => __('lang.please_select')]) !!}
     </td>
-    <td> <label for="" class="cost_label"></label></td>
-    <td><button type="button" class="btn btn-xs btn-danger remove_row remove_raw_material_btn"><i class="fa fa-times"></i></button></td>
+    <td class="text-center"> <label for="" class="cost_label"></label></td>
+    <td class="text-center"><button type="button" class="btn btn-danger remove_row remove_raw_material_btn"
+            style="border-radius: 50%!important"><i class="fa fa-times"></i></button></td>
     @if(!empty(!empty($consumption_product)))
     @php
-        $this_raw_material = App\Models\Product::find($consumption_product->raw_material_id);
+    $this_raw_material = App\Models\Product::find($consumption_product->raw_material_id);
     @endphp
-    <input type="hidden" name="raw_material_price" class="raw_material_price" value="{{$this_raw_material->purchase_price??0}}">
+    <input type="hidden" name="raw_material_price" class="raw_material_price"
+        value="{{$this_raw_material->purchase_price??0}}">
     @else
     <input type="hidden" name="raw_material_price" class="raw_material_price" value="0">
     @endif

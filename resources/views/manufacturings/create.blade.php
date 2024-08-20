@@ -111,7 +111,9 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">--}}
     {{-- <div class="modal-dialog" role="document">--}}
         {{-- <div class="modal-content">--}}
-            {{-- <div class="modal-header">--}}
+            {{-- <div
+                class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
+                --}}
                 {{-- <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>--}}
                 {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
                     {{-- <span aria-hidden="true">&times;</span>--}}

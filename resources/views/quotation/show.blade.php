@@ -1,10 +1,12 @@
 <div class="modal-dialog" role="document" style="max-width: 65%">
     <div class="modal-content">
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
 
             <h4 class="modal-title">@lang('lang.quotation')</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
+            <button type="button"
+                class="btn text-primary rounded-circle d-flex justify-content-center align-items-center modal-close-btn"
+                data-dismiss="modal">&times;</button>
         </div>
 
         <div class="modal-body">
@@ -33,7 +35,8 @@
                         <b>{{ $sale->customer->mobile_number ?? '' }}</b>
                     </div>
                     <div class="col-md-12">
-                        {!! Form::label('address', __('lang.address'), []) !!}: <b>{{ $sale->customer->address ?? '' }}</b>
+                        {!! Form::label('address', __('lang.address'), []) !!}: <b>{{ $sale->customer->address ?? ''
+                            }}</b>
                     </div>
                 </div>
             </div>
@@ -60,82 +63,82 @@
                         </thead>
                         <tbody>
                             @foreach ($sale->transaction_sell_lines as $line)
-                                <tr>
-                                    <td>
-                                        {{ $line->product->name }}
-                                        @if (!empty($line->variation))
-                                            @if ($line->variation->name != 'Default')
-                                                <b>{{ $line->variation->name }}</b>
-                                            @endif
-                                        @endif
+                            <tr>
+                                <td>
+                                    {{ $line->product->name }}
+                                    @if (!empty($line->variation))
+                                    @if ($line->variation->name != 'Default')
+                                    <b>{{ $line->variation->name }}</b>
+                                    @endif
+                                    @endif
 
-                                    </td>
-                                    <td>
-                                        @if (!empty($line->variation))
-                                            @if ($line->variation->name != 'Default')
-                                                {{ $line->variation->sub_sku }}
-                                            @else
-                                                {{ $line->product->sku ?? '' }}
-                                            @endif
-                                        @else
-                                            {{ $line->product->sku ?? '' }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (!empty($line->product->product_class))
-                                            {{ $line->product->product_class->name }}
-                                        @endif
-                                    </td>
+                                </td>
+                                <td>
+                                    @if (!empty($line->variation))
+                                    @if ($line->variation->name != 'Default')
+                                    {{ $line->variation->sub_sku }}
+                                    @else
+                                    {{ $line->product->sku ?? '' }}
+                                    @endif
+                                    @else
+                                    {{ $line->product->sku ?? '' }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if (!empty($line->product->product_class))
+                                    {{ $line->product->product_class->name }}
+                                    @endif
+                                </td>
 
-                                    <td>
-                                        @if (!empty($line->product->category))
-                                            {{ $line->product->category->name }}
-                                        @endif
-                                    </td>
+                                <td>
+                                    @if (!empty($line->product->category))
+                                    {{ $line->product->category->name }}
+                                    @endif
+                                </td>
 
-                                    <td>
-                                        @if (!empty($line->product->sub_category))
-                                            {{ $line->product->sub_category->name }}
-                                        @endif
-                                    </td>
+                                <td>
+                                    @if (!empty($line->product->sub_category))
+                                    {{ $line->product->sub_category->name }}
+                                    @endif
+                                </td>
 
-                                    <td>
-                                        @if (!empty($line->variation->color))
-                                            {{ $line->variation->color->name }}
-                                        @endif
-                                    </td>
+                                <td>
+                                    @if (!empty($line->variation->color))
+                                    {{ $line->variation->color->name }}
+                                    @endif
+                                </td>
 
-                                    <td>
-                                        @if (!empty($line->variation->size))
-                                            {{ $line->variation->size->name }}
-                                        @endif
-                                    </td>
+                                <td>
+                                    @if (!empty($line->variation->size))
+                                    {{ $line->variation->size->name }}
+                                    @endif
+                                </td>
 
-                                    <td>
-                                        @if (!empty($line->variation->grade))
-                                            {{ $line->variation->grade->name }}
-                                        @endif
-                                    </td>
+                                <td>
+                                    @if (!empty($line->variation->grade))
+                                    {{ $line->variation->grade->name }}
+                                    @endif
+                                </td>
 
-                                    <td>
-                                        @if (!empty($line->variation->unit))
-                                            {{ $line->variation->unit->name }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (isset($line->quantity))
-                                            {{ $line->quantity }}@else{{ 1 }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (isset($line->sell_price))
-                                            {{ @num_format($line->sell_price) }}@else{{ 0 }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ @num_format($line->sub_total) }}
-                                    </td>
-                                </tr>
+                                <td>
+                                    @if (!empty($line->variation->unit))
+                                    {{ $line->variation->unit->name }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if (isset($line->quantity))
+                                    {{ $line->quantity }}@else{{ 1 }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if (isset($line->sell_price))
+                                    {{ @num_format($line->sell_price) }}@else{{ 0 }}
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ @num_format($line->sub_total) }}
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
@@ -200,7 +203,7 @@
                 <div class="col-md-12">
                     @lang('lang.terms_and_conditions'):
                     @if (!empty($sale->terms_and_conditions))
-                        {{ $sale->terms_and_conditions->description }}
+                    {{ $sale->terms_and_conditions->description }}
                     @endif
                 </div>
             </div>
@@ -208,9 +211,10 @@
         </div>
 
         <div class="modal-footer">
-            <a data-href="{{ action('SellController@print', $sale->id) }}"
-                class="btn btn-primary text-white print-invoice"><i class="dripicons-print"></i> @lang('lang.print')</a>
-            <button type="button" class="btn btn-default" data-dismiss="modal">@lang('lang.close')</button>
+            <a data-href="{{ action('SellController@print', $sale->id) }}" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                text-center print-invoice"><i class="dripicons-print"></i> @lang('lang.print')</a>
+            <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
 
 

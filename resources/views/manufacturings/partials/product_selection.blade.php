@@ -1,12 +1,12 @@
-<button type="button" id="select_products_btn" class="btn btn-success" data-toggle="modal"
-    style="margin-top: 15px;">
+<button type="button" id="select_products_btn" class="btn btn-success" data-toggle="modal" style="margin-top: 15px;">
     @lang('lang.select_products')
 </button>
 <div class="modal fade" id="select_products_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
     aria-hidden="true" style="width: 100%;">
     <div class="modal-dialog modal-lg" role="document" id="select_products_modal">
         <div class="modal-content">
-            <div class="modal-header">
+            <div
+                class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
 
                 <h4 class="modal-title">@lang( 'lang.select_products' )</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -20,7 +20,8 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        {!! Form::label('filter_product_class_id', __('lang.product_class') . ':', []) !!}
+                                        {!! Form::label('filter_product_class_id', __('lang.product_class') . ':', [])
+                                        !!}
                                         {!! Form::select('filter_product_class_id', $product_classes,
                                         request()->filter_product_class_id,
                                         ['class'
@@ -32,7 +33,8 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::label('filter_category_id', __('lang.category') . ':', []) !!}
-                                        {!! Form::select('filter_category_id', $categories, request()->category_id, ['class' =>
+                                        {!! Form::select('filter_category_id', $categories, request()->category_id,
+                                        ['class' =>
                                         'form-control filter_product
                                         selectpicker', 'data-live-search' =>'true', 'placeholder' => __('lang.all')])
                                         !!}
@@ -41,7 +43,8 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         {!! Form::label('filter_sub_category_id', __('lang.sub_category') . ':', []) !!}
-                                        {!! Form::select('filter_sub_category_id', $sub_categories, request()->sub_category_id,
+                                        {!! Form::select('filter_sub_category_id', $sub_categories,
+                                        request()->sub_category_id,
                                         ['class' =>
                                         'form-control filter_product
                                         selectpicker', 'data-live-search' =>'true', 'placeholder' => __('lang.all')])
@@ -119,7 +122,8 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        {!! Form::label('filter_customer_type_id', __('lang.customer_type') . ':', []) !!}
+                                        {!! Form::label('filter_customer_type_id', __('lang.customer_type') . ':', [])
+                                        !!}
                                         {!! Form::select('filter_customer_type_id', $customer_types,
                                         request()->customer_type_id,
                                         ['class'
@@ -242,8 +246,10 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="add-selected-btn">@lang( 'lang.add' )</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">@lang( 'lang.close' )</button>
+                <button type="button" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center" id="add-selected-btn">@lang( 'lang.add' )</button>
+                <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                    data-dismiss="modal">@lang('lang.close')</button>
             </div>
 
         </div>

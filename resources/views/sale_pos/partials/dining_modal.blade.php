@@ -114,21 +114,21 @@
             display: block;
         }
     }
-
 </style>
 <div role="document" class="modal-dialog modal-lg">
     <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
-                    aria-hidden="true"><i class="dripicons-cross"></i></span></button>
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i
+                        class="dripicons-cross"></i></span></button>
         </div>
         <div class="modal-body" id="dining_content">
             @include('sale_pos.partials.dining_content')
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">@lang(
-                'lang.close')</button>
+            <button type="button" class="btn btn-default col-md-12 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
     </div>
 </div>

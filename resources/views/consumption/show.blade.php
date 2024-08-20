@@ -1,10 +1,12 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
 
             <h4 class="modal-title">@lang( 'lang.customer_size' )</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
+            <button type="button"
+                class="btn text-primary rounded-circle d-flex justify-content-center align-items-center modal-close-btn"
+                data-dismiss="modal">&times;</button>
         </div>
 
         <div class="modal-body">
@@ -16,8 +18,7 @@
                             ''}}
                         </div>
                     </div>
-                    <div
-                        class="col-md-3">
+                    <div class="col-md-3">
                         <div class="form-group">
                             {!! Form::label('created_by', __('lang.chef'). ':', []) !!}
                             {{$consumption->created_by_user->name ?? ''}}
@@ -49,7 +50,8 @@
                                 <table style="border: 0px; width: 100%;">
                                     <tr>
                                         <td colspan="2"><label for="">@lang('lang.current_stock'):
-                                                {{preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock : @num_format($current_stock)}}</label></td>
+                                                {{preg_match('/\.\d*[1-9]+/', (string)$current_stock) ? $current_stock :
+                                                @num_format($current_stock)}}</label></td>
                                     </tr>
                                     @foreach ($raw_material_details as $raw_material_detail)
                                     <tr>
@@ -100,7 +102,8 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default close-btn" data-dismiss="modal">@lang( 'lang.close' )</button>
+            <button type="button" class="btn btn-default col-md-12 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
 
     </div><!-- /.modal-content -->

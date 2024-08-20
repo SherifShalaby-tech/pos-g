@@ -1,4 +1,5 @@
-<button {{ $attributes->merge(['class' => 'btn btn-'.$color]) }} type="button" data-bs-toggle="collapse"
+<button {{ $attributes->merge(['class' => 'btn btn-'.$color]) }} style="width:fit-content" type="button"
+    data-bs-toggle="collapse"
     data-bs-target="#{{ $collapseId }}"
     aria-expanded="false" aria-controls="{{ $collapseId }}" {{ $attributes }}>
     {{$slot}}

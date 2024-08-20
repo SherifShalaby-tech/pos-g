@@ -17,7 +17,7 @@
                 @if (empty($page))
                 <div>
                     @can('product_module.product.create_and_edit')
-                    <a style="color: white" href="{{ action('ProductController@create') }}" class="btn btn-info"><i
+                    <a style="color: white" href="{{ action('ProductController@create') }}" class="btn btn-primary"><i
                             class="dripicons-plus"></i>
                         @lang('lang.add_product')</a>
                     @endcan
@@ -234,10 +234,6 @@
             </x-collapse-body>
         </div>
 
-
-
-
-
         {{-- <div class="row">
             <div class="col-md-12">
                 <button type="button" value="1"
@@ -306,12 +302,7 @@
             </div>
         </div> --}}
 
-
-
-
-
-        <div class="card mb-0 px-0 mt-2 card-body">
-
+        <div class="card mb-0 px-0 ">
             <div class="table-responsive">
                 <table id="product_table" class="table" style="width: auto">
                     <thead>
@@ -873,6 +864,20 @@
                 },
             });
 
+            // Move the length menu to the top-controls div
+            $('.dataTables_length').prependTo('.top-controls').addClass('col-lg-2 col-9 mb-3 mb-lg-0');
+
+            // Move the buttons to the top-controls div
+            $('.dt-buttons').prependTo('.top-controls').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap');
+
+            // Move the search input to the top-controls div
+            $('.dataTables_filter').prependTo('.top-controls').addClass('col-lg-3 col-9');
+
+            // Move the pagination controls to the bottom-controls div
+            $('.dataTables_paginate').prependTo('.bottom-controls').addClass('col-lg-2 col-9');
+
+            // Move the information display to the bottom-controls div
+            $('.dataTables_info').appendTo('.bottom-controls');
         });
         $('#product_table').on('change', '.product_delete_all', function() {
             var isChecked = $(this).prop('checked');

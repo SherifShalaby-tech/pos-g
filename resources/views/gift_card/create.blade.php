@@ -4,11 +4,13 @@
         {!! Form::open(['url' => action('GiftCardController@store'), 'method' => 'post', 'id' => $quick_add ?
         'quick_add_gift_card_form' : 'gift_card_add_form' ]) !!}
 
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
 
             <h4 class="modal-title">@lang( 'lang.generate_gift_card' )</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
+            <button type="button"
+                class="btn text-primary rounded-circle d-flex justify-content-center align-items-center modal-close-btn"
+                data-dismiss="modal">&times;</button>
         </div>
 
         <div class="modal-body">
@@ -42,8 +44,10 @@
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">@lang( 'lang.save' )</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">@lang( 'lang.close' )</button>
+            <button type="submit" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center">@lang( 'lang.save' )</button>
+            <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
 
         {!! Form::close() !!}

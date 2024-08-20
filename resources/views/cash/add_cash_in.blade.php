@@ -1,13 +1,16 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
-        {!! Form::open(['url' => action('CashController@saveAddCashIn'), 'method' => 'post', 'id' => 'add_cash_in_form', 'files' => true]) !!}
+        {!! Form::open(['url' => action('CashController@saveAddCashIn'), 'method' => 'post', 'id' => 'add_cash_in_form',
+        'files' => true]) !!}
 
-        <div class="modal-header">
+        <div
+            class="modal-header py-2 align-items-center text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif">
 
             <h4 class="modal-title">@lang('lang.add_cash')</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
+            <button type="button"
+                class="btn text-primary rounded-circle d-flex justify-content-center align-items-center modal-close-btn"
+                data-dismiss="modal">&times;</button>
         </div>
 
         <div class="modal-body">
@@ -16,25 +19,30 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('amount', __('lang.amount') . ':*') !!}
-                            {!! Form::text('amount', null, ['class' => 'form-control', 'placeholder' => __('lang.amount'), 'required']) !!}
+                            {!! Form::text('amount', null, ['class' => 'form-control', 'placeholder' =>
+                            __('lang.amount'), 'required']) !!}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('source_type', __('lang.source_type'), []) !!} <br>
-                            {!! Form::select('source_type', ['user' => __('lang.user'), 'safe' => __('lang.safe')], 'user', ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
+                            {!! Form::select('source_type', ['user' => __('lang.user'), 'safe' => __('lang.safe')],
+                            'user', ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'style' =>
+                            'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('source_id', __('lang.source'), []) !!}
-                            {!! Form::select('source_id', $users, false, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'placeholder' => __('lang.please_select'), 'required']) !!}
+                            {!! Form::select('source_id', $users, false, ['class' => 'selectpicker form-control',
+                            'data-live-search' => 'true', 'placeholder' => __('lang.please_select'), 'required']) !!}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('notes', __('lang.notes'), []) !!}
-                            {!! Form::textarea('notes', null, ['class' => 'form-control', 'placeholder' => __('lang.notes'), 'rows' => 3]) !!}
+                            {!! Form::textarea('notes', null, ['class' => 'form-control', 'placeholder' =>
+                            __('lang.notes'), 'rows' => 3]) !!}
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -49,8 +57,10 @@
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">@lang('lang.save')</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">@lang('lang.close')</button>
+            <button type="submit" class="btn btn-primary col-md-6 px-0 m-0 rounded-0
+                 text-center">@lang('lang.save')</button>
+            <button type="button" class="btn btn-default col-md-6 px-0 m-0 rounded-0 text-center"
+                data-dismiss="modal">@lang('lang.close')</button>
         </div>
 
         {!! Form::close() !!}
