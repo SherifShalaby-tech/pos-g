@@ -72,7 +72,7 @@ function __currency_trans_from_en(
     if (!isNaN(input) && input > 0) {
         new_input = Math.round(input * Math.pow(10, __quantity_precision)) / Math.pow(10, __quantity_precision);
         precision = (new_input % 1 !== 0) ? new_input.toString().split('.')[1].length : 2;
-    }else{
+    } else {
         precision = 2;
     }
     return accounting.formatMoney(
@@ -244,12 +244,12 @@ if (language == "en") {
 } else {
     dt_lang_url = base_path + "/js/datatables_lang/en.json";
 }
-var print_title="";
-if($('.print-title').length){
-    print_title=$('.print-title').text();
-    }else{
-        print_title=$('title').text();
-    }
+var print_title = "";
+if ($('.print-title').length) {
+    print_title = $('.print-title').text();
+} else {
+    print_title = $('title').text();
+}
 var buttons = [
     {
         extend: "print",
@@ -292,38 +292,38 @@ var buttons = [
         columns: ":gt(0)",
     },
 ];
-if($('.print-title-hint').text()=="product_report"){
-    var button= [
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i>',
-                charset: 'UTF-8',
-                bom: true,
-                footer: true,
-                title: print_title,
-                exportOptions: {
-                    columns: [0, 7, 8 , 9]
-                }
+if ($('.print-title-hint').text() == "product_report") {
+    var button = [
+        {
+            extend: 'print',
+            text: '<i class="fas fa-print"></i>',
+            charset: 'UTF-8',
+            bom: true,
+            footer: true,
+            title: print_title,
+            exportOptions: {
+                columns: [0, 7, 8, 9]
             }
-        ];
+        }
+    ];
     buttons.push(button);
-    }
-    if($('.print-title-hint').text()=="sale_report"){
-        var button= [
-                {
-                    extend: 'print',
-                    text: '<i class="fas fa-print"></i>',
-                    charset: 'UTF-8',
-                    bom: true,
-                    footer: true,
-                    title: print_title,
-                    exportOptions: {
-                        columns: [0, 1, 3 , 10,12]
-                    }
-                }
-            ];
-        buttons.push(button);
-    }
+}
+if ($('.print-title-hint').text() == "sale_report") {
+    var button = [
+        {
+            extend: 'print',
+            text: '<i class="fas fa-print"></i>',
+            charset: 'UTF-8',
+            bom: true,
+            footer: true,
+            title: print_title,
+            exportOptions: {
+                columns: [0, 1, 3, 10, 12]
+            }
+        }
+    ];
+    buttons.push(button);
+}
 var datatable_params = {
     lengthChange: true,
     paging: true,
@@ -351,6 +351,15 @@ var datatable_params = {
             .wrap("<form>")
             .parent()
             .attr("autocomplete", "off");
+
+        // Move elements into the .top-controls div after DataTable initializes
+        $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+        $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+        $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+        $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+        $('.bottom-controls').append($('.dataTables_info'));
     },
     dom: "lBfrtip",
     stateSave: true,
@@ -360,8 +369,8 @@ var datatable_params = {
             return typeof i === "string"
                 ? i.replace(/[\$,]/g, "") * 1
                 : typeof i === "number"
-                ? i
-                : 0;
+                    ? i
+                    : 0;
         };
 
         this.api()

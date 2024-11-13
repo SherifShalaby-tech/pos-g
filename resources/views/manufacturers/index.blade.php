@@ -18,9 +18,13 @@
                     {{-- @endcan--}}
                 </x-slot>
             </x-page-title>
+            <div
+                class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
 
-            <div class="card">
-                <div class="card-body">
+            </div>
+            <div class="card mt-1 mb-0">
+                <div class="card-body py-2 px-4">
+
                     <div class="table-responsive">
                         <table id="category_table" class="table dataTable">
                             <thead>
@@ -71,8 +75,14 @@
                     </div>
                 </div>
             </div>
+
+            <div
+                class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+                <!-- Pagination and other controls can go here -->
+            </div>
         </div>
     </div>
+
 </section>
 @endsection
 

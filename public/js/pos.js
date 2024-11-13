@@ -284,31 +284,31 @@ $(document).ready(function () {
                 },
                 messages: {
                     noResults: "",
-                    results: function () {},
+                    results: function () { },
                 },
             })
             .autocomplete("instance")._renderItem = function (ul, item) {
-            var string = "";
-            if (item.is_service == 0 && item.qty_available <= 0) {
-                string +=
-                    '<li class="ui-state-disabled">'
-                    +item.text +
-                    " (" +
-                    LANG.out_of_stock +
-                    ") </li>";
-            } else {
-                if(item.batch_number==null){
-                    string += item.text ;
+                var string = "";
+                if (item.is_service == 0 && item.qty_available <= 0) {
+                    string +=
+                        '<li class="ui-state-disabled">'
+                        + item.text +
+                        " (" +
+                        LANG.out_of_stock +
+                        ") </li>";
+                } else {
+                    if (item.batch_number == null) {
+                        string += item.text;
+                    }
+                    else {
+                        string += item.text + "  " + item.batch_number;
+                    }
                 }
-                else{
-                    string += item.text +"  "+ item.batch_number;
-                }
-            }
-            console.log(item)
-            return $("<li>")
-                .append("<div>" + string + "</div>")
-                .appendTo(ul);
-        };
+                console.log(item)
+                return $("<li>")
+                    .append("<div>" + string + "</div>")
+                    .appendTo(ul);
+            };
     }
 });
 
@@ -332,11 +332,11 @@ function get_label_product_row(
         .each(function () {
             var row_v_id = $(this).find(".variation_id").val();
             var row_batch_number = $(this).find(".batch_number_id").val();
-            if(add_stock_lines_id!=null){
-                if (row_v_id == variation_id && row_batch_number ==add_stock_lines_id && !is_added) {
+            if (add_stock_lines_id != null) {
+                if (row_v_id == variation_id && row_batch_number == add_stock_lines_id && !is_added) {
                     add_via_ajax = false;
                     is_added = true;
-                    is_batch=true;
+                    is_batch = true;
                     //Increment product quantity
                     qty_element = $(this).find(".quantity");
                     var qty = __read_number(qty_element);
@@ -348,11 +348,11 @@ function get_label_product_row(
                     $("input#search_product").focus();
                     $(this).insertBefore($("#product_table  tbody tr:first"));
                 }
-            }else{
-                if (row_v_id == variation_id && row_batch_number ==false && !is_added) {
+            } else {
+                if (row_v_id == variation_id && row_batch_number == false && !is_added) {
                     add_via_ajax = false;
                     is_added = true;
-                    is_batch=false;
+                    is_batch = false;
                     //Increment product quantity
                     qty_element = $(this).find(".quantity");
                     var qty = __read_number(qty_element);
@@ -389,14 +389,14 @@ function get_label_product_row(
                 row_count: row_count,
                 variation_id: variation_id,
                 store_id: store_id,
-                store_pos_id : store_pos_id,
+                store_pos_id: store_pos_id,
                 customer_id: customer_id,
                 currency_id: currency_id,
                 edit_quantity: edit_quantity,
                 weighing_scale_barcode: weighing_scale_barcode,
                 dining_table_id: $("#dining_table_id").val(),
                 is_direct_sale: $("#is_direct_sale").val(),
-                batch_number_id:add_stock_lines_id
+                batch_number_id: add_stock_lines_id
             },
             success: function (result) {
                 if (!result.success) {
@@ -450,8 +450,8 @@ function check_for_sale_promotion() {
         success: function (result) {
             console.log(result)
             if (result.valid) {
-                let  discount = 0;
-                let  sum_item_discount = 0;
+                let discount = 0;
+                let sum_item_discount = 0;
                 result.sale_promotion_details.forEach((data, index) => {
 
                     let sum_discount = 0;
@@ -463,9 +463,9 @@ function check_for_sale_promotion() {
                             data.discount_type === "fixed"
                         ) {
                             sum_discount =
-                                ( parseFloat(
-                                        data.discount_value
-                                    ) ) *  parseFloat(data.count_discount_number);
+                                (parseFloat(
+                                    data.discount_value
+                                )) * parseFloat(data.count_discount_number);
 
                         }
                         if (
@@ -473,14 +473,14 @@ function check_for_sale_promotion() {
                             "percentage"
                         ) {
                             let discount_value =
-                                ( parseFloat(
-                                        data.discount_value
-                                    )) /
+                                (parseFloat(
+                                    data.discount_value
+                                )) /
                                 100;
                             sum_discount =
                                 (parseFloat(
                                     data.actual_sell_price
-                                ) - discount_value ) *  parseFloat(data.count_discount_number);;
+                                ) - discount_value) * parseFloat(data.count_discount_number);;
 
                         }
                         if (data.purchase_condition) {
@@ -492,7 +492,7 @@ function check_for_sale_promotion() {
                                 sum_discount = 0;
                             }
                         }
-                        discount+=sum_discount;
+                        discount += sum_discount;
                         var product_ids = data.product_ids;
                         $("#product_table > tbody > tr").each(function (ele, tr) {
                             let product_id = __read_number(
@@ -532,8 +532,8 @@ function check_for_sale_promotion() {
                                         .find(".qty")
                                         .val()
                                         .trim();
-                                        console.log(row_product_id)
-                                        console.log(product_id)
+                                    console.log(row_product_id)
+                                    console.log(product_id)
                                     if (row_product_id == product_id) {
                                         if (discount_type == "fixed") {
                                             $(this)
@@ -547,9 +547,9 @@ function check_for_sale_promotion() {
 
                                         $(this)
                                             .find(".promotion_discount_value")
-                                            .val(discount_value*qty);
+                                            .val(discount_value * qty);
 
-                                        sum_item_discount +=(discount_value*qty);
+                                        sum_item_discount += (discount_value * qty);
                                         $(this)
                                             .find(
                                                 ".promotion_purchase_condition_amount"
@@ -564,15 +564,15 @@ function check_for_sale_promotion() {
                     }
 
                 });
-                console.log('sales_promotion-cost_span=>',sum_item_discount,discount)
+                console.log('sales_promotion-cost_span=>', sum_item_discount, discount)
                 $("span#sales_promotion-cost_span").text(
-                    __currency_trans_from_en(sum_item_discount+discount, false)
+                    __currency_trans_from_en(sum_item_discount + discount, false)
                 );
                 __write_number($("#total_pp_discount"), discount);
 
 
                 calculate_sub_totals();
-            }else{
+            } else {
                 $("span#sales_promotion-cost_span").text(
                     __currency_trans_from_en(0, false)
                 );
@@ -592,11 +592,11 @@ function calculate_sub_totals() {
     var total_tax_payable = 0;
     var total_coupon_discount = 0;
     var sales_promotion_cost = __read_number($("#sales_promotion-cost"));
-    let item_quantity=0;
+    let item_quantity = 0;
     var exchange_rate = __read_number($("#exchange_rate"));
     $("#product_table > tbody  > tr").each((ele, tr) => {
         let quantity = __read_number($(tr).find(".quantity"));
-        item_quantity+=quantity;
+        item_quantity += quantity;
         let sell_price = __read_number($(tr).find(".sell_price"));
         let price_hidden = __read_number($(tr).find(".price_hidden"));
         let sub_total = 0;
@@ -734,7 +734,7 @@ function calculate_sub_totals() {
     //     __write_number($("#discount_amount"), promo_discount);
     // }
 
-    if(__currency_trans_from_en($("#subtotal").text(), false) > 0){
+    if (__currency_trans_from_en($("#subtotal").text(), false) > 0) {
         total -= promo_discount;
     }
 
@@ -952,7 +952,7 @@ $(document).on("change", ".sell_price", function () {
     if (sell_price < purchase_price) {
         swal(LANG.warning, LANG.sell_price_less_than_purchase_price, "warning");
         return;
-    }else{
+    } else {
         //change price
         swal({
             title: "",
@@ -963,20 +963,20 @@ $(document).on("change", ".sell_price", function () {
             showCancelButton: true,
             confirmButtonText: 'Save',
         })
-        .then((isConfirm) => {
-            if (isConfirm) {
-               $.ajax({
-                type: "post",
-                url: "/pos/change-selling-price/"+$(this).data('variation_id'),
-                data: {sell_price:sell_price},
-                success: function (response) {
-                    swal("Success", response.msg, "success");
+            .then((isConfirm) => {
+                if (isConfirm) {
+                    $.ajax({
+                        type: "post",
+                        url: "/pos/change-selling-price/" + $(this).data('variation_id'),
+                        data: { sell_price: sell_price },
+                        success: function (response) {
+                            swal("Success", response.msg, "success");
+                        }
+                    });
+                } else {
+                    swal("Success", LANG.price_changed_only_for_this_transaction, "success");
                 }
-               });
-            } else {
-                swal("Success", LANG.price_changed_only_for_this_transaction, "success");
-            }
-        });
+            });
     }
 });
 $(document).on("change", ".quantity, .sell_price", function () {
@@ -1237,14 +1237,14 @@ $(document).on("change", ".received_amount", function () {
         $(this_row).find(".change_amount").val(change);
         $(".add_to_customer_balance").removeClass("hide");
         $(document).on("click", ".add_to_customer_balance", function () {
-            if($(".payment_way").val() != 'deposit'){ // or this.value == 'volvo'
+            if ($(".payment_way").val() != 'deposit') { // or this.value == 'volvo'
                 $(this_row).find("#add_to_customer_balance").val(change);
                 $(this_row).find(".change_amount").val(0);
                 $(this_row).find(".change").text(0);
                 $(this).attr("disabled", true);
-                let new_amount  = received_amount - change;
+                let new_amount = received_amount - change;
                 $(this_row).find(".received_amount").val(new_amount)
-            }else{
+            } else {
                 $(".add_to_customer_balance").addClass("hide");
             }
         });
@@ -1258,7 +1258,7 @@ $(document).on("change", ".received_amount", function () {
 });
 
 $(document).on("click", ".close-payment-madal", function () {
-    __write_number($("#add_to_customer_balance"),0);
+    __write_number($("#add_to_customer_balance"), 0);
     $(".add_to_customer_balance").attr("disabled", false);
     $(".add_to_customer_balance").addClass("hide");
 
@@ -1623,7 +1623,7 @@ function reset_pos_form() {
     $("#received_currency_id").change();
     $("#received_currency_id").selectpicker("refresh");
 
-    __write_number($("#add_to_customer_balance"),0);
+    __write_number($("#add_to_customer_balance"), 0);
     $(".add_to_customer_balance").attr("disabled", false);
     $(".add_to_customer_balance").addClass("hide");
 }
@@ -1716,6 +1716,15 @@ $(document).ready(function () {
                 .wrap("<form>")
                 .parent()
                 .attr("autocomplete", "off");
+
+            // Move elements into the .top-controls div after DataTable initializes
+            $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+            $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+            $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+            $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+            $('.bottom-controls').append($('.dataTables_info'));
         },
         ajax: {
             url: "/pos/get-recent-transactions",
@@ -1742,14 +1751,14 @@ $(document).ready(function () {
             { data: "canceled_by", name: "canceled_by" },
             { data: "action", name: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {},
+        createdRow: function (row, data, dataIndex) { },
         footerCallback: function (row, data, start, end, display) {
             var intVal = function (i) {
                 return typeof i === "string"
                     ? i.replace(/[\$,]/g, "") * 1
                     : typeof i === "number"
-                    ? i
-                    : 0;
+                        ? i
+                        : 0;
             };
 
             this.api()
@@ -1803,6 +1812,15 @@ $(document).ready(function () {
                 .wrap("<form>")
                 .parent()
                 .attr("autocomplete", "off");
+
+            // Move elements into the .top-controls div after DataTable initializes
+            $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+            $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+            $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+            $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+            $('.bottom-controls').append($('.dataTables_info'));
         },
         ajax: {
             url: "/pos/get-draft-transactions",
@@ -1831,14 +1849,14 @@ $(document).ready(function () {
             { data: "deliveryman_name", name: "deliveryman.employee_name" },
             { data: "action", name: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {},
+        createdRow: function (row, data, dataIndex) { },
         footerCallback: function (row, data, start, end, display) {
             var intVal = function (i) {
                 return typeof i === "string"
                     ? i.replace(/[\$,]/g, "") * 1
                     : typeof i === "number"
-                    ? i
-                    : 0;
+                        ? i
+                        : 0;
             };
 
             this.api()
@@ -1890,6 +1908,15 @@ $(document).ready(function () {
                 .wrap("<form>")
                 .parent()
                 .attr("autocomplete", "off");
+
+            // Move elements into the .top-controls div after DataTable initializes
+            $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+            $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+            $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+            $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+            $('.bottom-controls').append($('.dataTables_info'));
         },
         ajax: {
             url: "/pos/get-online-order-transactions",
@@ -1916,14 +1943,14 @@ $(document).ready(function () {
             { data: "deliveryman_name", name: "deliveryman_name" },
             { data: "action", name: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {},
+        createdRow: function (row, data, dataIndex) { },
         footerCallback: function (row, data, start, end, display) {
             var intVal = function (i) {
                 return typeof i === "string"
                     ? i.replace(/[\$,]/g, "") * 1
                     : typeof i === "number"
-                    ? i
-                    : 0;
+                        ? i
+                        : 0;
             };
 
             this.api()
@@ -1956,7 +1983,7 @@ $(document).on("shown.bs.modal", "#contact_details_modal", function () {
     customer_sales_table.ajax.reload();
 });
 $(document).on("shown.bs.modal", "#recentTransaction", function () {
-        get_recent_transactions();
+    get_recent_transactions();
 });
 $(document).on("click", "#view-draft-btn", function () {
     $("#draftTransaction").modal("show");
@@ -2019,6 +2046,15 @@ function get_recent_transactions() {
                 .wrap("<form>")
                 .parent()
                 .attr("autocomplete", "off");
+
+            // Move elements into the .top-controls div after DataTable initializes
+            $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+            $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+            $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+            $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+            $('.bottom-controls').append($('.dataTables_info'));
         },
         ajax: {
             url: "/pos/get-recent-transactions",
@@ -2059,14 +2095,14 @@ function get_recent_transactions() {
             { data: "canceled_by", name: "canceled_by" },
             { data: "action", name: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {},
+        createdRow: function (row, data, dataIndex) { },
         footerCallback: function (row, data, start, end, display) {
             var intVal = function (i) {
                 return typeof i === "string"
                     ? i.replace(/[\$,]/g, "") * 1
                     : typeof i === "number"
-                    ? i
-                    : 0;
+                        ? i
+                        : 0;
             };
 
             this.api()
@@ -2102,23 +2138,17 @@ function get_recent_transactions() {
                     });
                     var footer_html = "";
                     $.each(currency_obj, function (key, value) {
-                        footer_html += `<h6 class="currency_total currency_total_${
-                            value.currency_id
-                        }" data-currency_id="${
-                            value.currency_id
-                        }" data-is_default="${
-                            value.is_default
-                        }" data-conversion_rate="${
+                        footer_html += `<h6 class="currency_total currency_total_${value.currency_id
+                            }" data-currency_id="${value.currency_id
+                            }" data-is_default="${value.is_default
+                            }" data-conversion_rate="${value.conversion_rate
+                            }" data-base_conversion="${currency_total[value.currency_id] *
                             value.conversion_rate
-                        }" data-base_conversion="${
-                            currency_total[value.currency_id] *
-                            value.conversion_rate
-                        }" data-orig_value="${
-                            currency_total[value.currency_id]
-                        }">${__currency_trans_from_en(
-                            currency_total[value.currency_id],
-                            false
-                        )}</h6>`;
+                            }" data-orig_value="${currency_total[value.currency_id]
+                            }">${__currency_trans_from_en(
+                                currency_total[value.currency_id],
+                                false
+                            )}</h6>`;
                     });
                     $(column.footer()).html(footer_html);
                 });
@@ -2290,9 +2320,9 @@ function getCustomerPointDetails() {
                 $(".redeem_btn").attr("disabled", true);
                 $("#is_redeem_points").val(0);
             }
-            if(result.customer_type_name == "Walk in"){
+            if (result.customer_type_name == "Walk in") {
                 $(".customer_type_name").text(LANG.walk_in_customer);
-            }else{
+            } else {
                 $(".customer_type_name").text(result.customer_type_name);
             }
             $("#emails").val(result.customer.email);
@@ -3068,28 +3098,28 @@ $(document).on("change", "#upload_documents", function (event) {
 //     });
 // });
 $(document).on("change", ".discount_category", function (e) {
-    product_discount_id=$(this).val();
-    product_id=$(this).parent('td').find('.p-id').val();
+    product_discount_id = $(this).val();
+    product_id = $(this).parent('td').find('.p-id').val();
     $.ajax({
         method: "get",
         url: "/pos/get-product-discount",
-        data:{
+        data: {
             product_discount_id: product_discount_id,
             // product_id,product_id
         },
         success: function (response) {
-            if(response.result){
+            if (response.result) {
                 console.log(response.result)
-                qty=__read_number($(this).find('.quantity'))
-                $(".discount_type"+product_id).val(response.result.discount_type);
-                $(".discount_category_name"+product_id).val(response.result.discount_category);
-                __write_number($(".discount_value"+product_id), response.result.discount);
-                __write_number($(".discount_amount"+product_id), response.result.discount*qty);
+                qty = __read_number($(this).find('.quantity'))
+                $(".discount_type" + product_id).val(response.result.discount_type);
+                $(".discount_category_name" + product_id).val(response.result.discount_category);
+                __write_number($(".discount_value" + product_id), response.result.discount);
+                __write_number($(".discount_amount" + product_id), response.result.discount * qty);
 
-            }else{
-                $(".discount_type"+product_id).val('');
-                __write_number($(".discount_value"+product_id), 0);
-                __write_number($(".discount_amount"+product_id), 0);
+            } else {
+                $(".discount_type" + product_id).val('');
+                __write_number($(".discount_value" + product_id), 0);
+                __write_number($(".discount_amount" + product_id), 0);
             }
             check_for_sale_promotion();
             calculate_sub_totals();

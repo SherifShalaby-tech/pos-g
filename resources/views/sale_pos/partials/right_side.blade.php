@@ -1,106 +1,219 @@
 <div class="row">
-    <br>
-    <div class="col-md-12">
-        <div class="filter-checkbox card" style="margin: 0px;">
-            @if (session('system_mode') != 'restaurant')
-            <div class="card-header" style="padding: 5px 20px; color: var(--primary-color)">
-                <i class="fa fa-filter"></i> @lang('lang.filter')
+
+    <div class="col-md-12 px-1">
+
+        <x-collapse-button color="secondary my-2 d-flex" collapse-id="Filter">
+            Filter
+            <div style="width: 20px" class="ml-2">
+                <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
             </div>
-            @endif
-            <div class="card-body" style="padding: 5px 20px">
-                <div class="row">
-                    @if (session('system_mode') != 'restaurant')
-                    <div class="col-md-4">
-                        <label class="checkbox-inline">
-                            <input class="" type="checkbox" id="category-filter" />
-                            @lang('lang.category')
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="checkbox-inline">
-                            <input class="" type="checkbox" id="sub-category-filter" />
-                            @lang('lang.sub_category')
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="checkbox-inline">
-                            <input class="" type="checkbox" id="brand-filter" />
-                            @lang('lang.brand')
-                        </label>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="selling_filter" value="best_selling">
-                            @lang('lang.best_selling')
-                        </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="selling_filter" value="slow_moving_items">
-                            @lang('lang.slow_moving_items')
-                        </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="selling_filter" value="product_in_last_transactions">
-                            @lang('lang.product_in_last_transactions')
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="price_filter" value="highest_price">
-                            @lang('lang.highest_price')
-                        </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="price_filter" value="lowest_price">
-                            @lang('lang.lowest_price')
-                        </label>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="sorting_filter" value="a_to_z"> @lang('lang.a_to_z')
-                        </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="sorting_filter" value="z_to_a"> @lang('lang.z_to_a')
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="expiry_filter" value="nearest_expiry">
-                            @lang('lang.nearest_expiry')
-                        </label>
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="expiry_filter" value="longest_expiry">
-                            @lang('lang.longest_expiry')
-                        </label>
-                    </div>
-                    @endif
-                    <div class="col-md-6 @if (session('system_mode') == 'restaurant') hide @endif">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="sale_promo_filter" value="items_in_sale_promotion">
-                            @lang('lang.items_in_sale_promotion')
-                        </label>
-                    </div>
-                    @if (session('system_mode') == 'restaurant')
-                    <div class="col-md-12 filter-btn-div">
-                        <div class="btn-group btn-group-toggle ml-2 btn-group-custom" data-toggle="buttons">
-                            <label class="btn btn-primary active filter-btn">
-                                <input type="radio" checked autocomplete="off" name="restaurant_filter" value="all">
-                                @lang('lang.all')
-                            </label>
-                            <label class="btn btn-primary filter-btn">
-                                <input type="radio" autocomplete="off" name="restaurant_filter" value="promotions">
-                                @lang('lang.promotions')
-                            </label>
-                            @foreach ($product_classes as $product_class)
-                            <label class="btn btn-primary filter-btn">
-                                <input type="radio" name="restaurant_filter" value="{{ $product_class->id }}"
-                                    autocomplete="off" id="{{ $product_class->name . '_' . $product_class->id }}">
-                                {{ ucfirst($product_class->name) }}
-                            </label>
-                            @endforeach
+        </x-collapse-button>
+
+        <x-collapse-body collapse-id="Filter">
+
+            <div class="filter-checkbox " style="margin: 0px;">
+                {{-- @if (session('system_mode') != 'restaurant')
+                <div class="card-header" style="padding: 5px 20px; color: #7c5cc4">
+                    <i class="fa fa-filter"></i> @lang('lang.filter')
+                </div>
+                @endif --}}
+
+
+                <div class="card-body" style="padding: 5px 20px">
+                    <div class="row">
+                        @if (session('system_mode') != 'restaurant')
+                        <div class="card mt-1 mb-0 col-md-12 px-0">
+                            <div class="card-body d-flex justify-content-between p-1">
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+
+                                    <input class="" type="checkbox" id="category-filter" />
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.category')
+
+                                    </span>
+                                </div>
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input class="" type="checkbox" id="sub-category-filter" />
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.sub_category')
+                                    </span>
+                                </div>
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input class="" type="checkbox" id="brand-filter" />
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.brand')
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-1 mb-0 col-md-12 px-0">
+                            <div class="card-body d-flex justify-content-between p-1">
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="selling_filter" value="best_selling">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.best_selling')
+                                    </span>
+                                </div>
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="selling_filter" value="slow_moving_items">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.slow_moving_items')
+                                    </span>
+                                </div>
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="selling_filter" value="product_in_last_transactions">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.product_in_last_transactions')
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="card mt-1 mb-0 col-md-12 px-0">
+                            <div class="card-body d-flex justify-content-center p-1" style="gap: 70px">
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="price_filter" value="highest_price">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.highest_price')
+                                    </span>
+                                </div>
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="price_filter" value="lowest_price">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.lowest_price')
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="card mt-1 mb-0 col-md-12 px-0">
+                            <div class="card-body d-flex justify-content-center p-1" style="gap: 45px">
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="sorting_filter" value="a_to_z">
+                                    <label class="checkbox-inline">
+                                    </label>
+
+                                    <span style="font-size: 10px">
+                                        @lang('lang.a_to_z')
+                                    </span>
+                                </div>
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="sorting_filter" value="z_to_a">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.z_to_a')
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="card mt-1 mb-0 col-md-12 px-0">
+                            <div class="card-body d-flex justify-content-center p-1" style="gap: 20px">
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="expiry_filter" value="nearest_expiry">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.nearest_expiry')
+                                    </span>
+                                </div>
+                                <div
+                                    class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                    <input type="checkbox" class="expiry_filter" value="longest_expiry">
+                                    <label class="checkbox-inline">
+                                    </label>
+                                    <span style="font-size: 10px">
+                                        @lang('lang.longest_expiry')
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @endif
+
+                        <div
+                            class="col-md-12 px-0 d-flex justify-content-center align-items-center @if (session('system_mode') == 'restaurant') hide @endif">
+                            <div class="card mt-1 mb-0 col-md-12 px-0">
+                                <div class="card-body d-flex justify-content-between p-1">
+                                    <div
+                                        class=" px-0 toggle-pill-color-pos d-flex justify-content-center align-items-center flex-column">
+                                        <input type="checkbox" class="sale_promo_filter"
+                                            value="items_in_sale_promotion">
+                                        <label class="checkbox-inline">
+                                        </label>
+                                        <span style="font-size: 10px">
+                                            @lang('lang.items_in_sale_promotion')
+
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (session('system_mode') == 'restaurant')
+                            <div class="col-md-12 filter-btn-div">
+                                <div class="btn-group btn-group-toggle ml-2 btn-group-custom" data-toggle="buttons">
+                                    <label class="btn btn-primary active filter-btn">
+                                        <input type="radio" checked autocomplete="off" name="restaurant_filter"
+                                            value="all">
+                                        @lang('lang.all')
+                                    </label>
+                                    <label class="btn btn-primary filter-btn">
+                                        <input type="radio" autocomplete="off" name="restaurant_filter"
+                                            value="promotions">
+                                        @lang('lang.promotions')
+                                    </label>
+                                    @foreach ($product_classes as $product_class)
+                                    <label class="btn btn-primary filter-btn">
+                                        <input type="radio" name="restaurant_filter" value="{{ $product_class->id }}"
+                                            autocomplete="off"
+                                            id="{{ $product_class->name . '_' . $product_class->id }}">
+                                        {{ ucfirst($product_class->name) }}
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
-                    @endif
                 </div>
             </div>
-        </div>
+        </x-collapse-body>
     </div>
 
 

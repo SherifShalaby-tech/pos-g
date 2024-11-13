@@ -2,24 +2,31 @@
 @section('title', __('lang.raw_materials'))
 
 @section('content')
-    @isset($manufacturing->materials)
-        @php $total = 0 ;@endphp
-        @foreach($manufacturing->materials as $material)
-            @php  $total += ($material->variation->avg_purchase_price * $material->quantity) @endphp
-        @endforeach
-    @endisset
-    <section class="forms">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4>@lang('lang.add_new_production')</h4>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="bold"><small>@lang('lang.products_uner_manufacture')</small></h3>
-                            <table class="table">
-                                <thead>
+@isset($manufacturing->materials)
+@php $total = 0 ;@endphp
+@foreach($manufacturing->materials as $material)
+@php $total += ($material->variation->avg_purchase_price * $material->quantity) @endphp
+@endforeach
+@endisset
+<section class="forms">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+
+                    <x-page-title>
+
+                        <h4>@lang('lang.add_new_production')</h4>
+
+
+                        <x-slot name="buttons">
+
+                        </x-slot>
+                    </x-page-title>
+                    <div class="card-body">
+                        <h3 class="bold"><small>@lang('lang.products_uner_manufacture')</small></h3>
+                        <table class="table">
+                            <thead>
                                 <tr>
                                     <th style="width: 20%" class="col-sm-8">@lang( 'lang.name' )</th>
                                     <th style="width: 20%" class="col-sm-8">@lang( 'lang.sku' )</th>
@@ -27,27 +34,28 @@
                                     <th style="width: 20%" class="col-sm-4">@lang( 'lang.quantity' )</th>
                                     <th style="width: 20%" class="col-sm-4">@lang( 'lang.total' )</th>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                    @isset($manufacturing->materials)
-                                        @foreach($manufacturing->materials as $material)
-                                            <tr>
-                                                <td>
-                                                    @if ($material->variation->name != "Default")
-                                                        {{$material->variation->name}}
-                                                    @else
-                                                        {{$material->product->name}}
-                                                    @endif
-                                                </td>
-                                                <td>{{$material->variation->sub_sku}}</td>
-                                                <td>{{ @num_format($material->variation->avg_purchase_price) }}</td>
-                                                <td>{{ $material->quantity }}</td>
-                                                <td> {{ @num_format($material->variation->avg_purchase_price *$material->quantity ) }}</td>
-                                            </tr>
-                                        @endforeach
-                                    @endisset
-                                </tbody>
-                                <tfoot>
+                            </thead>
+                            <tbody>
+                                @isset($manufacturing->materials)
+                                @foreach($manufacturing->materials as $material)
+                                <tr>
+                                    <td>
+                                        @if ($material->variation->name != "Default")
+                                        {{$material->variation->name}}
+                                        @else
+                                        {{$material->product->name}}
+                                        @endif
+                                    </td>
+                                    <td>{{$material->variation->sub_sku}}</td>
+                                    <td>{{ @num_format($material->variation->avg_purchase_price) }}</td>
+                                    <td>{{ $material->quantity }}</td>
+                                    <td> {{ @num_format($material->variation->avg_purchase_price *$material->quantity )
+                                        }}</td>
+                                </tr>
+                                @endforeach
+                                @endisset
+                            </tbody>
+                            <tfoot>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -55,144 +63,157 @@
                                 <td>
                                     {{ @num_format($total) }}
                                 </td>
-                                </tfoot>
-                            </table>
-                            <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
+                            </tfoot>
+                        </table>
+                        <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
 
-                            {!! Form::open(['url' =>action('ManufacturingController@postReceivedProductsPage'), 'id' =>'product-edit-form', 'method'=>'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
-                            <input type="hidden" id="material_total_cost" name="material_total_cost" value="{{$total}}">
-                            <input type="hidden" name="store_id" value="{{ $store->id }}">
-                            <input type="hidden" name="manufacturer_id" value="{{ $manufacturer->id }}">
-                            <input type="hidden" name="manufacturing_id" value="{{ $manufacturing->id }}">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('files', __('lang.files'), []) !!} <br>
-                                        <input type="file" name="files[]" id="files" multiple>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('invoice_no', __('lang.invoice_no'), []) !!} <br>
-                                        {!! Form::text('invoice_no', null, ['class' => 'form-control', 'placeholder' => __('lang.invoice_no')]) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('other_expenses', __('lang.other_expenses'), []) !!} <br>
-                                        {!! Form::text('other_expenses',  @num_format(0), ['class' => 'form-control', 'placeholder' => __('lang.other_expenses'), 'id' => 'other_expenses']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('discount_amount', __('lang.discount'), []) !!} <br>
-                                        {!! Form::text('discount_amount', @num_format(0), ['class' => 'form-control', 'placeholder' => __('lang.discount'), 'id' => 'discount_amount']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('other_payments', __('lang.other_payments'), []) !!} <br>
-                                        {!! Form::text('other_payments',  @num_format(0) , ['class' => 'form-control', 'placeholder' => __('lang.other_payments'), 'id' => 'other_payments']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('source_type', __('lang.source_type'), []) !!} <br>
-                                        {!! Form::select('source_type', ['user' => __('lang.user'), 'pos' => __('lang.pos'), 'store' => __('lang.store'), 'safe' => __('lang.safe')], 'user', ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('source_of_payment', __('lang.source_of_payment'), []) !!} <br>
-                                        {!! Form::select('source_id', $users, null, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select'), 'id' => 'source_id', 'required']) !!}
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        {!! Form::label('payment_status', __('lang.payment_status') . ':*', []) !!}
-                                        {!! Form::select('payment_status', $payment_status_array, 'paid', ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'required', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
-                                    </div>
-                                </div>
-
-                                @include('manufacturings.partials.payment_form')
-
-                                <div class="col-md-3 due_amount_div hide">
-                                    <label for="due_amount" style="margin-top: 25px;">@lang('lang.due'): <span
-                                            class="due_amount_span">{{ @num_format(0) }}</span></label>
-                                </div>
-
-                                <div class="col-md-3 due_fields hide">
-                                    <div class="form-group">
-                                        {!! Form::label('due_date', __('lang.due_date') . ':', []) !!} <br>
-                                        {!! Form::text('due_date', !empty($payment) ? $payment->due_date : null, ['class' => 'form-control datepicker', 'placeholder' => __('lang.due_date')]) !!}
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 due_fields hide">
-                                    <div class="form-group">
-                                        {!! Form::label('notify_before_days', __('lang.notify_before_days') . ':', []) !!}
-                                        <br>
-                                        {!! Form::text('notify_before_days', !empty($payment) ? $payment->notify_before_days : null, ['class' => 'form-control', 'placeholder' => __('lang.notify_before_days')]) !!}
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        {!! Form::label('notes', __('lang.notes') . ':', []) !!} <br>
-                                        {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => 3]) !!}
-                                    </div>
-                                </div>
-
-                            </div>
-                            <br>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    {!! Form::label('store_id', __('lang.store'), []) !!}
-                                    <div class="input-group my-group">
-                                        <select required name="store_id" id="store_id"
-                                                class='select_product_ids selectpicker  form-control'
-                                                data-live-search='true' style='width: 30%;'
-                                                placeholder="{{__('lang.please_select')}}">
-
-                                            <option selected disabled  value="{{ $store->id }}">
-                                                {{ $store->name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    {!! Form::label('manufacturer_id', __('lang.manufacturer'), []) !!}
-                                    <div class="input-group my-group">
-                                        <select required name="manufacturer_id" id="manufacturer_id"
-                                                class='select_product_ids selectpicker  form-control'
-                                                data-live-search='true' style='width: 30%;'
-                                                placeholder="{{__('lang.please_select')}}">
-                                            <option selected disabled  value="{{ $manufacturer->id }}">
-                                                {{ $manufacturer->name }}
-                                            </option>
-                                        </select>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    {!! Form::label('product_ids', __('lang.manufacturing_material'), []) !!}
-                                    <div class="input-group my-group">
-                                        @include(
-                                            'manufacturings.partials.product_selection'
-                                        )
-                                    </div>
+                        {!! Form::open(['url' =>action('ManufacturingController@postReceivedProductsPage'), 'id'
+                        =>'product-edit-form', 'method'=>'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
+                        <input type="hidden" id="material_total_cost" name="material_total_cost" value="{{$total}}">
+                        <input type="hidden" name="store_id" value="{{ $store->id }}">
+                        <input type="hidden" name="manufacturer_id" value="{{ $manufacturer->id }}">
+                        <input type="hidden" name="manufacturing_id" value="{{ $manufacturing->id }}">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('files', __('lang.files'), []) !!} <br>
+                                    <input type="file" name="files[]" id="files" multiple>
                                 </div>
                             </div>
-                            <br>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <table class="table table-bordered table-striped table-condensed" id="product_table">
-                                        <thead>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('invoice_no', __('lang.invoice_no'), []) !!} <br>
+                                    {!! Form::text('invoice_no', null, ['class' => 'form-control', 'placeholder' =>
+                                    __('lang.invoice_no')]) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('other_expenses', __('lang.other_expenses'), []) !!} <br>
+                                    {!! Form::text('other_expenses', @num_format(0), ['class' => 'form-control',
+                                    'placeholder' => __('lang.other_expenses'), 'id' => 'other_expenses']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('discount_amount', __('lang.discount'), []) !!} <br>
+                                    {!! Form::text('discount_amount', @num_format(0), ['class' => 'form-control',
+                                    'placeholder' => __('lang.discount'), 'id' => 'discount_amount']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('other_payments', __('lang.other_payments'), []) !!} <br>
+                                    {!! Form::text('other_payments', @num_format(0) , ['class' => 'form-control',
+                                    'placeholder' => __('lang.other_payments'), 'id' => 'other_payments']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('source_type', __('lang.source_type'), []) !!} <br>
+                                    {!! Form::select('source_type', ['user' => __('lang.user'), 'pos' => __('lang.pos'),
+                                    'store' => __('lang.store'), 'safe' => __('lang.safe')], 'user', ['class' =>
+                                    'selectpicker form-control', 'data-live-search' => 'true', 'style' => 'width: 80%',
+                                    'placeholder' => __('lang.please_select')]) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('source_of_payment', __('lang.source_of_payment'), []) !!} <br>
+                                    {!! Form::select('source_id', $users, null, ['class' => 'selectpicker form-control',
+                                    'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder' =>
+                                    __('lang.please_select'), 'id' => 'source_id', 'required']) !!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('payment_status', __('lang.payment_status') . ':*', []) !!}
+                                    {!! Form::select('payment_status', $payment_status_array, 'paid', ['class' =>
+                                    'selectpicker form-control', 'data-live-search' => 'true', 'required', 'style' =>
+                                    'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
+                                </div>
+                            </div>
+
+                            @include('manufacturings.partials.payment_form')
+
+                            <div class="col-md-3 due_amount_div hide">
+                                <label for="due_amount" style="margin-top: 25px;">@lang('lang.due'): <span
+                                        class="due_amount_span">{{ @num_format(0) }}</span></label>
+                            </div>
+
+                            <div class="col-md-3 due_fields hide">
+                                <div class="form-group">
+                                    {!! Form::label('due_date', __('lang.due_date') . ':', []) !!} <br>
+                                    {!! Form::text('due_date', !empty($payment) ? $payment->due_date : null, ['class' =>
+                                    'form-control datepicker', 'placeholder' => __('lang.due_date')]) !!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 due_fields hide">
+                                <div class="form-group">
+                                    {!! Form::label('notify_before_days', __('lang.notify_before_days') . ':', []) !!}
+                                    <br>
+                                    {!! Form::text('notify_before_days', !empty($payment) ? $payment->notify_before_days
+                                    : null, ['class' => 'form-control', 'placeholder' => __('lang.notify_before_days')])
+                                    !!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {!! Form::label('notes', __('lang.notes') . ':', []) !!} <br>
+                                    {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => 3]) !!}
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {!! Form::label('store_id', __('lang.store'), []) !!}
+                                <div class="input-group my-group">
+                                    <select required name="store_id" id="store_id"
+                                        class='select_product_ids selectpicker  form-control' data-live-search='true'
+                                        style='width: 30%;' placeholder="{{__('lang.please_select')}}">
+
+                                        <option selected disabled value="{{ $store->id }}">
+                                            {{ $store->name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                {!! Form::label('manufacturer_id', __('lang.manufacturer'), []) !!}
+                                <div class="input-group my-group">
+                                    <select required name="manufacturer_id" id="manufacturer_id"
+                                        class='select_product_ids selectpicker  form-control' data-live-search='true'
+                                        style='width: 30%;' placeholder="{{__('lang.please_select')}}">
+                                        <option selected disabled value="{{ $manufacturer->id }}">
+                                            {{ $manufacturer->name }}
+                                        </option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                {!! Form::label('product_ids', __('lang.manufacturing_material'), []) !!}
+                                <div class="input-group my-group">
+                                    @include(
+                                    'manufacturings.partials.product_selection'
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-striped table-condensed" id="product_table">
+                                    <thead>
                                         <tr>
 
                                             <th style="width: 7%" class="col-sm-8">@lang( 'lang.image' )</th>
@@ -201,51 +222,57 @@
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.unit' )</th>
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.purchase_unit' )</th>
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.sell_unit' )</th>
-                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.change_current_stock' )</th>
+                                            <th style="width: 10%" class="col-sm-4">@lang( 'lang.change_current_stock' )
+                                            </th>
                                             <th style="width: 10%" class="col-sm-4">@lang( 'lang.action' )</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
+                                    </thead>
+                                    <tbody>
 
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-12 text-center">
-                                <h4>@lang('lang.total_manufacturing_cost'): <span id="total_manufacturing_cost"style="margin-right: 15px;">0 </span> <strong style="font-size: 12px" id="low_high_icon"></strong> </h4>
-                                <h4>@lang('lang.items_count'): <span class="items_quantity_count"style="margin-right: 15px;">0</span> </h4>
-                                <h4>@lang('lang.items_quantity'): <span class="items_product_count" style="margin-right: 15px;">0</span> </h4>
-                            </div>
-
-
-
-                            <input type="hidden" name="active" value="1">
-                            <input type="hidden" id="process_type" name="process_type" value="received_manufacturing_products">
-                            <div class="row">
-                                <div class="col-md-4 mt-5">
-                                    <div class="form-group">
-                                        <input type="button" value="{{trans('lang.received')}}" id="submit-btns"
-                                               class="btn btn-primary mr-3">
-                                        <a href="{{ route("manufacturing-s.index") }}"
-                                           class="btn btn-danger">{{trans('lang.cancel')}}</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {!! Form::close() !!}
                         </div>
+                        <div class="col-md-12 text-center">
+                            <h4>@lang('lang.total_manufacturing_cost'): <span id="total_manufacturing_cost"
+                                    style="margin-right: 15px;">0 </span> <strong style="font-size: 12px"
+                                    id="low_high_icon"></strong> </h4>
+                            <h4>@lang('lang.items_count'): <span class="items_quantity_count"
+                                    style="margin-right: 15px;">0</span> </h4>
+                            <h4>@lang('lang.items_quantity'): <span class="items_product_count"
+                                    style="margin-right: 15px;">0</span> </h4>
+                        </div>
+
+
+
+                        <input type="hidden" name="active" value="1">
+                        <input type="hidden" id="process_type" name="process_type"
+                            value="received_manufacturing_products">
+                        <div class="row">
+                            <div class="col-md-4 mt-5">
+                                <div class="form-group">
+                                    <input type="button" value="{{trans('lang.received')}}" id="submit-btns"
+                                        class="btn btn-primary mr-3">
+                                    <a href="{{ route(" manufacturing-s.index") }}"
+                                        class="btn btn-danger">{{trans('lang.cancel')}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
 
 @push('javascripts')
 
-    <script src="{{ asset('js/add_stock.js') }}"></script>
-    <script src="{{ asset('js/product_selection_manufacturing.js') }}"></script>
-    <script type="text/javascript">
-        function getTotalRecievedQuantity(){
+<script src="{{ asset('js/add_stock.js') }}"></script>
+<script src="{{ asset('js/product_selection_manufacturing.js') }}"></script>
+<script type="text/javascript">
+    function getTotalRecievedQuantity(){
             var quantity =0;
             $("#product_table tbody")
                 .find("tr")
@@ -617,7 +644,7 @@
 
             });
         });
-    </script>
+</script>
 
 
 
@@ -629,119 +656,121 @@
 
 
 
-{{--     select multi js--}}
+{{-- select multi js--}}
 
-{{--        let data = [];--}}
-{{--        let Quantities = [];--}}
-{{--        $(document).ready(function () {--}}
-{{--            $("#submit-btn").on("click", function (e) {--}}
-{{--                e.preventDefault();--}}
-{{--                if ($("#product-edit-form").valid()) {--}}
-{{--                    $.ajax({--}}
-{{--                        type: "POST",--}}
-{{--                        url: $("#product-edit-form").attr("action"),--}}
-{{--                        data: {--}}
-{{--                            "store_id" :$("#store_id").val(),--}}
-{{--                            "manufacturer_id" :$("#manufacturer_id").val(),--}}
-{{--                            "product_quentity" :Quantities,--}}
-{{--                        },--}}
-{{--                        success: function (response) {--}}
-{{--                            if (response.success) {--}}
-{{--                                swal("Success", response.msg, "success")--}}
-{{--                            }--}}
-{{--                            if (!response.success) {--}}
-{{--                                swal("Error", response.msg, "error");--}}
-{{--                            }--}}
-{{--                        },--}}
-{{--                        error: function (response) {--}}
-{{--                            if (!response.success) {--}}
-{{--                                swal("Error", response.msg, "error");--}}
-{{--                            }--}}
-{{--                        },--}}
-{{--                    });--}}
+{{-- let data = [];--}}
+{{-- let Quantities = [];--}}
+{{-- $(document).ready(function () {--}}
+{{-- $("#submit-btn").on("click", function (e) {--}}
+{{-- e.preventDefault();--}}
+{{-- if ($("#product-edit-form").valid()) {--}}
+{{-- $.ajax({--}}
+{{-- type: "POST",--}}
+{{-- url: $("#product-edit-form").attr("action"),--}}
+{{-- data: {--}}
+{{-- "store_id" :$("#store_id").val(),--}}
+{{-- "manufacturer_id" :$("#manufacturer_id").val(),--}}
+{{-- "product_quentity" :Quantities,--}}
+{{-- },--}}
+{{-- success: function (response) {--}}
+{{-- if (response.success) {--}}
+{{-- swal("Success", response.msg, "success")--}}
+{{-- }--}}
+{{-- if (!response.success) {--}}
+{{-- swal("Error", response.msg, "error");--}}
+{{-- }--}}
+{{-- },--}}
+{{-- error: function (response) {--}}
+{{-- if (!response.success) {--}}
+{{-- swal("Error", response.msg, "error");--}}
+{{-- }--}}
+{{-- },--}}
+{{-- });--}}
 
-{{--                }--}}
-{{--            });--}}
-{{--            });--}}
+{{-- }--}}
+{{-- });--}}
+{{-- });--}}
 
-{{--            $(document).on("change", "#product_ids", function (e) {--}}
+{{-- $(document).on("change", "#product_ids", function (e) {--}}
 
-{{--                if(data.length < $(this).val().length){--}}
-{{--                    let product_current;--}}
-{{--                    $(this).val().forEach(e=>{--}}
-{{--                        if (data.filter(function(g) { return g.id == e; }).length == 0) {--}}
-{{--                            product_current =e;--}}
-{{--                        }--}}
-{{--                    })--}}
-{{--                    // select added new value--}}
-{{--                    $("#product-modal tbody").empty()--}}
-{{--                    $("#product-modal tbody").append(`--}}
-{{--                <tr>--}}
-{{--                        <td>--}}
-{{--                            ${data.length == 0 ? $('#product_'+$(this).val()[0]).attr('name'): $('#product_'+product_current).attr('name')}--}}
-{{--                        </td>--}}
-{{--                        <td>--}}
-{{--                              ${data.length == 0 ? $('#product_'+$(this).val()[0]).attr('stock'): $('#product_'+product_current).attr('stock')}--}}
-{{--                        </td>--}}
-{{--                        <td>--}}
-{{--                            <input class="form-control" type="number" id="product_quantity">--}}
-{{--                            <input type="hidden" id="product_stock" value=" ${data.length == 0 ? $('#product_'+$(this).val()[0]).attr('stock'): $('#product_'+product_current).attr('stock')}">--}}
-{{--                            <input type="hidden" id="product_id" value=" ${data.length == 0 ? $('#product_'+$(this).val()[0]).val(): $('#product_'+product_current).val()}">--}}
-{{--                        </td>--}}
-{{--                        <td>--}}
-{{--                            GM--}}
-{{--                        </td>--}}
-{{--                    </tr>--}}
-{{--                `)--}}
-{{--                    $("#ProductsModal").modal("show")--}}
-{{--                }else{--}}
-{{--                    // select  remove old  value--}}
+{{-- if(data.length < $(this).val().length){--}} {{-- let product_current;--}} {{-- $(this).val().forEach(e=>{--}}
+    {{-- if (data.filter(function(g) { return g.id == e; }).length == 0) {--}}
+    {{-- product_current =e;--}}
+    {{-- }--}}
+    {{-- })--}}
+    {{-- // select added new value--}}
+    {{-- $("#product-modal tbody").empty()--}}
+    {{-- $("#product-modal tbody").append(`--}}
+    {{-- <tr>--}}
+        {{-- <td>--}}
+            {{-- ${data.length == 0 ? $('#product_'+$(this).val()[0]).attr('name'):
+            $('#product_'+product_current).attr('name')}--}}
+            {{-- </td>--}}
+        {{-- <td>--}}
+            {{-- ${data.length == 0 ? $('#product_'+$(this).val()[0]).attr('stock'):
+            $('#product_'+product_current).attr('stock')}--}}
+            {{-- </td>--}}
+        {{-- <td>--}}
+            {{-- <input class="form-control" type="number" id="product_quantity">--}}
+            {{-- <input type="hidden" id="product_stock"
+                value=" ${data.length == 0 ? $('#product_'+$(this).val()[0]).attr('stock'): $('#product_'+product_current).attr('stock')}">--}}
+            {{-- <input type="hidden" id="product_id"
+                value=" ${data.length == 0 ? $('#product_'+$(this).val()[0]).val(): $('#product_'+product_current).val()}">--}}
+            {{-- </td>--}}
+        {{-- <td>--}}
+            {{-- GM--}}
+            {{-- </td>--}}
+        {{-- </tr>--}}
+    {{-- `)--}}
+    {{-- $("#ProductsModal").modal("show")--}}
+    {{-- }else{--}}
+    {{-- // select remove old value--}}
 
-{{--                    console.log("$(this).val()",$(this).val())--}}
-{{--                    if($(this).val().length == 0){--}}
-{{--                        Quantities =[];--}}
-{{--                    }else{--}}
-{{--                        Quantities.forEach(a=>{--}}
-{{--                            if ($(this).val().filter(function(g) { return g == a.product_id; }).length == 0) {--}}
-{{--                                const index = Quantities.indexOf(a);--}}
-{{--                                if (index > -1) {--}}
-{{--                                    Quantities.splice(index, 1);--}}
-{{--                                }--}}
-{{--                            }--}}
-{{--                        })--}}
-{{--                    }--}}
+    {{-- console.log("$(this).val()",$(this).val())--}}
+    {{-- if($(this).val().length == 0){--}}
+    {{-- Quantities =[];--}}
+    {{-- }else{--}}
+    {{-- Quantities.forEach(a=>{--}}
+    {{-- if ($(this).val().filter(function(g) { return g == a.product_id; }).length == 0) {--}}
+    {{-- const index = Quantities.indexOf(a);--}}
+    {{-- if (index > -1) {--}}
+    {{-- Quantities.splice(index, 1);--}}
+    {{-- }--}}
+    {{-- }--}}
+    {{-- })--}}
+    {{-- }--}}
 
-{{--                    console.log(Quantities)--}}
+    {{-- console.log(Quantities)--}}
 
-{{--                }--}}
+    {{-- }--}}
 
-{{--                data = [];--}}
-{{--                product_ids = $(this).val();--}}
-{{--                product_ids.forEach(e => {--}}
-{{--                    data.push({--}}
-{{--                        "id": e,--}}
-{{--                        "name": $('#product_' + e).attr('name'),--}}
-{{--                        "stock": $('#product_' + e).attr('stock')--}}
-{{--                    })--}}
-{{--                });--}}
+    {{-- data = [];--}}
+    {{-- product_ids = $(this).val();--}}
+    {{-- product_ids.forEach(e => {--}}
+    {{-- data.push({--}}
+    {{-- "id": e,--}}
+    {{-- "name": $('#product_' + e).attr('name'),--}}
+    {{-- "stock": $('#product_' + e).attr('stock')--}}
+    {{-- })--}}
+    {{-- });--}}
 
-{{--            });--}}
-{{--            $(document).on("click", "#addQuantity", function (e) {--}}
-{{--                let userQuantity= Number($("#product_quantity").val());--}}
-{{--                let product_stock= Number($("#product_stock").val());--}}
-{{--                let product_id= Number($("#product_id").val());--}}
-{{--                if(userQuantity == null || userQuantity==''){--}}
-{{--                    swal("Error", "Please Fill Quantity Input", "error");--}}
-{{--                }else if(userQuantity > product_stock){--}}
-{{--                    swal("Error", "Sorry Out Of Stock", "error");--}}
-{{--                }else{--}}
-{{--                    Quantities.push({--}}
-{{--                        "product_id" :product_id,--}}
-{{--                        "quantity" :userQuantity,--}}
-{{--                    })--}}
-{{--                    // console.log(Quantities)--}}
-{{--                    swal("Success", 'Quantity Added Successfully', "success");--}}
-{{--                    $("#ProductsModal").modal("hide")--}}
-{{--                }--}}
-{{--            });--}}
-@endpush
+    {{-- });--}}
+    {{-- $(document).on("click", "#addQuantity", function (e) {--}}
+    {{-- let userQuantity= Number($("#product_quantity").val());--}}
+    {{-- let product_stock= Number($("#product_stock").val());--}}
+    {{-- let product_id= Number($("#product_id").val());--}}
+    {{-- if(userQuantity == null || userQuantity==''){--}}
+    {{-- swal("Error", "Please Fill Quantity Input", "error");--}}
+    {{-- }else if(userQuantity > product_stock){--}}
+    {{-- swal("Error", "Sorry Out Of Stock", "error");--}}
+    {{-- }else{--}}
+    {{-- Quantities.push({--}}
+    {{-- "product_id" :product_id,--}}
+    {{-- "quantity" :userQuantity,--}}
+    {{-- })--}}
+    {{-- // console.log(Quantities)--}}
+    {{-- swal("Success", 'Quantity Added Successfully', "success");--}}
+    {{-- $("#ProductsModal").modal("hide")--}}
+    {{-- }--}}
+    {{-- });--}}
+    @endpush

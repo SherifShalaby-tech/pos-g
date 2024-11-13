@@ -10,10 +10,16 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header d-flex align-items-center no-print">
-                        <h4>@lang('lang.transfer'): {{$transfer->invoice_no}}</h4>
-                    </div>
 
+                    <x-page-title>
+
+                        <h4>@lang('lang.transfer'): {{$transfer->invoice_no}}</h4>
+
+
+                        <x-slot name="buttons">
+
+                        </x-slot>
+                    </x-page-title>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -35,12 +41,14 @@
                             </div>
                             <div class="col-md-6">
                                 {!! Form::label('approved', __('lang.approved'), []) !!}:
-                                <b>@if(!empty($transfer->approved_at)) {{@format_date($transfer->approved_at)}} @endif - {{$transfer->approved_by_user->name}}</b>
+                                <b>@if(!empty($transfer->approved_at)) {{@format_date($transfer->approved_at)}} @endif -
+                                    {{$transfer->approved_by_user->name}}</b>
                             </div>
 
                             <div class="col-md-6">
                                 {!! Form::label('receiver_store', __('lang.received'), []) !!}:
-                                <b>@if(!empty($transfer->received_at)) {{@format_date($transfer->received_at)}} @endif - {{$transfer->received_by_user->name}}</b>
+                                <b>@if(!empty($transfer->received_at)) {{@format_date($transfer->received_at)}} @endif -
+                                    {{$transfer->received_by_user->name}}</b>
                             </div>
                         </div>
                         <br>

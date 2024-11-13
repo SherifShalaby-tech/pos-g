@@ -2,21 +2,31 @@
 @section('title', __('lang.money_safe'))
 
 @section('content')
-    <div class="container-fluid">
-
+<section class="forms py-2">
+    <div class="container-fluid px-2">
         <div class="col-md-12  no-print">
-            <div class="card-header d-flex align-items-center">
+
+            <x-page-title>
+
+
                 <h3 class="print-title">@lang('lang.money_safe')</h3>
-            </div>
-            <div class="card">
-                <div class="card-header d-flex align-items-center">
+
+                <x-slot name="buttons">
                     @can('safe_module.money_safe.create_and_edit')
-                        <a style="color: white" data-href="{{ action('MoneySafeController@create') }}"
-                            data-container=".view_modal" class="btn btn-modal btn-info"><i class="dripicons-plus"></i>
-                            @lang('lang.add_money_safe')</a>
+                    <a style="color: white" data-href="{{ action('MoneySafeController@create') }}"
+                        data-container=".view_modal" class="btn btn-modal btn-primary"><i class="dripicons-plus"></i>
+                        @lang('lang.add_money_safe')</a>
                     @endcan
-                </div>
-                <div class="card-body">
+
+                </x-slot>
+            </x-page-title>
+            <div
+                class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+
+            </div>
+            <div class="card mt-1 mb-0">
+                <div class="card-body py-2 px-4">
+
                     <div class="table-responsive">
                         <table class="table" id="money_safe_table">
                             <thead>
@@ -49,13 +59,19 @@
                     </div>
                 </div>
             </div>
+
+            <div
+                class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+                <!-- Pagination and other controls can go here -->
+            </div>
         </div>
     </div>
+</section>
 @endsection
 
 @section('javascript')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             money_safe_table = $("#money_safe_table").DataTable({
                 lengthChange: true,
                 paging: true,
@@ -80,6 +96,15 @@
                 initComplete: function() {
                     $(this.api().table().container()).find('input').parent().wrap('<form>').parent()
                         .attr('autocomplete', 'off');
+
+                        // Move elements into the .top-controls div after DataTable initializes
+                        $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0            justify-content-center'));
+                        $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap            justify-content-center'));
+                        $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+                        $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+                        $('.bottom-controls').append($('.dataTables_info'));
                 },
                 ajax: {
                     url: "/money-safe",
@@ -213,5 +238,5 @@
                 .find(".total")
                 .text(__currency_trans_from_en(converted_value, false));
         });
-    </script>
+</script>
 @endsection

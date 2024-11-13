@@ -16,15 +16,12 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     @include('layouts.partials.css')
-    <style>
-        .mCSB_draggerRail {
-            width: 16px !important;
-        }
+    @if (app()->getLocale() == "ar")
+    <link rel="stylesheet" href="{{ asset('front/css_ar.css') }}">
+    @else
+    <link rel="stylesheet" href="{{ asset('front/css_en.css') }}">
 
-        .mCSB_dragger_bar {
-            width: 10px !important;
-        }
-    </style>
+    @endif
 </head>
 
 <body onload="myFunction()">
@@ -54,12 +51,6 @@
             <input type="hidden" id="__precision" value="3">
             <input type="hidden" id="__quantity_precision" value="3">
             <input type="hidden" id="system_mode" value="{{ env('SYSTEM_MODE') }}">
-
-
-
-
-
-
 
 
             @yield('content')
@@ -450,31 +441,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-loadPrimaryColor();
-setTimeout(showPage, 150);
-});
+        loadPrimaryColor();
+        setTimeout(showPage, 150);
+        });
 
-function showPage() {
-document.getElementById("loader").style.display = "none";
-document.getElementById("content").style.display = "block";
-}
+        function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("content").style.display = "block";
+        }
 
-function changePrimaryColor(color , hoverColor) {
+        function changePrimaryColor(color , hoverColor) {
 
-document.documentElement.style.setProperty('--primary-color', color);
-document.documentElement.style.setProperty('--primary-color-hover', hoverColor);
-localStorage.setItem('primaryColor', color);
-localStorage.setItem('primaryColorHover', hoverColor);
-}
+        document.documentElement.style.setProperty('--primary-color', color);
+        document.documentElement.style.setProperty('--primary-color-hover', hoverColor);
+        localStorage.setItem('primaryColor', color);
+        localStorage.setItem('primaryColorHover', hoverColor);
+        }
 
-function loadPrimaryColor() {
-const savedColor = localStorage.getItem('primaryColor');
-const savedColorHover = localStorage.getItem('primaryColorHover');
-if (savedColor) {
-document.documentElement.style.setProperty('--primary-color', savedColor);
-document.documentElement.style.setProperty('--primary-color-hover', savedColorHover);
-}
-}
+        function loadPrimaryColor() {
+        const savedColor = localStorage.getItem('primaryColor');
+        const savedColorHover = localStorage.getItem('primaryColorHover');
+        if (savedColor) {
+        document.documentElement.style.setProperty('--primary-color', savedColor);
+        document.documentElement.style.setProperty('--primary-color-hover', savedColorHover);
+        }
+        }
     </script>
 </body>
 

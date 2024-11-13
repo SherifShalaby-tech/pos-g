@@ -6,11 +6,19 @@
 
 
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header d-flex align-items-center">
-                <h4 class="print-title">@lang('lang.list_of_earn_point_by_transactions')</h4>
-            </div>
-            <div class="card-body">
+
+        <x-page-title>
+
+            <h4 class="print-title">@lang('lang.list_of_earn_point_by_transactions')</h4>
+
+
+        </x-page-title>
+        <div
+            class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+
+        </div>
+        <div class="card mt-1 mb-0">
+            <div class="card-body py-2 px-4">
 
                 <div class="table-responsive">
                     <table id="store_table" class="table dataTable">
@@ -36,7 +44,8 @@
                                 <td>{{$transaction->store->name ?? ''}}</td>
                                 <td>{{ucfirst($transaction->created_by_user->name ?? '')}}</td>
                                 <td>{{$transaction->customer->name ?? ''}}</td>
-                                <td style="color: rgb(85, 85, 231)"><a data-href="{{action('SellController@show', $transaction->id)}}"
+                                <td style="color: rgb(85, 85, 231)"><a
+                                        data-href="{{action('SellController@show', $transaction->id)}}"
                                         data-container=".view_modal"
                                         class="btn btn-modal">{{$transaction->invoice_no}}</a></td>
                                 <td>
@@ -59,11 +68,17 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
+
+        <div
+            class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+            <!-- Pagination and other controls can go here -->
+        </div>
     </div>
+
 </div>
+
 @endsection
 
 @section('javascript')

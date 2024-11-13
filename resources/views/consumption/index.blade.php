@@ -2,9 +2,8 @@
 @section('title', __('lang.list_view_the_consumption_of_raw_material'))
 
 @section('content')
-<section class="forms pt-2">
-    <div class="container-fluid">
-
+<section class="forms py-2">
+    <div class="container-fluid px-2">
         <x-page-title>
             <h4 class="print-title">@lang('lang.list_view_the_consumption_of_raw_material')</h4>
             <x-slot name="buttons">
@@ -102,28 +101,41 @@
             </div>
         </x-collapse-body>
 
+        <div
+            class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
 
-    </div>
-    <div class="table-responsive">
-        <table id="raw_material_table" class="table" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>@lang('lang.raw_material')</th>
-                    <th>@lang('lang.current_stock')</th>
-                    <th>@lang('lang.value_of_current_stock')</th>
-                    <th>@lang('lang.products')</th>
-                    <th>@lang('lang.chef')</th>
-                    <th>@lang('lang.remaining_qty_sufficient_for')</th>
+        </div>
+        <div class="card mt-1 mb-0">
+            <div class="card-body py-2 px-4">
 
-                    <th class="notexport">@lang('lang.action')</th>
-                </tr>
-            </thead>
-            <tbody>
+                <div class="table-responsive">
+                    <table id="raw_material_table" class="table" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th>@lang('lang.raw_material')</th>
+                                <th>@lang('lang.current_stock')</th>
+                                <th>@lang('lang.value_of_current_stock')</th>
+                                <th>@lang('lang.products')</th>
+                                <th>@lang('lang.chef')</th>
+                                <th>@lang('lang.remaining_qty_sufficient_for')</th>
 
-            </tbody>
-            <tfoot>
-            </tfoot>
-        </table>
+                                <th class="notexport">@lang('lang.action')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+            <!-- Pagination and other controls can go here -->
+        </div>
     </div>
 </section>
 @endsection
@@ -184,6 +196,16 @@
             fnDrawCallback: function(oSettings) {
                 __currency_convert_recursively($('#raw_material_table'));
             },
+            initComplete: function (settings, json) {
+            // Move elements into the .top-controls div after DataTable initializes
+            $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+            $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+            $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+            $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+            $('.bottom-controls').append($('.dataTables_info'));
+            }
         });
 
         $(document).on('change', '.filter', function(){

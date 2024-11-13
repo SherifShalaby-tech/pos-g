@@ -4,18 +4,23 @@
 @section('content')
 <div class="container-fluid">
     <div class="col-md-12  no-print">
-        
+
         <div class="card">
-            <div class="card-header d-flex align-items-center">
+
+            <x-page-title>
+
                 <h4 class="print-title">@lang('lang.sub_categories')</h4>
-            </div>
-                <div class="card-header d-flex align-items-center">
+
+
+                <x-slot name="buttons">
                     @can('product_module.product_class.create_and_edit')
                     <a style="color: white" data-href="{{ action('CategoryController@create') }}?type=sub_category"
-                        data-container=".view_modal" class="btn btn-modal btn-info"><i class="dripicons-plus"></i>
+                        data-container=".view_modal" class="btn btn-modal btn-primary"><i class="dripicons-plus"></i>
                         @lang('lang.add_sub_category')</a>
                     @endcan
-                </div>
+
+                </x-slot>
+            </x-page-title>
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="category_table" class="table dataTable">
@@ -31,10 +36,11 @@
                             @foreach($categories as $category)
                             <tr>
                                 <td><img src="@if(!empty($category->getFirstMediaUrl('category'))){{$category->getFirstMediaUrl('category')}}@else{{asset('/uploads/'.session('logo'))}}@endif"
-                                         alt="photo" width="50" height="50">
+                                        alt="photo" width="50" height="50">
                                 </td>
                                 <td>{{$category->name}}</td>
-                                <td> <a href='/product-class'>{{$category->mainCategory->productClass->name ?? null}}</a> / <a href='/category'>{{$category->mainCategory->name}} </a> /
+                                <td> <a href='/product-class'>{{$category->mainCategory->productClass->name ??
+                                        null}}</a> / <a href='/category'>{{$category->mainCategory->name}} </a> /
                                     {{$category->name}} </td>
                                 <td>
                                     <div class="btn-group">

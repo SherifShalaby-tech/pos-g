@@ -2,9 +2,8 @@
 @section('title', __('lang.product'))
 
 @section('content')
-<section class="forms pt-2">
-    <div class="container-fluid">
-
+<section class="forms py-2">
+    <div class="container-fluid px-2">
         <x-page-title>
             @if (request()->segment(1) == 'product')
             <h4 class="print-title">@lang('lang.product_lists')</h4>
@@ -301,95 +300,108 @@
                     class="badge badge-pill badge-primary column-toggle">@lang('lang.edited_by')</button>
             </div>
         </div> --}}
+        <div
+            class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
 
-        <div class="card mb-0 px-0 ">
-            <div class="table-responsive">
-                <table id="product_table" class="table" style="width: auto">
-                    <thead>
-                        <tr>
-                            <th>@lang('lang.show_at_the_main_pos_page')</th>
-                            <th>@lang('lang.image')</th>
-                            <th style="">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@lang('lang.name')&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </th>
-                            <th>@lang('lang.product_code')</th>
-                            <th>
-                                @if (session('system_mode') == 'restaurant')
-                                @lang('lang.category')
-                                @else
-                                @lang('lang.class')
+        </div>
+        <div class="card mt-1 mb-0">
+            <div class="card-body py-2 px-4">
+
+                <div class="table-responsive">
+                    <table id="product_table" class="table" style="width: auto">
+                        <thead>
+                            <tr>
+                                <th>@lang('lang.show_at_the_main_pos_page')</th>
+                                <th>@lang('lang.image')</th>
+                                <th style="">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@lang('lang.name')&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </th>
+                                <th>@lang('lang.product_code')</th>
+                                <th>
+                                    @if (session('system_mode') == 'restaurant')
+                                    @lang('lang.category')
+                                    @else
+                                    @lang('lang.class')
+                                    @endif
+                                </th>
+                                <th>@lang('lang.select_to_delete')<br>
+                                    <input type="checkbox" name="product_delete_all" class="product_delete_all" />
+                                </th>
+                                @if (session('system_mode') != 'restaurant')
+                                <th>@lang('lang.category')</th>
+                                <th>@lang('lang.sub_category')</th>
                                 @endif
-                            </th>
-                            <th>@lang('lang.select_to_delete')<br>
-                                <input type="checkbox" name="product_delete_all" class="product_delete_all" />
-                            </th>
-                            @if (session('system_mode') != 'restaurant')
-                            <th>@lang('lang.category')</th>
-                            <th>@lang('lang.sub_category')</th>
-                            @endif
-                            <th>@lang('lang.purchase_history')</th>
-                            <th>@lang('lang.batch_number')</th>
-                            <th>@lang('lang.selling_price')</th>
-                            <th>@lang('lang.tax')</th>
-                            @if (session('system_mode') != 'restaurant')
-                            <th>@lang('lang.brand')</th>
-                            @endif
-                            <th>@lang('lang.unit')</th>
-                            <th>@lang('lang.color')</th>
-                            @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value == "true")
-                            <th>@lang('lang.thread_colors')</th>
-                            @endif
-                            <th>@lang('lang.size')</th>
-                            <th>@lang('lang.grade')</th>
-                            <th class="sum">@lang('lang.current_stock')</th>
-                            <th class="sum">@lang('lang.current_stock_value')</th>
-                            <th>@lang('lang.customer_type')</th>
-                            <th>@lang('lang.expiry_date')</th>
-                            <th>@lang('lang.manufacturing_date')</th>
-                            <th>@lang('lang.discount')</th>
-                            @can('product_module.purchase_price.view')
-                            <th>@lang('lang.purchase_price')</th>
-                            @endcan
-                            <th>@lang('lang.supplier')</th>
-                            <th>@lang('lang.active')</th>
-                            <th>@lang('lang.created_by')</th>
-                            <th>@lang('lang.date_of_creation')</th>
-                            <th>@lang('lang.edited_by')</th>
-                            <th>@lang('lang.edited_at')</th>
-                            <th class="notexport">@lang('lang.action')</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                                <th>@lang('lang.purchase_history')</th>
+                                <th>@lang('lang.batch_number')</th>
+                                <th>@lang('lang.selling_price')</th>
+                                <th>@lang('lang.tax')</th>
+                                @if (session('system_mode') != 'restaurant')
+                                <th>@lang('lang.brand')</th>
+                                @endif
+                                <th>@lang('lang.unit')</th>
+                                <th>@lang('lang.color')</th>
+                                @if(isset($enable_tekstil) && !is_null($enable_tekstil) && $enable_tekstil->value ==
+                                "true")
+                                <th>@lang('lang.thread_colors')</th>
+                                @endif
+                                <th>@lang('lang.size')</th>
+                                <th>@lang('lang.grade')</th>
+                                <th class="sum">@lang('lang.current_stock')</th>
+                                <th class="sum">@lang('lang.current_stock_value')</th>
+                                <th>@lang('lang.customer_type')</th>
+                                <th>@lang('lang.expiry_date')</th>
+                                <th>@lang('lang.manufacturing_date')</th>
+                                <th>@lang('lang.discount')</th>
+                                @can('product_module.purchase_price.view')
+                                <th>@lang('lang.purchase_price')</th>
+                                @endcan
+                                <th>@lang('lang.supplier')</th>
+                                <th>@lang('lang.active')</th>
+                                <th>@lang('lang.created_by')</th>
+                                <th>@lang('lang.date_of_creation')</th>
+                                <th>@lang('lang.edited_by')</th>
+                                <th>@lang('lang.edited_at')</th>
+                                <th class="notexport">@lang('lang.action')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            {{-- <td></td> --}}
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <th style="text-align: right">@lang('lang.total')</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                {{-- <td></td> --}}
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <th style="text-align: right">@lang('lang.total')</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
+
+        <div
+            class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+            <!-- Pagination and other controls can go here -->
+        </div>
     </div>
+
 </section>
 
 @endsection
@@ -862,22 +874,26 @@
                             }
                         });
                 },
+
+                initComplete: function () {
+                $(this.api().table().container())
+                .find("input")
+                .parent()
+                .wrap("<form>")
+                    .parent()
+                    .attr("autocomplete", "off");
+
+                    // Move elements into the .top-controls div after DataTable initializes
+                    $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+                    $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+                    $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+                    $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+                    $('.bottom-controls').append($('.dataTables_info'));
+                    },
             });
 
-            // Move the length menu to the top-controls div
-            $('.dataTables_length').prependTo('.top-controls').addClass('col-lg-2 col-9 mb-3 mb-lg-0');
-
-            // Move the buttons to the top-controls div
-            $('.dt-buttons').prependTo('.top-controls').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap');
-
-            // Move the search input to the top-controls div
-            $('.dataTables_filter').prependTo('.top-controls').addClass('col-lg-3 col-9');
-
-            // Move the pagination controls to the bottom-controls div
-            $('.dataTables_paginate').prependTo('.bottom-controls').addClass('col-lg-2 col-9');
-
-            // Move the information display to the bottom-controls div
-            $('.dataTables_info').appendTo('.bottom-controls');
         });
         $('#product_table').on('change', '.product_delete_all', function() {
             var isChecked = $(this).prop('checked');

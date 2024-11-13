@@ -6,11 +6,19 @@
 
 
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header d-flex align-items-center">
-                <h4 class="print-title">@lang('lang.list_of_redeemed_point_by_transactions')</h4>
-            </div>
-            <div class="card-body">
+
+        <x-page-title>
+
+            <h4 class="print-title">@lang('lang.list_of_redeemed_point_by_transactions')</h4>
+
+
+        </x-page-title>
+        <div
+            class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+
+        </div>
+        <div class="card mt-1 mb-0">
+            <div class="card-body py-2 px-4">
 
                 <div class="table-responsive">
                     <table id="store_table" class="table dataTable">
@@ -30,9 +38,9 @@
                         </thead>
                         <tbody>
                             @php
-                                $total_paid = 0;
-                                $total_point_earned = 0;
-                                $total_balance = 0;
+                            $total_paid = 0;
+                            $total_point_earned = 0;
+                            $total_balance = 0;
                             @endphp
                             @foreach($transactions as $transaction)
                             <tr>
@@ -61,9 +69,9 @@
 
                             </tr>
                             @php
-                                $total_paid += $transaction->transaction_payments->sum('amount');
-                                $total_point_earned += $transaction->rp_redeemed;
-                                $total_balance += $transaction->customer->total_rp;
+                            $total_paid += $transaction->transaction_payments->sum('amount');
+                            $total_point_earned += $transaction->rp_redeemed;
+                            $total_balance += $transaction->customer->total_rp;
                             @endphp
                             @endforeach
                         </tbody>
@@ -83,11 +91,18 @@
                         </tfoot>
                     </table>
                 </div>
-
             </div>
         </div>
+
+        <div
+            class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+            <!-- Pagination and other controls can go here -->
+        </div>
     </div>
+
 </div>
+
+
 @endsection
 
 @section('javascript')

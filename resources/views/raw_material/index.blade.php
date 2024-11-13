@@ -2,9 +2,8 @@
 @section('title', __('lang.raw_materials'))
 
 @section('content')
-<section class="forms pt-2">
-    <div class="container-fluid">
-
+<section class="forms py-2">
+    <div class="container-fluid px-2">
         <x-page-title>
             <h4 class="print-title">@lang('lang.raw_materials_list')</h4>
 
@@ -90,7 +89,7 @@
         </x-collapse-body>
 
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-12">
                 <button type="button" value="0"
                     class="badge badge-pill badge-primary column-toggle">@lang('lang.image')</button>
@@ -125,49 +124,64 @@
                     class="badge badge-pill badge-primary column-toggle">@lang('lang.purchase_price')</button>
                 @endcan
             </div>
+        </div> --}}
+
+
+        <div
+            class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+
+        </div>
+        <div class="card mt-1 mb-0">
+            <div class="card-body py-2 px-4">
+
+                <div class="table-responsive">
+                    <table id="raw_material_table" class="table ajax_view" style="width: auto">
+                        <thead>
+                            <tr>
+                                <th>@lang('lang.image')</th>
+                                <th>@lang('lang.name')</th>
+                                <th>@lang('lang.product_code')</th>
+                                <th>@lang('lang.purchase_history')</th>
+                                <th>@lang('lang.batch_number')</th>
+                                <th>@lang('lang.brand')</th>
+                                <th class="sum">@lang('lang.current_stock')</th>
+                                <th>@lang('lang.unit')</th>
+                                <th>@lang('lang.manufacturing_date')</th>
+                                <th>@lang('lang.expiry_date')</th>
+                                <th>@lang('lang.created_by')</th>
+                                <th>@lang('lang.edited_by')</th>
+                                <th>@lang('lang.products')</th>
+                                <th>@lang('lang.supplier')</th>
+                                @can('product_module.purchase_price.view')
+                                <th>@lang('lang.purchase_price')</th>
+                                @endcan
+                                <th class="notexport">@lang('lang.action')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <th style="text-align: right">@lang('lang.total')</th>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
         </div>
 
-    </div>
-    <div class="table-responsive">
-        <table id="raw_material_table" class="table ajax_view" style="width: auto">
-            <thead>
-                <tr>
-                    <th>@lang('lang.image')</th>
-                    <th>@lang('lang.name')</th>
-                    <th>@lang('lang.product_code')</th>
-                    <th>@lang('lang.purchase_history')</th>
-                    <th>@lang('lang.batch_number')</th>
-                    <th>@lang('lang.brand')</th>
-                    <th class="sum">@lang('lang.current_stock')</th>
-                    <th>@lang('lang.unit')</th>
-                    <th>@lang('lang.manufacturing_date')</th>
-                    <th>@lang('lang.expiry_date')</th>
-                    <th>@lang('lang.created_by')</th>
-                    <th>@lang('lang.edited_by')</th>
-                    <th>@lang('lang.products')</th>
-                    <th>@lang('lang.supplier')</th>
-                    @can('product_module.purchase_price.view')
-                    <th>@lang('lang.purchase_price')</th>
-                    @endcan
-                    <th class="notexport">@lang('lang.action')</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <th style="text-align: right">@lang('lang.total')</th>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
+        <div
+            class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+            <!-- Pagination and other controls can go here -->
+        </div>
     </div>
 </section>
 @endsection
@@ -320,6 +334,16 @@
 
                     __currency_convert_recursively($('#raw_material_table'));
                 },
+                initComplete: function (settings, json) {
+                // Move elements into the .top-controls div after DataTable initializes
+                $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0  justify-content-center'));
+                $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap  justify-content-center'));
+                $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+                $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+                $('.bottom-controls').append($('.dataTables_info'));
+                }
             });
 
         });

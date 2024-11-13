@@ -12,12 +12,14 @@
 
                 {!! Form::open(['url' => action('RemoveStockController@store'), 'method' => 'post', 'id' =>
                 'remove_stock_form', 'enctype' => 'multipart/form-data']) !!}
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
+
+                <div class="card mt-1 mb-0">
+                    <div class="card-body py-2 px-4">
+                        <div class="row locale_dir">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::label('store_id', __('lang.store') . ':*', []) !!}
+                                    {!! Form::label('store_id', __('lang.store') , ['class' =>"locale_label mb-1
+                                    field_required"]) !!}
                                     {!! Form::select('store_id', $stores, null, ['class' => 'selectpicker form-control',
                                     'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder' =>
                                     __('lang.please_select')]) !!}
@@ -25,7 +27,8 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::label('supplier_id', __('lang.supplier') . ':*', []) !!}
+                                    {!! Form::label('supplier_id', __('lang.supplier') , ['class' =>"locale_label mb-1
+                                    field_required"]) !!}
                                     {!! Form::select('supplier_id', $suppliers, null, ['class' => 'selectpicker
                                     form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder'
                                     => __('lang.please_select')]) !!}
@@ -33,61 +36,24 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::label('invoice_id', __('lang.invoice_no') . ':*', []) !!} <i
-                                        class="dripicons-question" data-toggle="tooltip"
-                                        title="@lang('lang.invoice_no_remove_stock_info')"></i>
+                                    <div class="d-flex justify-content-end" style="gap: 10px">
+                                        {!! Form::label('invoice_id', __('lang.invoice_no') , ['class' =>"locale_label
+                                        mb-1 field_required"]) !!} <i class="dripicons-question" data-toggle="tooltip"
+                                            title="@lang('lang.invoice_no_remove_stock_info')"></i>
+                                    </div>
                                     {!! Form::select('invoice_id', $invoice_nos, null, ['class' => 'selectpicker
                                     form-control', 'data-live-search' => 'true', 'style' => 'width: 80%', 'placeholder'
                                     => __('lang.please_select')]) !!}
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="button" value="1"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.image')</button>
-                                <button type="button" value="4"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.class')</button>
-                                <button type="button" value="5"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.category')</button>
-                                <button type="button" value="6"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.sub_category')</button>
-                                <button type="button" value="7"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.color')</button>
-                                <button type="button" value="8"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.size')</button>
-                                <button type="button" value="9"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.grade')</button>
-                                <button type="button" value="10"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.unit')</button>
-                                <button type="button" value="11"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.current_stock')</button>
-                                <button type="button" value="12"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.supplier')</button>
-                                <button type="button" value="13"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.email')</button>
-                                <button type="button" value="14"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.invoice_no')</button>
-                                <button type="button" value="15"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.invoice_date')</button>
-                                <button type="button" value="16"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.payment_status')</button>
-                                <button type="button" value="17"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.notes')</button>
-                                <button type="button" value="18"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.quantity')</button>
-                                <button type="button" value="19"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.remove_quantity')</button>
-                                @can('product_module.purchase_price.view')
-                                <button type="button" value="20"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.purchase_price')</button>
-                                @endcan
-                                <button type="button" value="21"
-                                    class="badge badge-pill badge-primary column-toggle">@lang('lang.sell_price')</button>
-                            </div>
-                        </div>
+                    </div>
+                </div>
 
-                        <div class="row">
+
+                <div class="card mt-1 mb-0">
+                    <div class="card-body py-2 px-4">
+                        <div class="row locale_dir">
                             <div class="col-md-12">
                                 <div id="product_table_div" class="table-responsive">
                                     <table class="table table-bordered table-striped table-condensed"
@@ -125,58 +91,81 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="final_total" id="final_total" value="0">
-                        <div class="row">
-                            <div class="col-md-12"
-                                style="text-align: right; font-size: 20px; font-weight: bold; padding: 20px;">
-                                @lang('lang.total'):<span class="final_total_span"></span>
+                    </div>
+                </div>
+
+
+                <input type="hidden" name="final_total" id="final_total" value="0">
+
+
+                <div class="card mt-1 mb-0">
+                    <div class="card-body py-2 px-4">
+                        <div class="row locale_dir">
+                            <div class="col-md-12" style="text-align: center; font-size: 20px; font-weight: bold;">
+                                @lang('lang.total'):<span class="final_total_span text-primary"></span>
                             </div>
                         </div>
-                        <div class="row">
+                    </div>
+                </div>
+
+                <div class="card mt-1 mb-0">
+                    <div class="card-body py-2 px-4">
+                        <div class="row locale_dir">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::label('files', __('lang.files'), []) !!} <br>
+                                    {!! Form::label('files', __('lang.files'), ['class' =>"locale_label mb-1"]) !!}
                                     {!! Form::file('files[]', null, ['class' => '']) !!}
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                    </div>
+                </div>
+
+
+                <div class="card mt-1 mb-0">
+                    <div class="card-body py-2 px-4">
+                        <div class="row locale_dir">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    {!! Form::label('reason', __('lang.reason') . ':', []) !!} <br>
+                                    {!! Form::label('reason', __('lang.reason'), ['class' =>"locale_label mb-1"]) !!}
                                     {!! Form::textarea('reason', null, ['class' => 'form-control', 'rows' => 3]) !!}
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    {!! Form::label('notes', __('lang.notes') . ':', []) !!} <br>
+                                    {!! Form::label('notes', __('lang.notes'), ['class' =>"locale_label mb-1"]) !!}
                                     {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => 3]) !!}
                                 </div>
                             </div>
 
                         </div>
-
                     </div>
-                    <input type="hidden" id="is_raw_material" name="is_raw_material" value="{{ $is_raw_material }}">
-                    <input type="hidden" id="product_data" name="product_data" value="[]">
-                    <input type="hidden" id="transaction_array" name="transaction_array" value="[]">
-                    <div class="col-sm-12">
-                        <button type="submit" name="submit" id="print" style="margin: 10px" value="print"
-                            class="btn btn-danger pull-right btn-flat submit">@lang('lang.print')</button>
-                        <button type="submit" name="submit" id="send_to_supplier" style="margin: 10px"
-                            value="send_to_supplier"
-                            class="btn btn-warning pull-right btn-flat submit">@lang('lang.send_to_supplier')</button>
-                        <button type="submit" name="submit" id="save" style="margin: 10px" value="save"
-                            class="btn btn-primary pull-right btn-flat submit">@lang('lang.delete')</button>
+                </div>
+
+                <input type="hidden" id="is_raw_material" name="is_raw_material" value="{{ $is_raw_material }}">
+                <input type="hidden" id="product_data" name="product_data" value="[]">
+                <input type="hidden" id="transaction_array" name="transaction_array" value="[]">
+
+                <div class="card mt-1 mb-0">
+                    <div class="card-body py-2 px-4">
+                        <div class="row locale_dir">
+                            <div class="col-sm-12">
+                                <button type="submit" name="submit" id="print" style="margin: 10px" value="print"
+                                    class="btn btn-danger pull-right btn-flat submit">@lang('lang.print')</button>
+                                <button type="submit" name="submit" id="send_to_supplier" style="margin: 10px"
+                                    value="send_to_supplier"
+                                    class="btn btn-warning pull-right btn-flat submit">@lang('lang.send_to_supplier')</button>
+                                <button type="submit" name="submit" id="save" style="margin: 10px" value="save"
+                                    class="btn btn-primary pull-right btn-flat submit">@lang('lang.delete')</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
     </div>
-
-
 </section>
 @endsection
 
@@ -349,6 +338,16 @@
                             }
                         });
                 },
+                initComplete: function (settings, json) {
+                // Move elements into the .top-controls div after DataTable initializes
+                $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0                 justify-content-center'));
+                $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap                 justify-content-center'));
+                $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+                $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+                $('.bottom-controls').append($('.dataTables_info'));
+                }
             });
 
         });

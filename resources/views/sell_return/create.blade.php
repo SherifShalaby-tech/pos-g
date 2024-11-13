@@ -12,11 +12,6 @@
                     <h4>@lang('lang.sell_return')</h4>
                 </x-page-title>
 
-
-
-
-
-
                 <div class="card">
 
                     <div class="card-body">

@@ -3,119 +3,120 @@
 
 
 @section('content')
-<section class="forms pt-2">
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-
-                <x-page-title>
-                    <h4 class="print-title">@lang('lang.expenses')</h4>
-                </x-page-title>
+<section class="forms py-2">
+    <div class="container-fluid px-2">
+        <x-page-title>
+            <h4 class="print-title">@lang('lang.expenses')</h4>
+        </x-page-title>
 
 
 
 
-                <x-collapse-button color="secondary my-2 d-flex" collapse-id="ExpenseListFilter">
-                    Filter
-                    <div style="width: 20px" class="ml-2">
-                        <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
-                    </div>
-                </x-collapse-button>
+        <x-collapse-button color="secondary my-2 d-flex" collapse-id="ExpenseListFilter">
+            Filter
+            <div style="width: 20px" class="ml-2">
+                <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
+            </div>
+        </x-collapse-button>
 
-                <x-collapse-body collapse-id="ExpenseListFilter">
-                    {{-- <form action=""> --}}
+        <x-collapse-body collapse-id="ExpenseListFilter">
+            {{-- <form action=""> --}}
+                <div class="row">
+
+                    <div class="col-md-12">
                         <div class="row">
-
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            {!! Form::label('expense_category_id', __('lang.expense_category'),
-                                            [])
-                                            !!}
-                                            {!! Form::select('expense_category_id', $expense_categories,
-                                            request()->expense_category_id, ['class' => 'form-control',
-                                            'placeholder' => __('lang.all'), 'data-live-search' =>
-                                            'true','id'=>'expense_category_id']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            {!! Form::label('expense_beneficiary_id',
-                                            __('lang.expense_beneficiary'), []) !!}
-                                            {!! Form::select('expense_beneficiary_id', $expense_beneficiaries,
-                                            request()->expense_beneficiary_id, ['class' => 'form-control',
-                                            'placeholder' => __('lang.all'), 'data-live-search' =>
-                                            'true','id'=>'expense_beneficiary_id']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            {!! Form::label('store_id', __('lang.store'), []) !!}
-                                            {!! Form::select('store_id', $stores, request()->store_id, ['class'
-                                            =>
-                                            'form-control', 'placeholder' => __('lang.all'), 'data-live-search'
-                                            =>
-                                            'true','id'=>'store_id']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            {!! Form::label('store_paid_id', __('lang.store') . ' ' .
-                                            __('lang.paid_by'), []) !!}
-                                            {!! Form::select('store_paid_id', $stores, request()->store_paid_id,
-                                            ['class' => 'form-control', 'placeholder' => __('lang.all'),
-                                            'data-live-search' => 'true','id'=>'store_paid_id']) !!}
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            {!! Form::label('start_date', __('lang.start_date'), []) !!}
-                                            {!! Form::text('start_date', request()->start_date, ['class' =>
-                                            'form-control','id'=>'start_date']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            {!! Form::label('start_time', __('lang.start_time'), []) !!}
-                                            {!! Form::text('start_time', request()->start_time, ['class' =>
-                                            'form-control time_picker sale_filter','id'=>'start_time']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            {!! Form::label('end_date', __('lang.end_date'), []) !!}
-                                            {!! Form::text('end_date', request()->end_date, ['class' =>
-                                            'form-control','id'=>'end_date']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            {!! Form::label('end_time', __('lang.end_time'), []) !!}
-                                            {!! Form::text('end_time', request()->end_time, ['class' =>
-                                            'form-control time_picker sale_filter','id'=>'end_time']) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button type="button"
-                                            class="btn btn-success mt-4 filter_product">@lang('lang.filter')</button>
-
-                                        <button
-                                            class="btn btn-danger mt-4 clear_filters">@lang('lang.clear_filters')</button>
-
-                                    </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('expense_category_id', __('lang.expense_category'),
+                                    [])
+                                    !!}
+                                    {!! Form::select('expense_category_id', $expense_categories,
+                                    request()->expense_category_id, ['class' => 'form-control',
+                                    'placeholder' => __('lang.all'), 'data-live-search' =>
+                                    'true','id'=>'expense_category_id']) !!}
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('expense_beneficiary_id',
+                                    __('lang.expense_beneficiary'), []) !!}
+                                    {!! Form::select('expense_beneficiary_id', $expense_beneficiaries,
+                                    request()->expense_beneficiary_id, ['class' => 'form-control',
+                                    'placeholder' => __('lang.all'), 'data-live-search' =>
+                                    'true','id'=>'expense_beneficiary_id']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('store_id', __('lang.store'), []) !!}
+                                    {!! Form::select('store_id', $stores, request()->store_id, ['class'
+                                    =>
+                                    'form-control', 'placeholder' => __('lang.all'), 'data-live-search'
+                                    =>
+                                    'true','id'=>'store_id']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('store_paid_id', __('lang.store') . ' ' .
+                                    __('lang.paid_by'), []) !!}
+                                    {!! Form::select('store_paid_id', $stores, request()->store_paid_id,
+                                    ['class' => 'form-control', 'placeholder' => __('lang.all'),
+                                    'data-live-search' => 'true','id'=>'store_paid_id']) !!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {!! Form::label('start_date', __('lang.start_date'), []) !!}
+                                    {!! Form::text('start_date', request()->start_date, ['class' =>
+                                    'form-control','id'=>'start_date']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {!! Form::label('start_time', __('lang.start_time'), []) !!}
+                                    {!! Form::text('start_time', request()->start_time, ['class' =>
+                                    'form-control time_picker sale_filter','id'=>'start_time']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {!! Form::label('end_date', __('lang.end_date'), []) !!}
+                                    {!! Form::text('end_date', request()->end_date, ['class' =>
+                                    'form-control','id'=>'end_date']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {!! Form::label('end_time', __('lang.end_time'), []) !!}
+                                    {!! Form::text('end_time', request()->end_time, ['class' =>
+                                    'form-control time_picker sale_filter','id'=>'end_time']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button"
+                                    class="btn btn-success mt-4 filter_product">@lang('lang.filter')</button>
+
+                                <button class="btn btn-danger mt-4 clear_filters">@lang('lang.clear_filters')</button>
+
+                            </div>
                         </div>
-                        {{--
-                    </form> --}}
+                    </div>
+                </div>
+                {{--
+            </form> --}}
 
-                </x-collapse-body>
+        </x-collapse-body>
 
 
 
+        <div
+            class="top-controls py-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+
+        </div>
+        <div class="card mt-1 mb-0">
+            <div class="card-body py-2 px-4">
 
                 <div class="table-responsive">
                     <table class="table" style="width: auto" id="expense_table">
@@ -157,10 +158,15 @@
                         </tfoot>
                     </table>
                 </div>
-
             </div>
         </div>
+
+        <div
+            class="bottom-controls mt-1 p-1 d-flex justify-content-center justify-content-lg-start align-items-center flex-wrap">
+            <!-- Pagination and other controls can go here -->
+        </div>
     </div>
+
 </section>
 @endsection
 
@@ -299,6 +305,16 @@
                             }
                         });
                 },
+                initComplete: function (settings, json) {
+                // Move elements into the .top-controls div after DataTable initializes
+                $('.top-controls').append($('.dataTables_length').addClass('d-flex col-lg-3 col-9 mb-3 mb-lg-0 justify-content-center'));
+                $('.top-controls').append($('.dt-buttons').addClass('col-lg-6 col-12 mb-3 mb-lg-0 d-flex dt-gap justify-content-center'));
+                $('.top-controls').append($('.dataTables_filter').addClass('col-lg-3 col-9'));
+
+
+                $('.bottom-controls').append($('.dataTables_paginate').addClass('col-lg-2 col-9 p-0'));
+                $('.bottom-controls').append($('.dataTables_info'));
+                }
             });
 
         });
