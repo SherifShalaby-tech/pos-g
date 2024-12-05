@@ -15,8 +15,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="i-checks" style="margin-top: 40px">
-                                <input id="fixed_wage" name="fixed_wage" type="checkbox" value="1" @if
-                                    (!empty($employee->fixed_wage)) checked @endif
+                                <input value="1" @if (!empty($employee->fixed_wage)) checked @endif id="fixed_wage"
+                                name="fixed_wage" type="checkbox"
                                 class="form-control-custom salary_checkbox">
                                 <label for="fixed_wage"><strong>@lang('lang.enter_the_fixed_wage')</strong></label>
                                 {!! Form::text('fixed_wage_value', !empty($employee->fixed_wage_value) ?
@@ -31,8 +31,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="i-checks" style="margin-top: 40px">
-                                <input id="commission" name="commission" type="checkbox" value="1" @if
-                                    (!empty($employee->commission)) checked @endif
+                                <input @if (!empty($employee->commission)) checked @endif id="commission"
+                                name="commission" type="checkbox" value="1"
                                 class="form-control-custom salary_checkbox">
                                 <label for="commission"><strong>@lang('lang.enter_the_commission_%')</strong></label>
                                 {!! Form::text('commission_value', !empty($employee->commission_value) ?

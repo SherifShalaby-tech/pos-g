@@ -6,21 +6,17 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
 
-                <x-page-title>
+            <x-page-title>
 
-                    <h4>@lang('lang.edit_employee')</h4>
+                <h4>@lang('lang.edit_employee')</h4>
+            </x-page-title>
 
+            {!! Form::open(['url' => action('EmployeeController@update', $employee->id), 'method' => 'put', 'id'
+            => 'edit_employee_form', 'enctype' => 'multipart/form-data']) !!}
 
-                    <x-slot name="buttons">
-
-                    </x-slot>
-                </x-page-title>
-                <div class="card-body">
-                    {!! Form::open(['url' => action('EmployeeController@update', $employee->id), 'method' => 'put', 'id'
-                    => 'edit_employee_form', 'enctype' => 'multipart/form-data']) !!}
-
+            <div class="card mt-1 mb-0">
+                <div class="card-body py-2 px-4">
                     <div class="row">
 
                         <div class="col-sm-6">
@@ -108,9 +104,9 @@
                         @foreach ($number_of_leaves as $number_of_leave)
                         <div class="col-sm-6">
                             <div class="i-checks">
-                                <input id="number_of_leaves{{ $number_of_leave->id }}"
-                                    name="number_of_leaves[{{ $number_of_leave->id }}][enabled]" @if
-                                    ($number_of_leave->enabled == 1) checked @endif type="checkbox" value="1"
+                                <input @if ($number_of_leave->enabled == 1) checked @endif id="number_of_leaves{{
+                                $number_of_leave->id }}"
+                                name="number_of_leaves[{{ $number_of_leave->id }}][enabled]" type="checkbox" value="1"
                                 class="form-control-custom">
                                 <label for="number_of_leaves{{ $number_of_leave->id }}"><strong>{{
                                         $number_of_leave->name }}</strong></label>
@@ -132,66 +128,73 @@
 
                         @include('employee.partial.salary_details')
                     </div>
+                </div>
+            </div>
 
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <label for="working_day_per_week">@lang('lang.select_working_day_per_week')</label>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>@lang('lang.check_in')</th>
-                                        <th> @lang('lang.check_out')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($week_days as $key => $week_day)
-                                    <tr>
-                                        <td>
-                                            <div class="form-group">
-                                                <div class="i-checks">
-                                                    <input id="working_day_per_week{{ $key }}" @if
-                                                        (!empty($employee->working_day_per_week[$key])) checked @endif
-                                                    name="working_day_per_week[{{ $key }}]"
-                                                    type="checkbox" value="1" class="form-control-custom">
-                                                    <label for="working_day_per_week{{ $key }}"><strong>{{ $week_day
-                                                            }}</strong></label>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {!! Form::text('check_in[' . $key . ']', !empty($employee->check_in[$key]) ?
-                                            $employee->check_in[$key] : null, ['class' => 'form-control input-md
-                                            check_in time_picker ']) !!}
-                                        </td>
-                                        <td>
-                                            {!! Form::text('check_out[' . $key . ']', !empty($employee->check_out[$key])
-                                            ? $employee->check_out[$key] : null, [
-                                            'class' => 'form-control input-md check_out
-                                            time_picker',
-                                            ]) !!}
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <x-collapse-button color="primary my-1 d-flex product-btn justify-content-end"
+                collapse-id="select_working_day_per_week">
+                @lang('lang.select_working_day_per_week')
+            </x-collapse-button>
+
+            <x-collapse-body collapse-id="select_working_day_per_week">
 
 
-                    <br>
-                    <br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>@lang('lang.check_in')</th>
+                            <th> @lang('lang.check_out')</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($week_days as $key => $week_day)
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <div class="i-checks">
+                                        <input @if (!empty($employee->working_day_per_week[$key])) checked
+                                        @endif id="working_day_per_week{{ $key }}"
+                                        name="working_day_per_week[{{ $key }}]"
+                                        type="checkbox" value="1" class="form-control-custom">
+                                        <label for="working_day_per_week{{ $key }}"><strong>{{ $week_day
+                                                }}</strong></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {!! Form::text('check_in[' . $key . ']', !empty($employee->check_in[$key]) ?
+                                $employee->check_in[$key] : null, ['class' => 'form-control input-md
+                                check_in time_picker ']) !!}
+                            </td>
+                            <td>
+                                {!! Form::text('check_out[' . $key . ']', !empty($employee->check_out[$key])
+                                ? $employee->check_out[$key] : null, [
+                                'class' => 'form-control input-md check_out
+                                time_picker',
+                                ]) !!}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </x-collapse-body>
 
+            <x-collapse-button color="primary my-1 d-flex product-btn justify-content-end" collapse-id="user_rights">
+                @lang('lang.user_rights')
+            </x-collapse-button>
+
+            <x-collapse-body collapse-id="user_rights">
+
+
+                <div class="col-md-12">
+                    @include('employee.partial.permission')
+                </div>
+            </x-collapse-body>
+
+            <div class="card mt-1 mb-0">
+                <div class="card-body py-2 px-4">
                     <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h3>@lang('lang.user_rights')</h3>
-                        </div>
-                        <div class="col-md-12">
-                            @include('employee.partial.permission')
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
 
                         <div class="col-sm-12">
                             <button type="submit" class="btn btn-primary"
@@ -199,13 +202,14 @@
                         </div>
 
                     </div>
-                    {!! Form::close() !!}
-
                 </div>
             </div>
+            {!! Form::close() !!}
+
         </div>
     </div>
 </div>
+
 
 
 @endsection

@@ -5,24 +5,21 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-
-                <x-page-title>
-
-                    <h4>@lang('lang.add_new_employee')</h4>
 
 
-                    <x-slot name="buttons">
+            <x-page-title>
 
-                    </x-slot>
-                </x-page-title>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <form class="form-group" id="new_employee_form"
-                                action="{{ action('EmployeeController@store') }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
+                <h4>@lang('lang.add_new_employee')</h4>
+
+            </x-page-title>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="form-group" id="new_employee_form" action="{{ action('EmployeeController@store') }}"
+                        method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="card mt-1 mb-0">
+                            <div class="card-body py-2 px-4">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="fname">@lang('lang.name'):*</label>
@@ -31,7 +28,8 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="store_id">@lang('lang.store')</label>
-                                        {!! Form::select('store_id[]', $stores, !empty($stores) && count($stores) > 0 ?
+                                        {!! Form::select('store_id[]', $stores, !empty($stores) && count($stores) >
+                                        0 ?
                                         array_key_first($stores) : false, ['class' => 'form-control selectpicker',
                                         'multiple', 'data-live-search' => 'true', 'id' => 'store_id']) !!}
                                     </div>
@@ -77,7 +75,8 @@
                                     <div class="col-sm-6">
                                         <label for="job_type">@lang('lang.job_type')</label>
                                         {!! Form::select('job_type_id', $jobs, null, ['class' => 'form-control
-                                        selectpicker', 'placeholder' => __('lang.select_job_type'), 'data-live-search'
+                                        selectpicker', 'placeholder' => __('lang.select_job_type'),
+                                        'data-live-search'
                                         => 'true']) !!}
                                     </div>
                                     <div class="col-sm-6">
@@ -91,7 +90,8 @@
 
                                     <div class="col-sm-6">
                                         <label for="upload_files">@lang('lang.upload_files')</label>
-                                        {!! Form::file('upload_files[]', ['class' => 'form-control', 'multiple']) !!}
+                                        {!! Form::file('upload_files[]', ['class' => 'form-control', 'multiple'])
+                                        !!}
                                     </div>
                                     <div class="col-md-6">
                                         <label for="photo">@lang('lang.profile_photo')</label>
@@ -119,6 +119,7 @@
                                     @endforeach
                                 </div>
 
+
                                 <div class="row mt-4">
                                     <!-- Button trigger modal -->
                                     <button type="button" style="margin-left: 15px;" class="btn btn-primary"
@@ -128,67 +129,73 @@
 
                                     @include('employee.partial.salary_details')
                                 </div>
-                                <br>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label
-                                            for="working_day_per_week">@lang('lang.select_working_day_per_week')</label>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>@lang('lang.check_in')</th>
-                                                    <th> @lang('lang.check_out')</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($week_days as $key => $week_day)
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <div class="i-checks">
-                                                                <input id="working_day_per_week{{ $key }}"
-                                                                    name="working_day_per_week[{{ $key }}]"
-                                                                    type="checkbox" value="1"
-                                                                    class="form-control-custom">
-                                                                <label for="working_day_per_week{{ $key }}"><strong>{{
-                                                                        $week_day }}</strong></label>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        {!! Form::text('check_in[' . $key . ']', null, [
-                                                        'class' => 'form-control input-md check_in
-                                                        time_picker',
-                                                        ]) !!}
+                            </div>
+                        </div>
+                        <x-collapse-button color="primary my-1 d-flex product-btn justify-content-end"
+                            collapse-id="select_working_day_per_week">
+                            @lang('lang.select_working_day_per_week')
+                        </x-collapse-button>
 
-                                                    </td>
-                                                    <td>
-                                                        {!! Form::text('check_out[' . $key . ']', null, [
-                                                        'class' => 'form-control input-md check_out
-                                                        time_picker',
-                                                        ]) !!}
+                        <x-collapse-body collapse-id="select_working_day_per_week">
 
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <br>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-12 text-center">
-                                        <h3>@lang('lang.user_rights')</h3>
-                                    </div>
-                                    <div class="col-md-12">
-                                        @include('employee.partial.permission')
-                                    </div>
-                                </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>@lang('lang.check_in')</th>
+                                        <th> @lang('lang.check_out')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($week_days as $key => $week_day)
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <div class="i-checks">
+                                                    <input id="working_day_per_week{{ $key }}"
+                                                        name="working_day_per_week[{{ $key }}]" type="checkbox"
+                                                        value="1" class="form-control-custom">
+                                                    <label for="working_day_per_week{{ $key }}"><strong>{{
+                                                            $week_day }}</strong></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {!! Form::text('check_in[' . $key . ']', null, [
+                                            'class' => 'form-control input-md check_in
+                                            time_picker',
+                                            ]) !!}
 
-                                <div class="row mt-4">
+                                        </td>
+                                        <td>
+                                            {!! Form::text('check_out[' . $key . ']', null, [
+                                            'class' => 'form-control input-md check_out
+                                            time_picker',
+                                            ]) !!}
+
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </x-collapse-body>
+
+
+                        <x-collapse-button color="primary my-1 d-flex product-btn justify-content-end"
+                            collapse-id="user_rights">
+                            @lang('lang.user_rights')
+                        </x-collapse-button>
+
+                        <x-collapse-body collapse-id="user_rights">
+
+                            <div class="col-md-12">
+                                @include('employee.partial.permission')
+                            </div>
+                        </x-collapse-body>
+
+                        <div class="card mt-1 mb-0">
+                            <div class="card-body py-2 px-4">
+                                <div class="row ">
                                     <div class="col-sm-12">
                                         <input type="submit" id="submit-btn" class="btn btn-primary"
                                             value="@lang('lang.save')" name="submit">
@@ -196,14 +203,16 @@
                                             value="@lang('lang.send_credentials')" name="submit">
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('javascript')

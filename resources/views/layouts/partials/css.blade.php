@@ -134,7 +134,7 @@
     }
 
     .modal-header {
-        background: linear-gradient(to right, var(--primary-color), #6b73ff);
+        background: linear-gradient(to right, var(--primary-color), var(--primary-color-hover));
         color: white
     }
 
