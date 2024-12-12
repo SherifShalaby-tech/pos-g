@@ -52,7 +52,8 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                 @endif
 
 
-                @if(session('system_mode') == 'restaurant' || session('system_mode') == 'garments' || session('system_mode') == 'pos')
+                @if(session('system_mode') == 'restaurant' || session('system_mode') == 'garments' ||
+                session('system_mode') == 'pos')
                 @if( !empty($module_settings['raw_material_module']) )
                 @if(auth()->user()->can('raw_material_module.raw_material.create_and_edit') ||
                 auth()->user()->can('raw_material_module.raw_material.view')
@@ -145,8 +146,7 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         @can('raw_material_module.internal_stock_return.view')
                         <li
                             class="@if(request()->segment(1) == 'raw-materials' && request()->segment(2) == 'internal-stock-return' && empty(request()->segment(2))) active @endif">
-                            <a
-                                href="/raw-materials/internal-stock-return">{{__('lang.return_requests_report')}}</a>
+                            <a href="/raw-materials/internal-stock-return">{{__('lang.return_requests_report')}}</a>
                         </li>
                         @endcan
                     </ul>
@@ -198,21 +198,25 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                 @endif
                 @endif
                 <li><a href="#manufacturings" aria-expanded="false" data-toggle="collapse"> <i
-                                class="fa fa-retweet "></i><span>{{__('lang.manufacturings')}}</span><span></a>
-                    <ul id="manufacturings"  class="collapse list-unstyled @if(in_array(request()->segment(1), ['manufacturings'])) show @endif">
+                            class="fa fa-retweet "></i><span>{{__('lang.manufacturings')}}</span><span></a>
+                    <ul id="manufacturings"
+                        class="collapse list-unstyled @if(in_array(request()->segment(1), ['manufacturings'])) show @endif">
                         <li
-                                class="@if(request()->segment(1) == 'manufacturers' && empty(request()->segment(2))) active @endif">
+                            class="@if(request()->segment(1) == 'manufacturers' && empty(request()->segment(2))) active @endif">
                             <a href="{{action('ManufacturerController@index')}}">{{__('lang.manufacturers')}}</a>
                         </li>
                         <li
                             class="@if(request()->segment(1) == 'manufacturers' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('ManufacturingController@create')}}">{{__('lang.add_new_manufacturing')}}</a>
+                            <a
+                                href="{{action('ManufacturingController@create')}}">{{__('lang.add_new_manufacturing')}}</a>
                         </li>
                         <li class="@if(request()->segment(1) == 'email' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('ManufacturingController@index',"pending")}}">{{__('lang.under_processing')}}</a>
+                            <a href="{{action('ManufacturingController@index',"
+                                pending")}}">{{__('lang.under_processing')}}</a>
                         </li>
                         <li class="@if(request()->segment(1) == 'email' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('ManufacturingController@index',"completed")}}">{{__('lang.processed')}}</a>
+                            <a href="{{action('ManufacturingController@index',"
+                                completed")}}">{{__('lang.processed')}}</a>
                         </li>
                     </ul>
                 </li>
@@ -286,22 +290,19 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         @can('stock.internal_stock_request.create_and_edit')
                         <li
                             class="@if(request()->segment(1) == 'internal-stock-request' && request()->segment(2) == 'create') active @endif">
-                            <a
-                                href="/internal-stock-request/create">{{__('lang.internal_stock_request')}}</a>
+                            <a href="/internal-stock-request/create">{{__('lang.internal_stock_request')}}</a>
                         </li>
                         @endcan
                         @can('stock.internal_stock_return.create_and_edit')
                         <li
                             class="@if(request()->segment(1) == 'internal-stock-return' && request()->segment(2) == 'create') active @endif">
-                            <a
-                                href="/internal-stock-return/create">{{__('lang.internal_stock_return')}}</a>
+                            <a href="/internal-stock-return/create">{{__('lang.internal_stock_return')}}</a>
                         </li>
                         @endcan
                         @can('stock.internal_stock_return.view')
                         <li
                             class="@if(request()->segment(1) == 'internal-stock-return' && empty(request()->segment(2))) active @endif">
-                            <a
-                                href="/internal-stock-return">{{__('lang.return_requests_report')}}</a>
+                            <a href="/internal-stock-return">{{__('lang.return_requests_report')}}</a>
                         </li>
                         @endcan
                         @can('stock.import.create_and_edit')
@@ -640,7 +641,8 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         @can('reports.daily_sales_summary.view')
                         <li
                             class="@if(request()->segment(1) == 'report' && request()->segment(2) == 'daily-sales-summary') active @endif">
-                            <a href="{{action('ReportController@getDailySalesSummary')}}">{{__('lang.daily_sales_summary')}}</a>
+                            <a
+                                href="{{action('ReportController@getDailySalesSummary')}}">{{__('lang.daily_sales_summary')}}</a>
                         </li>
                         @endcan
                         @can('reports.receivable_report.view')
@@ -680,14 +682,16 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         @can('reports.dining_in_sales.view')
                         <li
                             class="@if(request()->segment(1) == 'report' && request()->segment(2) == 'get-dining-report') active @endif">
-                            <a href="{{action('ReportController@getDiningRoomReport')}}">{{__('lang.dining_in_sales')}}</a>
+                            <a
+                                href="{{action('ReportController@getDiningRoomReport')}}">{{__('lang.dining_in_sales')}}</a>
                         </li>
                         @endcan
                         @endif
                         @can('reports.sales_per_employee.view')
                         <li
                             class="@if(request()->segment(1) == 'report' && request()->segment(2) == 'get-employee-commission-report') active @endif">
-                            <a href="{{action('ReportController@getSalesPerEmployeeReport')}}">{{__('lang.sales_per_employee')}}</a>
+                            <a
+                                href="{{action('ReportController@getSalesPerEmployeeReport')}}">{{__('lang.sales_per_employee')}}</a>
                         </li>
                         @endcan
                         @can('reports.best_seller_report.view')
@@ -890,7 +894,8 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         @can('service_provider.supplier_service.create_and_edit')
                         <li
                             class="@if(request()->segment(1) == 'supplier-service' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('SupplierServiceController@index')}}">{{__('lang.all_supplier_service')}}</a>
+                            <a
+                                href="{{action('SupplierServiceController@index')}}">{{__('lang.all_supplier_service')}}</a>
                         </li>
                         @endcan
                     </ul>
@@ -1076,7 +1081,8 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                     <ul id="money_safe"
                         class="collapse list-unstyled @if(in_array(request()->segment(1), ['money-safe', 'money-safe-transfer'])) show @endif">
                         @can('safe_module.money_safe.view')
-                        <li class="@if(request()->segment(1) == 'money-safe' && empty(request()->segment(2))) active @endif">
+                        <li
+                            class="@if(request()->segment(1) == 'money-safe' && empty(request()->segment(2))) active @endif">
                             <a href="{{action('MoneySafeController@index')}}">{{__('lang.view_all_money_safe')}}</a>
                         </li>
                         @endcan
@@ -1086,23 +1092,23 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                 @endif
 
                 <!-- printers section -->
-                    <li>
-                        <a href="#printers" aria-expanded="false" data-toggle="collapse"> <i
-                                class="dripicons-print"></i><span>@lang('lang.printers')</span></a>
-                        <ul id="printers"
-                            class="collapse list-unstyled @if(in_array(request()->segment(1), ['store', 'store-pos', 'terms-and-conditions', 'settings','extension', 'product-class', 'category', 'sub-category', 'brand', 'unit', 'color', 'size', 'grade', 'tax', 'dining-room', 'dining-table', 'exchange-rate'])) show @endif">
-                                <li
-                                    class="@if(request()->segment(1) == 'printers' && empty(request()->segment(2))) active @endif">
-                                    <a href="{{route('printers.index')}}">{{__('lang.printers_list')}}</a>
-                                </li>
-                                <li
-                                    class="@if(request()->segment(1) == 'printers' && request()->segment(2) == 'create') active @endif">
-                                    <a href="{{route('printers.create')}}">{{__('lang.add_new_printer')}}</a>
-                                </li>
-                        </ul>
-                    </li>
+                <li>
+                    <a href="#printers" aria-expanded="false" data-toggle="collapse"> <i
+                            class="dripicons-print"></i><span>@lang('lang.printers')</span></a>
+                    <ul id="printers"
+                        class="collapse list-unstyled @if(in_array(request()->segment(1), ['store', 'store-pos', 'terms-and-conditions', 'settings','extension', 'product-class', 'category', 'sub-category', 'brand', 'unit', 'color', 'size', 'grade', 'tax', 'dining-room', 'dining-table', 'exchange-rate'])) show @endif">
+                        <li
+                            class="@if(request()->segment(1) == 'printers' && empty(request()->segment(2))) active @endif">
+                            <a href="{{route('printers.index')}}">{{__('lang.printers_list')}}</a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(1) == 'printers' && request()->segment(2) == 'create') active @endif">
+                            <a href="{{route('printers.create')}}">{{__('lang.add_new_printer')}}</a>
+                        </li>
+                    </ul>
+                </li>
 
-                    <!-- end of printers section -->
+                <!-- end of printers section -->
                 @if( !empty($module_settings['sms_module']) )
                 @if(auth()->user()->can('sms_module.sms.create_and_edit') ||
                 auth()->user()->can('sms_module.sms.view') )
@@ -1169,7 +1175,8 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         @can('product_module.product_class.view')
                         <li
                             class="@if(request()->segment(1) == 'product-class' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('ProductClassController@index')}}">@if(session('system_mode') == 'restaurant'){{__('lang.category')}} @else {{__('lang.product_class')}} @endif</a>
+                            <a href="{{action('ProductClassController@index')}}">@if(session('system_mode') ==
+                                'restaurant'){{__('lang.category')}} @else {{__('lang.product_class')}} @endif</a>
                         </li>
                         @endcan
                         @if(session('system_mode') != 'restaurant')
@@ -1214,8 +1221,10 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         </li>
                         @endcan
                         @can('supplier_module.category.view')
-                        <li class="@if(request()->segment(1) == 'supplier-category' && empty(request()->segment(2))) active @endif">
-                            <a href="{{action('SupplierCategoryController@index')}}">{{__('lang.supplier_category')}}</a>
+                        <li
+                            class="@if(request()->segment(1) == 'supplier-category' && empty(request()->segment(2))) active @endif">
+                            <a
+                                href="{{action('SupplierCategoryController@index')}}">{{__('lang.supplier_category')}}</a>
                         </li>
                         @endcan
                         @if(session('system_mode') == 'restaurant')
@@ -1251,12 +1260,14 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                         </li>
                         @endcan
                         @can('product_module.tax.view')
-                        <li class="@if(request()->segment(1) == 'tax' && empty(request()->segment(2)) && request()->type == "product_tax") active @endif">
+                        <li class="@if(request()->segment(1) == 'tax' && empty(request()->segment(2)) && request()->type == "
+                            product_tax") active @endif">
                             <a href="{{action('TaxController@index')}}?type=product_tax">{{__('lang.product_tax')}}</a>
                         </li>
                         @endcan
                         @can('product_module.tax.view')
-                        <li class="@if(request()->segment(1) == 'tax' && empty(request()->segment(2)) && request()->type == "general_tax") active @endif">
+                        <li class="@if(request()->segment(1) == 'tax' && empty(request()->segment(2)) && request()->type == "
+                            general_tax") active @endif">
                             <a href="{{action('TaxController@index')}}?type=general_tax">{{__('lang.general_tax')}}</a>
                         </li>
                         @endcan
@@ -1306,6 +1317,12 @@ $module_settings = !empty($module_settings) ? json_decode($module_settings, true
                                 href="{{action('SettingController@getGeneralSetting')}}">{{__('lang.general_settings')}}</a>
                         </li>
                         @endcan
+                        {{-- @can('settings.general_settings.view') --}}
+                        <li
+                            class="@if(request()->segment(1) == 'settings' && request()->segment(2) == 'get-general-setting') active @endif">
+                            <a href="{{ route('payment-methods.index') }}">{{__('lang.payment_methods')}}</a>
+                        </li>
+                        {{-- @endcan --}}
                     </ul>
                 </li>
                 <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">

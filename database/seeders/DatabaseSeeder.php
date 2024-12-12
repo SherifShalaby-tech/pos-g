@@ -107,8 +107,8 @@ class DatabaseSeeder extends Seeder
                 ['key' => 'enable_tekstil', 'value' => 'false', 'created_by' => 1, 'date_and_time' => Carbon::now(), 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
                 ['key' => 'numbers_length_after_dot', 'value' => '2', 'created_by' => 1, 'date_and_time' => Carbon::now(), 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
                 ['key' => 'font_size_at_invoice', 'value' => 'max', 'created_by' => 1, 'date_and_time' => Carbon::now(), 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
-            
-                ]
+
+            ]
 
         );
 
@@ -209,6 +209,7 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             CurrenciesTableSeeder::class,
             PrinterSeeder::class,
+            PaymentMethodsSeeder::class
         ]);
     }
 }

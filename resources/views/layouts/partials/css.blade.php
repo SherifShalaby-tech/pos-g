@@ -143,12 +143,17 @@
         padding: 0
     }
 
+    .modal-footer .btn {
+        margin: 0 !important
+    }
+
 
     .modal-close-btn {
         width: 35px;
         height: 35px;
         font-weight: 600;
         font-size: 1.5rem;
+
         background-color: #fff;
     }
 

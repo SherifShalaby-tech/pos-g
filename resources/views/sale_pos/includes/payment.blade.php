@@ -1,4 +1,20 @@
-<div class="payment-options d-flex flex-wrap justify-content-start flex-row-reverse pb-2 table_room_hide dev_not_room"
+@php
+$pay_button_show = App\Models\PaymentMethod::where('name' , '=' ,"Pay")->first()['is_active'];
+$quick_pay_button_show = App\Models\PaymentMethod::where('name' , '=' ,"Quick Pay")->first()['is_active'];
+$other_online_payments_button_show =
+App\Models\PaymentMethod::where('name' , '=' ,"Other Online Payments")->first()['is_active'];
+$draft_button_show = App\Models\PaymentMethod::where('name' , '=' ,"Draft")->first()['is_active'];
+$view_draft_button_show = App\Models\PaymentMethod::where('name' , '=' ,"View Draft")->first()['is_active'];
+$online_orders_button_show = App\Models\PaymentMethod::where('name' , '=' ,"Online Orders")->first()['is_active'];
+$pay_later_button_show = App\Models\PaymentMethod::where('name' , '=' ,"Pay Later")->first()['is_active'];
+$recent_transaction_button_show =
+App\Models\PaymentMethod::where('name' , '=' ,"Recent Transactions")->first()['is_active'];
+$bank_transfer_button_show = App\Models\PaymentMethod::where('name' , '=' ,"Bank Transfer")->first()['is_active'];
+
+$payment_methods = App\Models\PaymentMethod::where('is_default',0)->get();
+@endphp
+
+<div class="payment-options mt-2 d-flex flex-wrap justify-content-start flex-row-reverse pb-2 table_room_hide dev_not_room"
     style="gap:10px;">
     {{-- <div class="">
         <button style="background: var(--primary-color)" data-method="card" type="button"
@@ -6,18 +22,25 @@
                 class="fa fa-credit-card"></i>
             @lang('lang.card')</button>
     </div> --}}
+    @if ($pay_button_show)
     <div class="">
         <button style="background: var(--primary-color)" data-method="cash" type="button"
-            class="btn btn-custom btn-primary payment-btn" data-toggle="modal" data-target="#add-payment"
-            data-backdrop="static" data-keyboard="false" id="cash-btn"><i class="fa fa-money"></i>
+            class="btn btn-custom btn-primary payment-modal-btn payment-btn" data-toggle="modal"
+            data-target="#add-payment" data-backdrop="static" data-keyboard="false" id="cash-btn"><i
+                class="fa fa-money"></i>
             @lang('lang.pay')</button>
     </div>
-    <div class="">
+    @endif
+
+
+    {{-- <div class="">
         <button style="background: var(--primary-color)" data-method="coupon" type="button"
             class="btn btn-custom btn-primary" data-toggle="modal" data-target="#coupon_modal" id="coupon-btn"><i
                 class="fa fa-tag"></i>
             @lang('lang.coupon')</button>
-    </div>
+    </div> --}}
+
+    @if ($other_online_payments_button_show)
     @if (session('system_mode') != 'restaurant')
     <div class="">
         <button style="background: var(--primary-color)" data-method="paypal" type="button"
@@ -26,17 +49,24 @@
             @lang('lang.other_online_payments')</button>
     </div>
     @endif
+    @endif
+    @if ($draft_button_show)
     <div class="">
         <button style="background: var(--primary-color)" data-method="draft" type="button" data-toggle="modal"
             data-target="#sale_note_modal" class="btn btn-custom btn-primary"><i class="dripicons-flag"></i>
             @lang('lang.draft')</button>
     </div>
+    @endif
+    @if ($view_draft_button_show)
     <div class="">
         <button style="background: var(--primary-color)" data-method="draft" type="button"
             class="btn btn-custom btn-primary" id="view-draft-btn"
             data-href="{{ action('SellPosController@getDraftTransactions') }}"><i class="dripicons-flag"></i>
             @lang('lang.view_draft')</button>
     </div>
+    @endif
+
+    @if ($online_orders_button_show)
     <div class="">
         <button style="background: var(--primary-color)" data-method="online-order" type="button"
             class="btn btn-custom btn-primary" id="view-online-order-btn"
@@ -44,6 +74,7 @@
                 src="{{ asset('images/online_order.png') }}" style="height: 25px; width: 35px;" alt="icon">
             @lang('lang.online_orders') <span class="badge badge-danger online-order-badge">0</span></button>
     </div>
+    @endif
     {{-- <div class="">
         <button style="background: var(--primary-color)" data-method="cheque" type="button"
             class="btn btn-custom btn-primary payment-btn" data-toggle="modal" data-target="#add-payment"
@@ -56,11 +87,13 @@
             id="bank-transfer-btn"><i class="fa fa-building-o"></i>
             @lang('lang.bank_transfer')</button>
     </div> --}}
+    @if ($pay_later_button_show)
     <div class="">
         <button style="background: var(--primary-color)" data-method="pay-later" type="button"
             class="btn btn-custom btn-primary" id="pay-later-btn"><i class="fa fa-hourglass-start"></i>
             @lang('lang.pay_later')</button>
     </div>
+    @endif
     {{-- <div class="">
         <button style="background: var(--primary-color)" data-method="gift_card" type="button"
             class="btn btn-custom btn-primary payment-btn" data-toggle="modal" data-target="#add-payment"
@@ -73,16 +106,41 @@
             id="deposit-btn"><i class="fa fa-university"></i>
             @lang('lang.use_the_balance')</button>
     </div> --}}
+
+    @if ($recent_transaction_button_show)
+    <div class="">
+        <button style="background: var(--primary-color)" type="button" class="btn btn-custom btn-primary"
+            id="recent-transaction-btn"><i class="dripicons-clock"></i>
+            @lang('lang.recent_transactions')</button>
+    </div>
+    @endif
+
+    @foreach ($payment_methods as $method)
+    @if ($method->is_active)
+
+    <div class="">
+        <button data-method="cash" style="background: var(--primary-color)" type="button"
+            data-method-id="{{ $method->id }}"
+            data-method-types='@json(App\Models\PaymentMethodType::where("payment_method_id", $method->id)->pluck("name"))'
+            class="btn btn-custom payment-btn payment-modal-btn" data-toggle="modal" data-target="#add-payment"
+            data-backdrop="static" data-keyboard="false"><i class="fa fa-money"></i>
+            {{ $method->name }}</button>
+    </div>
+    @endif
+    @endforeach
+
+    <div>
+        @if(auth()->user()->can('sp_module.sales_promotion.view')
+        || auth()->user()->can('sp_module.sales_promotion.create_and_edit')
+        || auth()->user()->can('sp_module.sales_promotion.delete'))
+        <button style="background-color: #d63031" type="button" class="btn btn-md payment-btn text-white"
+            data-toggle="modal" data-target="#discount_modal">@lang('lang.random_discount')</button>
+        @endif
+    </div>
     <div class="">
         <button style="background-color: #dc3545!important;border-color: #dc3545!important" type="button"
             class="btn btn-custom btn-danger" id="cancel-btn" onclick="return confirmCancel()"><i
                 class="fa fa-close"></i>
             @lang('lang.cancel')</button>
     </div>
-    <div class="">
-        <button style="background: var(--primary-color)" type="button" class="btn btn-custom btn-primary"
-            id="recent-transaction-btn"><i class="dripicons-clock"></i>
-            @lang('lang.recent_transactions')</button>
-    </div>
-
 </div>

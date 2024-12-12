@@ -456,14 +456,20 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
                                             style="font-weight:600">{{ __('lang.sales_promotion')
                                             }}</span><span id="sales_promotion-cost_span">0.00</span>
                                     </div>
-                                    <div>
-                                        @if(auth()->user()->can('sp_module.sales_promotion.view')
-                                        || auth()->user()->can('sp_module.sales_promotion.create_and_edit')
-                                        || auth()->user()->can('sp_module.sales_promotion.delete'))
-                                        <button style="background-color: #d63031" type="button"
-                                            class="btn btn-md payment-btn text-white" data-toggle="modal"
-                                            data-target="#discount_modal">@lang('lang.random_discount')</button>
-                                        @endif
+
+                                    <div class="payment-amount col-md-3 table_room_hide dev_not_room bg-primary text-white @if (app()->isLocale('ar')) flex-row-reverse @else flex-row @endif"
+                                        style="
+                                        display: flex;
+                                        height: fit-content;
+                                        align-items: center;
+                                        justify-content: space-between;
+                                        font-weight: 700;
+                                        font-size: 18px;
+                                        border-radius: 5px;
+                                        padding: 12px 10px;">
+                                        <span class="">{{ __('lang.grand_total') }}
+                                        </span>
+                                        <span class="final_total_span">0.00</span>
                                     </div>
                                 </div>
                             </div>
@@ -536,6 +542,8 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
                     $toc_hidden = array_key_first($tac);
                     }
                     @endphp
+
+                    @include('sale_pos.includes.payment')
                     <input type="hidden" name="terms_and_condition_hidden" id="terms_and_condition_hidden"
                         value="{{ $toc_hidden }}">
 
@@ -582,22 +590,11 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
                             </div>
                         </div>
 
-                        <div class="payment-amount col-md-3 table_room_hide dev_not_room bg-primary text-white " style="
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            font-weight: 700;
-                            font-size: 18px;
-                            border-radius: 5px;
-                            padding: 0 10px;">
-                            <span class="">{{ __('lang.grand_total') }}
-                            </span>
-                            <span class="final_total_span">0.00</span>
-                        </div>
+
 
                     </div>
 
-                    @include('sale_pos.includes.payment')
+
 
                 </div>
 
@@ -863,6 +860,36 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
     offcanvas.classList.remove('open');
     // backdrop.classList.remove('show');
     document.body.classList.remove('offcanvas-open');
+    });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.payment-modal-btn');
+
+    buttons.forEach(button => {
+    button.addEventListener('click', function () {
+ // Get the data attributes
+    const methodId = button.getAttribute('data-method-id');
+    const methodTypes = JSON.parse(button.getAttribute('data-method-types')); // Parse JSON data
+
+// Target the select element
+const paymentSelect = document.querySelector('#payment-method-select');
+
+if (methodId && methodTypes && paymentSelect) {
+// Clear existing options
+paymentSelect.innerHTML = '';
+
+// Add new options from methodTypes
+methodTypes.forEach(type => {
+const option = document.createElement('option');
+option.value = type; // Set value attribute
+option.textContent = type; // Set displayed text
+paymentSelect.appendChild(option);
+});
+}
+
+    });
     });
     });
 </script>
