@@ -198,7 +198,7 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
                                             alt="@lang('lang.customer_size')" data-toggle="tooltip"
                                             title="@lang('lang.customer_size')"></button>
                                     @endif
-                                    <button type="button" class="btn btn-primary w-75" style="margin-top: 38px;"
+                                    <button type="button" class="btn btn-primary" style="margin-top: 38px;"
                                         id="print_and_draft"><i class="dripicons-print"></i></button>
                                     <input type="hidden" id="print_and_draft_hidden" name="print_and_draft_hidden"
                                         value="">
@@ -279,7 +279,7 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
 
                                         @endif
 
-                                        <button type="button" class="btn btn-primary w-75" data-toggle="modal"
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
                                             data-target="#contact_details_modal">@lang('lang.details')</button>
 
 
