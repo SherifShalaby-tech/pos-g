@@ -1,17 +1,5 @@
-<div class="row">
-
-    <div class="col-md-12 px-1">
-
-        <x-collapse-button color="secondary my-2 d-flex" collapse-id="Filter">
-            Filter
-            <div style="width: 20px" class="ml-2">
-                <img class="w-100" src="{{ asset('front/filter.png') }}" alt="">
-            </div>
-        </x-collapse-button>
-
-        <x-collapse-body collapse-id="Filter">
-
-            <div class="filter-checkbox " style="margin: 0px;">
+<div class="d-flex flex-column">
+    <div class="mb-1 d-flex flex-wrap" style="gap: 5px">
                 {{-- @if (session('system_mode') != 'restaurant')
                 <div class="card-header" style="padding: 5px 20px; color: #7c5cc4">
                     <i class="fa fa-filter"></i> @lang('lang.filter')
@@ -213,14 +201,11 @@
                     </div>
                 </div>
             </div>
-        </x-collapse-body>
-    </div>
 
-
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body" style="padding: 0;">
-                <div class="col-md-12 mt-1 table-container">
+<div class=" px-1">
+    <div class="card">
+        <div class="card-body" style="padding: 0;">
+            <div class="col-md-12 mt-1 table-container">
                     <div class="filter-window" style="width: 100% !important; height: 100% !important">
                         <div class="category mt-3">
                             <div class="row ml-2 mr-2 px-2">

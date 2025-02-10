@@ -164,7 +164,7 @@ $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
 
                                 <div class="col-md-1 px-0">
                                     {!! Form::label('', "tax" ,
-                                    ['class' => app()->isLocale('ar') ? 'mb-0 label-ar' : 'mb-0 label-en']) !!}
+                                    []) !!}
                                     <select class="form-control" name="tax_id" id="tax_id">
                                         <option value="">No Tax</option>
                                         @foreach ($taxes as $tax)

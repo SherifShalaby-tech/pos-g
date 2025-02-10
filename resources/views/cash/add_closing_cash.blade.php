@@ -80,14 +80,14 @@
                             <td><b>@lang('lang.other_cash_sales')</b></td>
                             @foreach ($cr_data as $data)
                             <td>{{ $data['currency']['symbol'] }}
-                                @if(($data['cash_register']->total_cash_sales -
+                                {{-- @if(($data['cash_register']->total_cash_sales -
                                 $data['cash_register']->total_dining_in_cash)>0)
                                 {{ @num_format($data['cash_register']->total_cash_sales -
                                 $data['cash_register']->total_dining_in_cash-$total_latest_payments) }}
-                                @else
+                                @else --}}
                                 {{ @num_format($data['cash_register']->total_cash_sales -
                                 $data['cash_register']->total_dining_in_cash) }}
-                                @endif
+                                {{-- @endif --}}
                             </td>
                             @endforeach
                         </tr>
@@ -95,11 +95,11 @@
                             <td><b>@lang('lang.total_cash_sale')</b></td>
                             @foreach ($cr_data as $data)
                             <td>{{ $data['currency']['symbol'] }}
-                                @if($data['cash_register']->total_cash_sales>0)
+                                {{-- @if($data['cash_register']->total_cash_sales>0)
                                 {{ @num_format($data['cash_register']->total_cash_sales-$total_latest_payments) }}
-                                @else
+                                @else --}}
                                 {{ @num_format($data['cash_register']->total_cash_sales) }}
-                                @endif
+                                {{-- @endif --}}
                             </td>
                             @endforeach
                         </tr>
@@ -107,13 +107,13 @@
                             <td><b>@lang('lang.total_sales')</b></td>
                             @foreach ($cr_data as $data)
                             <td>{{ $data['currency']['symbol'] }}
-                                @if($data['cash_register']->total_sale - $data['cash_register']->total_refund>0)
+                                {{-- @if($data['cash_register']->total_sale - $data['cash_register']->total_refund>0)
                                 {{ @num_format($data['cash_register']->total_sale -
                                 $data['cash_register']->total_refund-$total_latest_payments) }}
-                                @else
+                                @else --}}
                                 {{ @num_format($data['cash_register']->total_sale -
                                 $data['cash_register']->total_refund) }}
-                                @endif
+                                {{-- @endif --}}
                             </td>
                             @endforeach
                         </tr>
